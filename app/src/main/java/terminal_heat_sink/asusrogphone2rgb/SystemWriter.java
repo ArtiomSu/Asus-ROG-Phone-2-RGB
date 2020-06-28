@@ -25,8 +25,8 @@ public class SystemWriter {
                 p.waitFor();
                 if (p.exitValue() != 255) {
                     // TODO Code to run on success
-                    Toast toast = Toast.makeText(context, "success", Toast.LENGTH_SHORT);
-                    toast.show();
+                    //Toast toast = Toast.makeText(context, "success", Toast.LENGTH_SHORT);
+                    //toast.show();
 
                 }
                 else {

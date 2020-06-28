@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".ColourWheelActivity">
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+
+    <LinearLayout
+        android:id="@+id/colorPickerLinear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/tab_text_2"
-        android:textAlignment="center"
+        android:orientation="vertical">
 
-        android:textColor="@color/colorText"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+
+    </LinearLayout>
 </FrameLayout>

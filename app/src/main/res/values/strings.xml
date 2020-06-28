@@ -4,6 +4,30 @@
     <string name="tab_text_2">Colour Wheel</string>
     <string name="tab_text_3">About</string>
     <string name="title_activity_animations">AnimationsActivity</string>
+    <string name="about_text">Hello There Ladies and Gentlemen.\n
+        This app allows you to control the logo rgb on custom roms.\n\n
+
+        You need to be rooted to use this since it writes to system files.\n\n
+
+        To use it press the power button on the bottom right of the screen.\n
+        When it turns green we are good to go and you can head over the animations tab.\n\n
+
+        The Colour wheel allows you to change the colour provided the animations aren\'t rainbow.\n
+        Colour wheel will work for the following animations.\n
+        solid one colour\n
+        breathing one colour\n
+        blink\n
+        some kind of thunder\n
+        quick two flashes\n
+        and sort of the last one too\n\n
+
+        If you like what I do you can check out my github, telegram channel by clicking the icons at the top.\n\n
+
+        If you would like to donate :) click on the paypal or patreon icons up above\n\n
+
+        Thanks and Bye Bye
+    </string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
