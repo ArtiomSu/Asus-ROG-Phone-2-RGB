@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "Asus ROG Phone 2 RGB"
