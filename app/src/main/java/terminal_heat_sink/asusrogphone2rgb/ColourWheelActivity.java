@@ -73,13 +73,14 @@ public class ColourWheelActivity extends Fragment {
         if(color == 0){
             if (savedInstanceState != null) {
                 color = savedInstanceState.getInt(SAVED_STATE_KEY_COLOR, 0xFFFF8000);
+            }else{
+                color = -1031;
             }
         }
 
         colorPickerView.setInitialColor(color);
 
-
-        return ll;
+        return root;
 
         //return inflater.inflate(R.layout.activity_colour_wheel, container, false);
     }

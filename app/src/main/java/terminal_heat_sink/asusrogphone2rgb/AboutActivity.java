@@ -77,7 +77,7 @@ public class AboutActivity extends Fragment {
         text.setTextColor(getResources().getColor(R.color.colorText));
         text.setText(R.string.about_text);
 
-        return ll;
+        return root;
 
         //return inflater.inflate(R.layout.activity_about, container, false);
     }

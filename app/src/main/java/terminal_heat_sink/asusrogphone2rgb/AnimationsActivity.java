@@ -144,9 +144,11 @@ public class AnimationsActivity extends Fragment {
             });
         }
 
-        return animations_scroll_layout;
+        return root;
         //return inflater.inflate(R.layout.activity_animations, container, false);
     }
+
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
