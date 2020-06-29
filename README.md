@@ -67,7 +67,7 @@ Colour wheel will work for the following animations.
 ![screenshot 4](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/4.jpg)
 
 # Issues
-1. colour wheel performance 
+1. colour wheel performance. This is improved as of version 3 but could still be smoother 
 
 # Features to be implemented
 1. animation speed should be possible
@@ -76,5 +76,16 @@ Colour wheel will work for the following animations.
 4. set animations for when receiving notifications/calls so on...
 
 # Version
+3. [3.0-performance](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/3) 
+```
+    Rewrote SystemWriter to only write once per action thereby increasing performance mostly for colour wheel
+    ColorWheel fragment now only writes to system if the data is changed instead of everytime the app opens or twice when colour is changed.
+```
 2. [2.0-hotfix](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/2)
+```
+    Issue with fragment not working on stock rom fixed. Stock rom tested working ok without any crashes
+```
 1. [initial_release](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/1)
+```
+    Working on HavocOS only.
+```
