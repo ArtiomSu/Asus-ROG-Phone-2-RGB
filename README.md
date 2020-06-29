@@ -1,5 +1,6 @@
 # Asus-ROG-Phone-2-RGB
-This app allows you to control the logo rgb on custom roms. It will probably work on stock rom too but might interfere with asus's rgb app.
+This app allows you to control the logo rgb on custom roms. 
+Works on stock rom too after release 2.0-hotfix
 
 Note I have only tested it on android 10.
 
@@ -75,4 +76,5 @@ Colour wheel will work for the following animations.
 4. set animations for when receiving notifications/calls so on...
 
 # Version
+2. [2.0-hotfix](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/2)
 1. [initial_release](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/1)
