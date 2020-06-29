@@ -3,19 +3,14 @@ package terminal_heat_sink.asusrogphone2rgb;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Switch;
-import android.widget.Toast;
 
 public class AnimationsActivity extends Fragment {
     public AnimationsActivity() {
@@ -32,7 +27,6 @@ public class AnimationsActivity extends Fragment {
 
 
         LinearLayout animations_linear_layout = (LinearLayout) root.findViewById(R.id.animations_linear_layout);
-        ScrollView animations_scroll_layout = (ScrollView) root.findViewById(R.id.animations_scroll_layout);
 
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
@@ -49,9 +43,6 @@ public class AnimationsActivity extends Fragment {
                 current_selected = 0;
             }
         }
-
-
-
 
         String[][] options = {
                 {"0","off"},
@@ -91,8 +82,6 @@ public class AnimationsActivity extends Fragment {
             }
             sw.setText(options[i][1]);
 
-            //btn.setBackgroundColor(Color.rgb(255, 255, 255));
-            //btn.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             switches[i] = sw;
             animations_linear_layout.addView(sw);
             sw = ((Switch) root.findViewById(id_));
@@ -129,23 +118,17 @@ public class AnimationsActivity extends Fragment {
                             switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
                             switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
                             switches[0].setTextColor(getResources().getColor(R.color.colorON));
-                            SystemWriter.write("/sys/class/leds/aura_sync/mode", "0",getActivity().getApplicationContext());
-                            SystemWriter.write("/sys/class/leds/aura_sync/apply", "1",getActivity().getApplicationContext());
+                            SystemWriter.write_animation(0,getActivity().getApplicationContext());
                         }else{
                             //set effect
-                            SystemWriter.write("/sys/class/leds/aura_sync/mode", String.valueOf(id_),getActivity().getApplicationContext());
-                            SystemWriter.write("/sys/class/leds/aura_sync/apply", "1",getActivity().getApplicationContext());
+                            SystemWriter.write_animation(id_,getActivity().getApplicationContext());
                         }
-//                        Toast.makeText(view.getContext(),
-//                                "Button clicked index = " + String.valueOf(id_), Toast.LENGTH_SHORT)
-//                                .show();
 
                 }
             });
         }
 
         return root;
-        //return inflater.inflate(R.layout.activity_animations, container, false);
     }
 
 
@@ -157,14 +140,4 @@ public class AnimationsActivity extends Fragment {
         savedInstanceState.putInt("current_selected", current_selected);
     }
 
-//    @Override
-//    public void onActivityCreated (Bundle savedInstanceState) {
-//
-//        super.onActivityCreated(savedInstanceState);
-//
-//
-//
-//
-//
-//    }
 }

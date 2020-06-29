@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AboutActivity extends Fragment {
@@ -20,9 +19,6 @@ public class AboutActivity extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.activity_about, container, false);
-
-        LinearLayout ll = (LinearLayout) root.findViewById(R.id.about_linear);
-
 
         ImageView telegram_image_view = (ImageView) root.findViewById(R.id.imageViewTelegram);
 
@@ -78,8 +74,6 @@ public class AboutActivity extends Fragment {
         text.setText(R.string.about_text);
 
         return root;
-
-        //return inflater.inflate(R.layout.activity_about, container, false);
     }
 }
 

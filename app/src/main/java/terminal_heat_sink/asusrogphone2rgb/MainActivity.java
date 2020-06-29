@@ -6,21 +6,13 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.PersistableBundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 import terminal_heat_sink.asusrogphone2rgb.ui.main.SectionsPagerAdapter;
 
@@ -43,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         final Context context = getApplicationContext();
 
-
-
-
         SharedPreferences prefs = context.getSharedPreferences(
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
 
@@ -56,15 +45,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         if(fab_on){
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON) ));
@@ -78,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
                 FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
                 if(fab_on){
                     fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorBG) ));
-                    SystemWriter.write("/sys/class/leds/aura_sync/led_on","0",getApplicationContext());
+                    SystemWriter.turn_on(false,getApplicationContext());
                     fab_on = false;
                 }else{
                     fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON) ));
-                    SystemWriter.write("/sys/class/leds/aura_sync/led_on","1",getApplicationContext());
+                    SystemWriter.turn_on(true,getApplicationContext());
                     fab_on = true;
                 }
                 SharedPreferences prefs = context.getSharedPreferences(
@@ -91,10 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
 
     }
 

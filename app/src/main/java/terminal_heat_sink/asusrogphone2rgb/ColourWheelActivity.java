@@ -4,11 +4,9 @@ package terminal_heat_sink.asusrogphone2rgb;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,30 +35,26 @@ public class ColourWheelActivity extends Fragment {
 
         colorPickerView = new ColorPickerView(getActivity().getApplicationContext());
 
-        //int picker_id = colorPickerView.getId();
-
         ll.addView(colorPickerView);
-
-        //colorPickerView = ((ColorPickerView) root.findViewById(picker_id));
 
         colorPickerView.setEnabledAlpha(false);
         colorPickerView.setEnabledBrightness(false);
-        //colorPickerView.setLayoutParams(new ColorPickerView.LayoutParams(ColorPickerView.LayoutParams.layout_constraintLeft_toLeftOf, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         colorPickerView.subscribe(new ColorObserver() {
             @Override
             public void onColor(int color, boolean fromUser, boolean shouldPropagate) {
                 SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                         "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                prefs.edit().putInt(SAVED_PREFS_KEY_COLOR, color).apply();
-                //Color c = Color.valueOf(color);
-                //Log.e("color"," color picked "+color + " RGB is "+ Color.red(color)+ " " + Color.green(color)+ " "+ Color.blue(color));
 
-                SystemWriter.write("/sys/class/leds/aura_sync/green_pwm",String.valueOf(Color.green(color)),getActivity().getApplicationContext());
-                SystemWriter.write("/sys/class/leds/aura_sync/red_pwm",String.valueOf(Color.red(color)),getActivity().getApplicationContext());
-                SystemWriter.write("/sys/class/leds/aura_sync/blue_pwm",String.valueOf(Color.blue(color)),getActivity().getApplicationContext());
-                SystemWriter.write("/sys/class/leds/aura_sync/apply", "1",getActivity().getApplicationContext());
+                //check if the same colour is already applied
+                int previous_color = prefs.getInt(SAVED_PREFS_KEY_COLOR,0);
+                if(previous_color != color || previous_color == 0){
+                    prefs.edit().putInt(SAVED_PREFS_KEY_COLOR, color).apply();
+                    //Color c = Color.valueOf(color);
+                    //Log.e("color"," color picked "+color + " RGB is "+ Color.red(color)+ " " + Color.green(color)+ " "+ Color.blue(color));
 
+                    SystemWriter.write_colour(Color.red(color),Color.green(color),Color.blue(color),getActivity().getApplicationContext());
+                }
 
             }
         });
@@ -81,8 +75,6 @@ public class ColourWheelActivity extends Fragment {
         colorPickerView.setInitialColor(color);
 
         return root;
-
-        //return inflater.inflate(R.layout.activity_colour_wheel, container, false);
     }
 
     @Override
