@@ -15,6 +15,8 @@ Note I have only tested it on android 10.
 
 [Usage](#usage)
 
+[Notifications](#notifications)
+
 [Screenshots](#screenshots)
 
 [Issues](#issues)
@@ -59,6 +61,41 @@ Colour wheel will work for the following animations.
 4. some kind of thunder
 5. quick two flashes
 6. and sort of the last one too
+
+# Notifications
+Notification support is available from version 4 currently in beta and on the notifications branch.
+
+To use the notifications 
+
+1. Press on the notification settings to see the options.
+2. Press on React to Notifications to start the service.
+3. Press on the "Click to enable app to read notifications in settings" button and allow Asus Rog Phone 2 RGB to read notifications
+4. Select which animation you want to run when there is a notification
+
+### How do the notifications work?
+When a new notification comes in, the app reads the package name and saves it. The selected notification animation is executed.
+
+When you remove the notification from the status bar the app also detects this and restores the animations to whatever you selected in the app, If you didnt select anything then it will just turn them off.
+
+##### What if multiple notifications come in at once?
+The app tracks the latest notification, and only checks if the latest is removed. So if you have a whats app notification followed by a telegram notification. The notification animation will keep playing until you remove the telegram notification.
+
+This will allow setting custom notification animations for each app. ( in progress )
+
+##### How do you deal with spammy notifications?
+Some apps such as OpenVpn like to push updates to the notification this causes the app to think that a new notification is posted.
+
+To solve this I use a blacklist so any package name in the blacklist its notifications will be ignored.
+
+Current blacklist
+```
+package_blackList.put("de.blinkt.openvpn",1);
+package_blackList.put("terminal_heat_sink.asusrogphone2rgb",1);
+```
+Yes this app is also in there otherwise it will start notification animation when the app is opened. 
+
+##### 
+
 
 # Screenshots
 ![screenshot 1](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/1.jpg)
