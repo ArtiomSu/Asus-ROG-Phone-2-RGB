@@ -33,4 +33,21 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+
+    <string-array name="notification_animations">
+        <item>solid one colour</item>
+        <item>breathing one colour</item>
+        <item>blink</item>
+        <item>rainbow</item>
+        <item>another rainbow?</item>
+        <item>rainbow breathe</item>
+        <item>somekind of thunder</item>
+        <item>thunder rainbow</item>
+        <item>quick two flashes</item>
+        <item>quick two flashes rainbow</item>
+        <item>breathe rainbow</item>
+        <item>some strange breathe rainbow</item>
+        <item>slow glitchy rainbow</item>
+        <item>Developers custom anim</item>
+    </string-array>
 </resources>
