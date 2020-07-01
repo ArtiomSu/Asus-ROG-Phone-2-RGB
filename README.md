@@ -113,6 +113,10 @@ Yes this app is also in there otherwise it will start notification animation whe
 4. set animations for when receiving notifications/calls so on...
 
 # Version
+4. [3.1-beta-notifications](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/4) 
+```
+    This is a beta release that introduced notification support
+```
 3. [3.0-performance](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/3) 
 ```
     Rewrote SystemWriter to only write once per action thereby increasing performance mostly for colour wheel
