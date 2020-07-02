@@ -17,6 +17,8 @@ Note I have only tested it on android 10.
 
 [Notifications](#notifications)
 
+[Second led](#second-led)
+
 [Screenshots](#screenshots)
 
 [Issues](#issues)
@@ -72,6 +74,16 @@ To use the notifications
 3. Press on the "Click to enable app to read notifications in settings" button and allow Asus Rog Phone 2 RGB to read notifications
 4. Select which animation you want to run when there is a notification
 
+### Second led
+With the release of version 5 you can also enable the use of the second led that's normally ment to be used with a custom case.
+
+The "enable second led" switch above "Notification settings" switch enables the second led for any animations selected above. This doesnt have any impact on using the second led for notifications.
+
+For notifications you now have the following options relating to the second led.
+1. "use second led for notifications also" This lights up the second led and the logo led when a notification comes in.
+2. "Use Only the second led for notifications" This lights up only the second led.
+3. If you have both 1 and 2 disabled then only the logo led with light up.
+
 ### How do the notifications work?
 When a new notification comes in, the app reads the package name and saves it. The selected notification animation is executed.
 
@@ -113,6 +125,10 @@ Yes this app is also in there otherwise it will start notification animation whe
 4. set animations for when receiving notifications/calls so on...
 
 # Version
+5. [3.2-beta-second_led](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/5) 
+```
+    This is a beta release that introduced the use of the second led
+```
 4. [3.1-beta-notifications](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/4) 
 ```
     This is a beta release that introduced notification support
