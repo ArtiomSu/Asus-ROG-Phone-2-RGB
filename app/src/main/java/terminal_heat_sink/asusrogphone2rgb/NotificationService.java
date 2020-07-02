@@ -22,6 +22,9 @@ public class NotificationService extends NotificationListenerService {
     private String notifications_animation_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_animation";
     private String fab_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.fab_on";
     private String current_selected_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.current_selected";
+    private String notifications_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_second_led";
+    private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
+    private String use_notifications_second_led_only_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_second_led_use_only";
 
 
     private Map package_blackList = new HashMap();
@@ -115,32 +118,42 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private void send_notification(String name, boolean added, int mode){
+
+        SharedPreferences prefs = context.getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+
+
         if(added && (!latest_notification.equals(name))){ //if different notification is added.
             latest_notification = name;
-            Log. i ( "AsusRogPhone2RGBNotificationService" , "stating to notify for "+latest_notification);
+            boolean use_second_led_for_notification = prefs.getBoolean(notifications_second_led_on_shared_preference_key,false);
+            boolean use_second_led_only = prefs.getBoolean(use_notifications_second_led_only_on_shared_preference_key,false);
+            Log. i ( "AsusRogPhone2RGBNotificationService" , "stating to notify for "+latest_notification+" use second led:"+use_second_led_for_notification+" use second led only:"+use_second_led_only);
+
 
             if(mode >= 20){ //using custom animations
                 mode = 8; // thunder rainbow
             }else{
-                SystemWriter.notification_start(mode,false,0,0,0,context);
+
             }
+            SystemWriter.notification_start(mode,false,0,0,0,context,use_second_led_for_notification,use_second_led_only);
 
 
         }else if( !added && latest_notification.equals(name)){ // restore to previous config
             Log. i ( "AsusRogPhone2RGBNotificationService" , "stopping notifications because this is cleared "+latest_notification);
 
-            SharedPreferences prefs = context.getSharedPreferences(
-                    "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+
             boolean on = prefs.getBoolean(fab_on_shared_preference_key,false);
             int animation = prefs.getInt(current_selected_shared_preference_key,0);
+            boolean use_second_led = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
 
 
 
             if(mode >= 20){ //using custom animations so might need to restore colour
-                SystemWriter.notification_stop(!on,animation,false,0,0,0,context);
+                SystemWriter.notification_stop(!on,animation,false,0,0,0,context,use_second_led);
             }else{
-                SystemWriter.notification_stop(!on,animation,false,0,0,0,context);
+                SystemWriter.notification_stop(!on,animation,false,0,0,0,context,use_second_led);
             }
+
             latest_notification = "";
         }
 

@@ -73,8 +73,30 @@ public class SystemWriter {
         }
     }
 
-    public static void notification_start(int mode, boolean use_color, int red, int green, int blue, Context context){
-        String command = "echo 1 > /sys/class/leds/aura_sync/led_on && ";
+    public static void turn_on_second_led(boolean on, Context context){
+        if(on){
+            write_to_sys("echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable \n",context);
+        }else{
+            write_to_sys("echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode \n",context);
+        }
+    }
+
+    public static void notification_start(int mode, boolean use_color, int red, int green, int blue, Context context, boolean use_second_led, boolean use_second_led_only){
+
+        String command = "";
+
+        if(use_second_led_only){
+            command += "echo 0 > /sys/class/leds/aura_sync/led_on && ";
+        }else{
+            command += "echo 1 > /sys/class/leds/aura_sync/led_on && ";
+        }
+
+        if(use_second_led || use_second_led_only){
+            command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable && ";
+        }else{
+            command += "echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+        }
+
         if(use_color){
             command += "echo " + red + " > " + "/sys/class/leds/aura_sync/red_pwm" + " && " +
                     "echo " + green + " > " + "/sys/class/leds/aura_sync/green_pwm" + " && " +
@@ -86,11 +108,21 @@ public class SystemWriter {
         write_to_sys(command,context);
     }
 
-    public static void notification_stop(boolean turn_off, int mode, boolean use_color, int red, int green, int blue, Context context){
+    public static void notification_stop(boolean turn_off, int mode, boolean use_color, int red, int green, int blue, Context context, boolean use_second_led){
         String command = "";
+
+        if(use_second_led){
+            command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable && ";
+        }else{
+            command += "echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+        }
+
         if(turn_off){
             command += "echo 0 > /sys/class/leds/aura_sync/led_on && ";
+        }else{
+            command += "echo 1 > /sys/class/leds/aura_sync/led_on && ";
         }
+
         if(use_color){
             command += "echo " + red + " > " + "/sys/class/leds/aura_sync/red_pwm" + " && " +
                     "echo " + green + " > " + "/sys/class/leds/aura_sync/green_pwm" + " && " +
