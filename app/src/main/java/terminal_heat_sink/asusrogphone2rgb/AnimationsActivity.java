@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
@@ -41,6 +42,7 @@ public class AnimationsActivity extends Fragment {
     private Spinner notificationAnimationSelector;
     private Switch switch_enable_second_led_notifications;
     private Switch switch_use_second_led_for_notifications_only;
+    private Button button_select_apps;
 
     private String[][] animation_options = {
             {"0","off"},
@@ -103,7 +105,7 @@ public class AnimationsActivity extends Fragment {
             }else{
                 sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                 sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                sw.setTextColor(getResources().getColor(R.color.colorText));
+                sw.setTextColor(getResources().getColor(R.color.colorOFF));
             }
             sw.setText(animation_options[i][1]);
 
@@ -154,21 +156,33 @@ public class AnimationsActivity extends Fragment {
         }
 
         custom_stuff = new LinearLayout(getActivity().getApplicationContext());
-        custom_stuff.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        custom_stuff.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
         custom_stuff.setOrientation(LinearLayout.VERTICAL);
         custom_stuff.setGravity(Gravity.FILL_VERTICAL);
+        custom_stuff.setBackgroundColor(getResources().getColor(R.color.seperator));
+        custom_stuff.setPadding(0,20,0,20);
+
 
         final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
-        custom_text_view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        custom_text_view_params.setMargins(0,0,0,20);
+        custom_text_view.setLayoutParams(custom_text_view_params);
         custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
         custom_text_view.setText("Custom Options");
-        custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+        custom_text_view.setTypeface(null, Typeface.BOLD);
+        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
 
 
         custom_stuff.addView(custom_text_view);
 
         Switch switch_enable_second_led = new Switch(getActivity().getApplicationContext());
         switch_enable_second_led.setText("Enable second led");
+        LinearLayout.LayoutParams switch_enable_second_led_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        switch_enable_second_led_params.setMargins(0,0,0,20);
+        switch_enable_second_led.setLayoutParams(switch_enable_second_led_params);
+
         custom_stuff.addView(switch_enable_second_led);
 
         boolean second_led_enabled = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
@@ -222,8 +236,8 @@ public class AnimationsActivity extends Fragment {
         boolean notifications_enabled = prefs.getBoolean(notifications_settings_on_shared_preference_key,false);
 
         if(notifications_enabled){
-            switch_notifications_settings.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_notifications_settings.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_notifications_settings.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
+            switch_notifications_settings.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
             switch_notifications_settings.setTextColor(getResources().getColor(R.color.colorText));
             switch_notifications_settings.setChecked(true);
 
@@ -233,8 +247,8 @@ public class AnimationsActivity extends Fragment {
 
         }else{
             switch_notifications_settings.setChecked(false);
-            switch_notifications_settings.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_notifications_settings.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            switch_notifications_settings.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
+            switch_notifications_settings.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
             switch_notifications_settings.setTextColor(getResources().getColor(R.color.colorText));
         }
 
@@ -246,8 +260,8 @@ public class AnimationsActivity extends Fragment {
                     Switch s = (Switch) view;
                 if(notifications_enabled){
                     s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
                     s.setTextColor(getResources().getColor(R.color.colorText));
                     prefs.edit().putBoolean(notifications_settings_on_shared_preference_key, false).apply();
 
@@ -256,11 +270,12 @@ public class AnimationsActivity extends Fragment {
                     custom_stuff.removeView(notificationAnimationSelector);
                     custom_stuff.removeView(switch_enable_second_led_notifications);
                     custom_stuff.removeView(switch_use_second_led_for_notifications_only);
+                    custom_stuff.removeView(button_select_apps);
 
                 }else{
                     s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
                     s.setTextColor(getResources().getColor(R.color.colorText));
                     prefs.edit().putBoolean(notifications_settings_on_shared_preference_key, true).apply();
 
@@ -281,6 +296,7 @@ public class AnimationsActivity extends Fragment {
     }
 
     private void create_notification_settings(){
+        // react to notifications
         switch_enable_notifications = new Switch(getActivity().getApplicationContext());
         switch_enable_notifications.setText("React To Notifications");
 
@@ -329,7 +345,7 @@ public class AnimationsActivity extends Fragment {
 
         custom_stuff.addView(switch_enable_notifications);
 
-
+        // use second led also for notifications
         switch_enable_second_led_notifications = new Switch(getActivity().getApplicationContext());
         switch_enable_second_led_notifications.setText("Use second led for notifications also");
         boolean notifications_second_led_enabled = prefs.getBoolean(notifications_second_led_on_shared_preference_key,false);
@@ -373,7 +389,7 @@ public class AnimationsActivity extends Fragment {
         custom_stuff.addView(switch_enable_second_led_notifications);
 
 
-
+        // use second led for notifications only
         switch_use_second_led_for_notifications_only = new Switch(getActivity().getApplicationContext());
         switch_use_second_led_for_notifications_only.setText("Use Only the second led for notifications");
         boolean notifications_second_led_enabled_only = prefs.getBoolean(use_notifications_second_led_only_on_shared_preference_key,false);
@@ -415,16 +431,14 @@ public class AnimationsActivity extends Fragment {
 
         custom_stuff.addView(switch_use_second_led_for_notifications_only);
 
-
-
-
-
-
+        // open settings to enable notification access
         open_settings = new Button(getActivity().getApplicationContext());
         open_settings.setText("Click to enable App to read notifications in settings");
         open_settings.setTextColor(getResources().getColor(R.color.colorText));
         open_settings.setBackgroundColor(getResources().getColor(R.color.colorButton));
-
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0,0,0,10);
+        open_settings.setLayoutParams(params);
 
         open_settings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -434,7 +448,21 @@ public class AnimationsActivity extends Fragment {
 
         custom_stuff.addView(open_settings);
 
+        // select which apps to use for notifications
+        button_select_apps = new Button(getActivity().getApplicationContext());
+        button_select_apps.setText("Select which apps trigger notifications");
+        button_select_apps.setTextColor(getResources().getColor(R.color.colorText));
+        button_select_apps.setBackgroundColor(getResources().getColor(R.color.colorButton));
 
+        button_select_apps.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent app_selector = new Intent(getActivity().getApplicationContext(), AppSelector.class);
+                startActivity(app_selector);
+            }});
+
+        custom_stuff.addView(button_select_apps);
+
+        // which animation to use for notifications
         notificationAnimationSelector = new Spinner(getActivity().getApplicationContext());
         String[] animation_items = getResources().getStringArray(R.array.notification_animations);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, animation_items);
@@ -445,11 +473,10 @@ public class AnimationsActivity extends Fragment {
         notificationAnimationSelector.setAdapter(adapter);
 
         notificationAnimationSelector.setPrompt("Select Animation to use for notifications");
-        notificationAnimationSelector.setBackgroundColor(getResources().getColor(R.color.colorBG));
+        //notificationAnimationSelector.setBackgroundColor(getResources().getColor(R.color.colorBG));
 
         int notifications_animation = prefs.getInt(notifications_animation_on_shared_preference_key,1);
         notificationAnimationSelector.setSelection(notifications_animation-1,true);
-
 
 
         notificationAnimationSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -14,8 +14,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 public class NotificationService extends NotificationListenerService {
     private String notifications_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_on";
@@ -25,21 +24,13 @@ public class NotificationService extends NotificationListenerService {
     private String notifications_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_second_led";
     private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
     private String use_notifications_second_led_only_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_second_led_use_only";
+    private String apps_selected_for_notifications_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_apps_selected";
 
-
-    private Map package_blackList = new HashMap();
 
     private String latest_notification = "";
 
     Context context ;
 
-    private void populate_lists(){
-        if(package_blackList.isEmpty()){
-            Log.i( "AsusRogPhone2RGBNotificationService" , "populating_black_list");
-            package_blackList.put("de.blinkt.openvpn",1);
-            package_blackList.put("terminal_heat_sink.asusrogphone2rgb",1);
-        }
-    }
 
     @Override
     public void onCreate () {
@@ -53,7 +44,6 @@ public class NotificationService extends NotificationListenerService {
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
         boolean test = prefs.getBoolean(notifications_on_shared_preference_key,false);
         if(test){
-            populate_lists();
             String NOTIFICATION_CHANNEL_ID = "terminal_heat_sink.asusrogphone2rgb";
             String channelName = "Notification Service";
             NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
@@ -108,8 +98,12 @@ public class NotificationService extends NotificationListenerService {
             stopForeground(true);
             stopSelf();
         }else{
-            if(!package_blackList.containsKey(package_name)){
-                send_notification(package_name,added,animation);
+
+            Set<String> apps_to_notify = prefs.getStringSet(apps_selected_for_notifications_shared_preference_key,null);
+            if(apps_to_notify != null){
+                if(apps_to_notify.contains(package_name)){
+                    send_notification(package_name,added,animation);
+                }
             }
 
         }
