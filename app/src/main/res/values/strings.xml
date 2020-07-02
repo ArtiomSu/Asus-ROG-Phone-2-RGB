@@ -5,7 +5,7 @@
     <string name="tab_text_3">About</string>
     <string name="title_activity_animations">AnimationsActivity</string>
     <string name="about_text">Hello There Ladies and Gentlemen.\n
-        This app allows you to control the logo rgb on custom roms.\n\n
+        This app allows you to control the logo and second rgb on custom roms.\n\n
 
         You need to be rooted to use this since it writes to system files.\n\n
 
@@ -21,7 +21,23 @@
         quick two flashes\n
         and sort of the last one too\n\n
 
-        If you like what I do you can check out my github, telegram channel by clicking the icons at the top.\n\n
+        Notification support added and you can mess around with the settings after clicking on \"notification settings\"\n
+        To use the notifications\n
+        1. Press on the notification settings to see the options.\n
+        2. Press on React to Notifications to start the service.\n
+        3. Press on the \"Click to enable app to read notifications in settings\" button and allow Asus Rog Phone 2 RGB to read notifications\n
+        4. Select which animation you want to run when there is a notification\n
+        5. Press on \"Select which apps trigger notifications\" and tick on all the apps you want the app to use leds when a notification come in.\n\n
+
+        You can also enable the use of the second led that\'s normally meant to be used with a custom case.\n
+        The \"enable second led\" switch above \"Notification settings\" switch enables the second led for any animations selected above. This doesn\'t have any impact on using the second led for notifications.\n\n
+
+        For notifications you now have the following options relating to the second led.\n
+        \"use second led for notifications also\" This lights up the second led and the logo led when a notification comes in.\n
+        \"Use Only the second led for notifications\" This lights up only the second led.\n
+        If you have both 1 and 2 disabled then only the logo led with light up.\n
+
+        If you like what I do you can check out my github, youtube and telegram channel by clicking the icons at the top.\n\n
 
         If you would like to donate :) click on the paypal or patreon icons up above\n\n
 
@@ -33,4 +49,30 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+
+    <string-array name="notification_animations">
+        <item>solid one colour</item>
+        <item>breathing one colour</item>
+        <item>blink</item>
+        <item>rainbow</item>
+        <item>another rainbow?</item>
+        <item>rainbow breathe</item>
+        <item>somekind of thunder</item>
+        <item>thunder rainbow</item>
+        <item>quick two flashes</item>
+        <item>quick two flashes rainbow</item>
+        <item>breathe rainbow</item>
+        <item>some strange breathe rainbow</item>
+        <item>slow glitchy rainbow</item>
+        <item>Developers custom anim</item>
+    </string-array>
+    <string name="title_activity_app_selector">AppSelector</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

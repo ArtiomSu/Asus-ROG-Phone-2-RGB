@@ -68,6 +68,19 @@ public class AboutActivity extends Fragment {
             }
         });
 
+        ImageView youtube_image_view = (ImageView) root.findViewById(R.id.imageViewYoutube);
+
+        youtube_image_view.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse("https://www.youtube.com/c/TerminalHeatSink"));
+                startActivity(intent);
+            }
+        });
+
+
 
         TextView text = (TextView) root.findViewById(R.id.textViewAbout);
         text.setTextColor(getResources().getColor(R.color.colorText));
