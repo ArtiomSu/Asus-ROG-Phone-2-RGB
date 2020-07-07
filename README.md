@@ -130,9 +130,13 @@ If another notification comes in while there is already leds blinking for a noti
 4. set animations for when receiving notifications/calls so on... (done)
 5. enable the use of second led (done)
 6. allow timeout for notifications (done)
-7. add quicktiles for toggling logo led, second led and notifications
+7. add quicktiles for toggling logo led (done), second led (done) and notifications ( in progress )
 
 # Version
+8. [3.5-quick-tile](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/8) 
+```
+Added two quick tiles for toggling the logo led and second led.
+```
 7. [3.4-beta-delay](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/7) 
 ```
     New feature added that allows the lights to stop or timeout after a number of minutes or whatever you select.
@@ -177,6 +181,7 @@ If another notification comes in while there is already leds blinking for a noti
 ![screenshot 5](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/5.jpg)
 ![screenshot 6](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/6.jpg)
 ![screenshot 7](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
-![screenshot 8](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
-![screenshot 9](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
-![screenshot 10](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
+![screenshot 8](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/8.jpg)
+![screenshot 9](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/9.jpg)
+![screenshot 10](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/10.jpg)
+![screenshot 11](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/11.jpg)
