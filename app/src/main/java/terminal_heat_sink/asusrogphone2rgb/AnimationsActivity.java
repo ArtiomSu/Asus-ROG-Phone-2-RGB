@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
@@ -17,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,22 +31,26 @@ public class AnimationsActivity extends Fragment {
     }
     private int current_selected = 0;
     private String current_selected_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.current_selected";
-    private String notifications_settings_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_settings";
     private String notifications_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_on";
     private String notifications_animation_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_animation";
     private String notifications_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_second_led";
-    private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
     private String use_notifications_second_led_only_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_second_led_use_only";
 
+    private String use_notifications_timeout_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_notifications_timeout_shared_preference_key";
+    private String notifications_timeout_seconds_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_timeout_seconds_shared_preference_key";
+    private String notifications_timeout_progress_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_timeout_progress_shared_preference_key";
 
 
-    private LinearLayout custom_stuff;
+
+    private LinearLayout notification_settings_ll;
     private Button open_settings;
     private Switch switch_enable_notifications;
     private Spinner notificationAnimationSelector;
     private Switch switch_enable_second_led_notifications;
     private Switch switch_use_second_led_for_notifications_only;
     private Button button_select_apps;
+    private SeekBar timeout_seekbar;
+    private TextView timeout_text;
 
     private String[][] animation_options = {
             {"0","off"},
@@ -87,8 +95,14 @@ public class AnimationsActivity extends Fragment {
             }
         }
 
+        create_animation_switches(animations_linear_layout,root);
 
+        create_notification_settings(animations_linear_layout, prefs);
 
+        return root;
+    }
+
+    private void create_animation_switches(LinearLayout animations_linear_layout, View root){
 
         final Switch[] switches = new Switch[animation_options.length];
 
@@ -114,53 +128,56 @@ public class AnimationsActivity extends Fragment {
             sw = ((Switch) root.findViewById(id_));
             sw.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                        boolean all_off = true;
-                        for (int i = 0; i < switches.length; i++) {
-                            if(i == id_){
-                                if(switches[i].isChecked()){
-                                    current_selected = i;
-                                    SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                                            "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                                    prefs.edit().putInt(current_selected_shared_preference_key, current_selected).apply();
-                                    all_off = false;
-                                    switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                                    switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                                    switches[i].setTextColor(getResources().getColor(R.color.colorON));
-                                }else{
-                                    switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                                    switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                                    switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
-                                }
+                    boolean all_off = true;
+                    for (int i = 0; i < switches.length; i++) {
+                        if(i == id_){
+                            if(switches[i].isChecked()){
+                                current_selected = i;
+                                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                                prefs.edit().putInt(current_selected_shared_preference_key, current_selected).apply();
+                                all_off = false;
+                                switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                                switches[i].setTextColor(getResources().getColor(R.color.colorON));
                             }else{
-                                switches[i].setChecked(false);
                                 switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                                 switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                                 switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
                             }
-                        }
-
-                        if(all_off){
-                            current_selected = 0;
-                            switches[0].setChecked(true);
-                            switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                            switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                            switches[0].setTextColor(getResources().getColor(R.color.colorON));
-                            SystemWriter.write_animation(0,getActivity().getApplicationContext());
                         }else{
-                            //set effect
-                            SystemWriter.write_animation(id_,getActivity().getApplicationContext());
+                            switches[i].setChecked(false);
+                            switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                            switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                            switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
                         }
+                    }
+
+                    if(all_off){
+                        current_selected = 0;
+                        switches[0].setChecked(true);
+                        switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                        switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                        switches[0].setTextColor(getResources().getColor(R.color.colorON));
+                        SystemWriter.write_animation(0,getActivity().getApplicationContext());
+                    }else{
+                        //set effect
+                        SystemWriter.write_animation(id_,getActivity().getApplicationContext());
+                    }
 
                 }
             });
         }
+    }
 
-        custom_stuff = new LinearLayout(getActivity().getApplicationContext());
-        custom_stuff.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
-        custom_stuff.setOrientation(LinearLayout.VERTICAL);
-        custom_stuff.setGravity(Gravity.FILL_VERTICAL);
-        custom_stuff.setBackgroundColor(getResources().getColor(R.color.seperator));
-        custom_stuff.setPadding(0,20,0,20);
+
+    private void create_notification_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
+        notification_settings_ll = new LinearLayout(getActivity().getApplicationContext());
+        notification_settings_ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+        notification_settings_ll.setOrientation(LinearLayout.VERTICAL);
+        notification_settings_ll.setGravity(Gravity.FILL_VERTICAL);
+        notification_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+        notification_settings_ll.setPadding(0,20,0,20);
 
 
         final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
@@ -168,140 +185,18 @@ public class AnimationsActivity extends Fragment {
         custom_text_view_params.setMargins(0,0,0,20);
         custom_text_view.setLayoutParams(custom_text_view_params);
         custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
-        custom_text_view.setText("Custom Options");
+        custom_text_view.setText("Notification Settings");
         //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
         custom_text_view.setTypeface(null, Typeface.BOLD);
         custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
         custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
 
 
-        custom_stuff.addView(custom_text_view);
+        notification_settings_ll.addView(custom_text_view);
 
-        Switch switch_enable_second_led = new Switch(getActivity().getApplicationContext());
-        switch_enable_second_led.setText("Enable second led");
-        LinearLayout.LayoutParams switch_enable_second_led_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        switch_enable_second_led_params.setMargins(0,0,0,20);
-        switch_enable_second_led.setLayoutParams(switch_enable_second_led_params);
-
-        custom_stuff.addView(switch_enable_second_led);
-
-        boolean second_led_enabled = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
-
-        if(second_led_enabled){
-            switch_enable_second_led.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_enable_second_led.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_enable_second_led.setTextColor(getResources().getColor(R.color.colorON));
-            switch_enable_second_led.setChecked(true);
-
-        }else{
-            switch_enable_second_led.setChecked(false);
-            switch_enable_second_led.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_enable_second_led.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_enable_second_led.setTextColor(getResources().getColor(R.color.colorOFF));
-        }
-
-        switch_enable_second_led.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                boolean second_led_enabled = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
-                Switch s = (Switch) view;
-                if(second_led_enabled){
-                    s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTextColor(getResources().getColor(R.color.colorText));
-                    prefs.edit().putBoolean(use_second_led_on_shared_preference_key, false).apply();
-
-                    SystemWriter.turn_on_second_led(false,getActivity().getApplicationContext());
-
-                }else{
-                    s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTextColor(getResources().getColor(R.color.colorText));
-                    prefs.edit().putBoolean(use_second_led_on_shared_preference_key, true).apply();
-
-                    SystemWriter.turn_on_second_led(true,getActivity().getApplicationContext());
-                }
-            }
-        });
-
-
-
-        Switch switch_notifications_settings = new Switch(getActivity().getApplicationContext());
-        switch_notifications_settings.setText("Notification settings");
-        custom_stuff.addView(switch_notifications_settings);
-
-        boolean notifications_enabled = prefs.getBoolean(notifications_settings_on_shared_preference_key,false);
-
-        if(notifications_enabled){
-            switch_notifications_settings.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
-            switch_notifications_settings.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
-            switch_notifications_settings.setTextColor(getResources().getColor(R.color.colorText));
-            switch_notifications_settings.setChecked(true);
-
-            create_notification_settings();
-
-
-
-        }else{
-            switch_notifications_settings.setChecked(false);
-            switch_notifications_settings.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
-            switch_notifications_settings.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
-            switch_notifications_settings.setTextColor(getResources().getColor(R.color.colorText));
-        }
-
-        switch_notifications_settings.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                boolean notifications_enabled = prefs.getBoolean(notifications_settings_on_shared_preference_key,false);
-                    Switch s = (Switch) view;
-                if(notifications_enabled){
-                    s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_off)));
-                    s.setTextColor(getResources().getColor(R.color.colorText));
-                    prefs.edit().putBoolean(notifications_settings_on_shared_preference_key, false).apply();
-
-                    custom_stuff.removeView(open_settings);
-                    custom_stuff.removeView(switch_enable_notifications);
-                    custom_stuff.removeView(notificationAnimationSelector);
-                    custom_stuff.removeView(switch_enable_second_led_notifications);
-                    custom_stuff.removeView(switch_use_second_led_for_notifications_only);
-                    custom_stuff.removeView(button_select_apps);
-
-                }else{
-                    s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.notification_settings_on)));
-                    s.setTextColor(getResources().getColor(R.color.colorText));
-                    prefs.edit().putBoolean(notifications_settings_on_shared_preference_key, true).apply();
-
-
-                    create_notification_settings();
-
-
-                }
-
-            }
-        });
-
-
-
-
-        animations_linear_layout.addView(custom_stuff);
-        return root;
-    }
-
-    private void create_notification_settings(){
         // react to notifications
         switch_enable_notifications = new Switch(getActivity().getApplicationContext());
         switch_enable_notifications.setText("React To Notifications");
-
-        SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
 
         boolean notifications_enabled = prefs.getBoolean(notifications_on_shared_preference_key,false);
 
@@ -343,7 +238,7 @@ public class AnimationsActivity extends Fragment {
             }
         });
 
-        custom_stuff.addView(switch_enable_notifications);
+        notification_settings_ll.addView(switch_enable_notifications);
 
         // use second led also for notifications
         switch_enable_second_led_notifications = new Switch(getActivity().getApplicationContext());
@@ -386,7 +281,7 @@ public class AnimationsActivity extends Fragment {
             }
         });
 
-        custom_stuff.addView(switch_enable_second_led_notifications);
+        notification_settings_ll.addView(switch_enable_second_led_notifications);
 
 
         // use second led for notifications only
@@ -429,7 +324,7 @@ public class AnimationsActivity extends Fragment {
             }
         });
 
-        custom_stuff.addView(switch_use_second_led_for_notifications_only);
+        notification_settings_ll.addView(switch_use_second_led_for_notifications_only);
 
         // open settings to enable notification access
         open_settings = new Button(getActivity().getApplicationContext());
@@ -446,7 +341,7 @@ public class AnimationsActivity extends Fragment {
                 startActivity(intent);
             }});
 
-        custom_stuff.addView(open_settings);
+        notification_settings_ll.addView(open_settings);
 
         // select which apps to use for notifications
         button_select_apps = new Button(getActivity().getApplicationContext());
@@ -460,7 +355,7 @@ public class AnimationsActivity extends Fragment {
                 startActivity(app_selector);
             }});
 
-        custom_stuff.addView(button_select_apps);
+        notification_settings_ll.addView(button_select_apps);
 
         // which animation to use for notifications
         notificationAnimationSelector = new Spinner(getActivity().getApplicationContext());
@@ -507,12 +402,138 @@ public class AnimationsActivity extends Fragment {
             }
         });
 
-        custom_stuff.addView(notificationAnimationSelector);
+        notification_settings_ll.addView(notificationAnimationSelector);
 
 
+        Switch switch_timeout = new Switch(getActivity().getApplicationContext());
+        switch_timeout.setText("Notification timeout");
+        boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
+        notification_settings_ll.addView(switch_timeout);
+        if(use_timeout){
+            switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_timeout.setTextColor(getResources().getColor(R.color.colorON));
+            switch_timeout.setChecked(true);
+            create_timeout_settings(prefs);
+        }else{
+            switch_timeout.setChecked(false);
+            switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            switch_timeout.setTextColor(getResources().getColor(R.color.colorOFF));
+        }
 
+        switch_timeout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
+                Switch s = (Switch) view;
+                if(use_timeout){
+                    s.setChecked(false);
+                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+                    prefs.edit().putBoolean(use_notifications_timeout_shared_preference_key, false).apply();
+                    notification_settings_ll.removeView(timeout_seekbar);
+                    notification_settings_ll.removeView(timeout_text);
+
+                }else{
+                    s.setChecked(true);
+                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setTextColor(getResources().getColor(R.color.colorON));
+                    prefs.edit().putBoolean(use_notifications_timeout_shared_preference_key, true).apply();
+                    create_timeout_settings(prefs);
+                }
+
+            }
+        });
+
+        animations_linear_layout.addView(notification_settings_ll);
     }
 
+
+    private void create_timeout_settings(SharedPreferences prefs){
+
+        int timeout_seconds = prefs.getInt(notifications_timeout_seconds_shared_preference_key,60*30);// 30 mins
+        int progress = prefs.getInt(notifications_timeout_progress_shared_preference_key,20);
+
+        timeout_text = new TextView(getActivity().getApplicationContext());
+        timeout_text.setTextColor(getResources().getColor(R.color.colorText));
+
+
+        timeout_seekbar = new SeekBar(getActivity().getApplicationContext());
+        timeout_seekbar.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+
+        timeout_seekbar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+
+
+        timeout_seekbar.setThumb(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        timeout_seekbar.setMax(1000);
+        timeout_seekbar.setMin(10);
+
+        timeout_seekbar.setProgress(progress);
+        timeout_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+
+                prefs.edit().putInt(notifications_timeout_progress_shared_preference_key,i).apply();
+
+                int input = (int)Math.pow(1.0105,i)+19;
+
+                prefs.edit().putInt(notifications_timeout_seconds_shared_preference_key,input).apply();
+                timeout_text.setText(format_timeout(input));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        timeout_text.setText(format_timeout(timeout_seconds));
+        notification_settings_ll.addView(timeout_text);
+        notification_settings_ll.addView(timeout_seekbar);
+    }
+
+    private String format_timeout(int time) {
+        String output = "Notifications will timeout after";
+        int total_time = time;
+        if (total_time >= 60 * 60) { // greater than an hour
+            int hours = 0;
+            while (total_time >= 60 * 60) {
+                hours++;
+                total_time = total_time - 60 * 60;
+            }
+            output += " " + hours + " hours ";
+        }
+
+        if (total_time >= 60) { // minutes
+            int minutes = 0;
+            while (total_time >= 60) {
+                minutes++;
+                total_time = total_time - 60;
+            }
+            output += " " + minutes + " minutes ";
+        }
+
+        //seconds remaning
+        if (total_time > 0)
+            output += " " + total_time + " seconds ";
+
+        Log.i("AsusRogPhone2RGBTimeoutSelected","milli:"+time+" "+output);
+
+        return output;
+    }
 
 
     @Override

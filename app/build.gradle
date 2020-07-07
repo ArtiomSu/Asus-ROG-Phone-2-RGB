@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 5
-        versionName "3.3-beta-app-select"
+        versionCode 7
+        versionName "3.4-beta-delay"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

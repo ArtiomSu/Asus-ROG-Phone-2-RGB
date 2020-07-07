@@ -19,7 +19,9 @@ import terminal_heat_sink.asusrogphone2rgb.ui.main.SectionsPagerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private boolean fab_on = false;
+    private boolean second_led_on = false;
     private String fab_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.fab_on";
+    private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
 
 
     @Override
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab_second_led = findViewById(R.id.fab_second_led);
 
         final Context context = getApplicationContext();
 
@@ -71,6 +74,34 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        second_led_on = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
+        if(second_led_on){
+            fab_second_led.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON) ));
+        }else{
+            fab_second_led.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorBG) ));
+        }
+
+        fab_second_led.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_second_led);
+                if(second_led_on){
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorBG) ));
+                    SystemWriter.turn_on_second_led(false,getApplicationContext());
+                    second_led_on = false;
+                }else{
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON) ));
+                    SystemWriter.turn_on_second_led(true,getApplicationContext());
+                    second_led_on = true;
+                }
+                SharedPreferences prefs = context.getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                prefs.edit().putBoolean(use_second_led_on_shared_preference_key, second_led_on).apply();
+            }
+        });
+
 
     }
 
