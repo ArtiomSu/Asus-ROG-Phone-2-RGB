@@ -19,13 +19,13 @@ Note I have only tested it on android 10.
 
 [Second led](#second-led)
 
-[Screenshots](#screenshots)
-
 [Issues](#issues)
 
 [Features to be implemented](#features-to-be-implemented)
 
 [Version](#version)
+
+[Screenshots](#screenshots)
 
 # Setup 
 1. Download the latest apk from [releases](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases).
@@ -73,6 +73,7 @@ To use the notifications
 2. Press on React to Notifications to start the service.
 3. Press on the "Click to enable app to read notifications in settings" button and allow Asus Rog Phone 2 RGB to read notifications
 4. Select which animation you want to run when there is a notification
+5. Press on "Select which apps trigger notifications" and tick on all the apps you want the app to use leds when a notification come in.
 
 ### Second led
 With the release of version 5 you can also enable the use of the second led that's normally ment to be used with a custom case.
@@ -95,36 +96,26 @@ The app tracks the latest notification, and only checks if the latest is removed
 This will allow setting custom notification animations for each app. ( in progress )
 
 ##### How do you deal with spammy notifications?
-Some apps such as OpenVpn like to push updates to the notification this causes the app to think that a new notification is posted.
-
-To solve this I use a blacklist so any package name in the blacklist its notifications will be ignored.
-
-Current blacklist
-```
-package_blackList.put("de.blinkt.openvpn",1);
-package_blackList.put("terminal_heat_sink.asusrogphone2rgb",1);
-```
-Yes this app is also in there otherwise it will start notification animation when the app is opened. 
-
-##### 
-
-
-# Screenshots
-![screenshot 1](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/1.jpg)
-![screenshot 2](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/2.jpg)
-![screenshot 3](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/3.jpg)
-![screenshot 4](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/4.jpg)
+As of release 6 users can select which applications they want to trigger leds from an app list, illiminating the need for a blacklist now.
 
 # Issues
 1. colour wheel performance. This is improved as of version 3 but could still be smoother 
+2. app list can take a while to load because it gets the app icon for each application on the phone.
 
 # Features to be implemented
-1. animation speed should be possible
-2. blink delay should be possible too
-3. maybe custom animations?
-4. set animations for when receiving notifications/calls so on...
+1. animation speed should be possible (might not be possible)
+2. blink delay should be possible too (might not be possible)
+3. maybe custom animations? (in progress)
+4. set animations for when receiving notifications/calls so on... (done)
+5. enable the use of second led (done)
 
 # Version
+6. [3.3-beta-app-select](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/6) 
+```
+    Added a view to select applications that you want to trigger the leds when they receive notifications.
+    Improved UI a little bit
+    Updated the about page
+```
 5. [3.2-beta-second_led](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/5) 
 ```
     This is a beta release that introduced the use of the second led
@@ -146,3 +137,11 @@ Yes this app is also in there otherwise it will start notification animation whe
 ```
     Working on HavocOS only.
 ```
+# Screenshots
+![screenshot 1](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/1.jpg)
+![screenshot 2](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/2.jpg)
+![screenshot 3](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/3.jpg)
+![screenshot 4](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/4.jpg)
+![screenshot 5](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/5.jpg)
+![screenshot 6](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/6.jpg)
+![screenshot 7](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
