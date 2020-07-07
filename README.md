@@ -19,6 +19,8 @@ Note I have only tested it on android 10.
 
 [Second led](#second-led)
 
+[Notification Timeout](#notification-timeout)
+
 [Issues](#issues)
 
 [Features to be implemented](#features-to-be-implemented)
@@ -69,11 +71,12 @@ Notification support is available from version 4 currently in beta and on the no
 
 To use the notifications 
 
-1. Press on the notification settings to see the options.
+1. You will find notification settings in the animations tab.
 2. Press on React to Notifications to start the service.
 3. Press on the "Click to enable app to read notifications in settings" button and allow Asus Rog Phone 2 RGB to read notifications
 4. Select which animation you want to run when there is a notification
 5. Press on "Select which apps trigger notifications" and tick on all the apps you want the app to use leds when a notification come in.
+6. Optionaly you can select notification timeout see [Notification Timeout](#notification-timeout)
 
 ### Second led
 With the release of version 5 you can also enable the use of the second led that's normally ment to be used with a custom case.
@@ -98,9 +101,27 @@ This will allow setting custom notification animations for each app. ( in progre
 ##### How do you deal with spammy notifications?
 As of release 6 users can select which applications they want to trigger leds from an app list, illiminating the need for a blacklist now.
 
+### Notification Timeout
+This feature was added in release 7. It allows you to choose a time between 20 seconds and 9 hours, this will determine the maximum time it takes before the leds are turned off provided the notification is not cleared.
+
+The slider ( or seekbar in android lingo ) is setup so that it increases exponentially meaning it is easier to dile in smalled values, For example half way through the bar is only 4 minutes. 3/4 of the way is around 1 hour and it will increase quickly to 9 hours and 33 minutes at the end.
+
+###### Why is this feature neccessary?
+If you leave the notification option on all the time, you can get a notification during the night for example and the leds will be blinking for the whole night, decreasing your battery by a bit.
+
+However with notification timeout enabled you can set it so the leds stop after say 20 minutes of not clearing them.
+
+###### How does it work?
+A thread is created from the NotificationService class when the leds are ment to react to the notification. The thread checks if the leds have been flashing for specified amount of time and if the notification itself is not cleared. 
+
+If the notification is cleared then it will call the same code that the NotificationService uses to stop and restore the leds.
+
+If another notification comes in while there is already leds blinking for a notification then the timer is essentially reset and will wait to timeout for the new notification. This is because currently only the latest notification is being tracked. Future release might track every notification that comes in but this is pointless at the moment since the animations for every notification is the same.
+
 # Issues
-1. colour wheel performance. This is improved as of version 3 but could still be smoother 
+1. colour wheel performance. This is improved as of version 3 but could still be smoother.
 2. app list can take a while to load because it gets the app icon for each application on the phone.
+3. notification service keeps on restarting when killed.
 
 # Features to be implemented
 1. animation speed should be possible (might not be possible)
@@ -108,8 +129,19 @@ As of release 6 users can select which applications they want to trigger leds fr
 3. maybe custom animations? (in progress)
 4. set animations for when receiving notifications/calls so on... (done)
 5. enable the use of second led (done)
+6. allow timeout for notifications (done)
+7. add quicktiles for toggling logo led, second led and notifications
 
 # Version
+7. [3.4-beta-delay](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/7) 
+```
+    New feature added that allows the lights to stop or timeout after a number of minutes or whatever you select.
+    So this way if a notification comes on during the night the leds won't be shinning all night long.
+
+    Update to UI
+    AnimationsActivity heavily refactored.
+    Timer Runnable created in NotificationService
+```
 6. [3.3-beta-app-select](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/6) 
 ```
     Added a view to select applications that you want to trigger the leds when they receive notifications.
@@ -145,3 +177,6 @@ As of release 6 users can select which applications they want to trigger leds fr
 ![screenshot 5](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/5.jpg)
 ![screenshot 6](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/6.jpg)
 ![screenshot 7](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
+![screenshot 8](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
+![screenshot 9](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
+![screenshot 10](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
