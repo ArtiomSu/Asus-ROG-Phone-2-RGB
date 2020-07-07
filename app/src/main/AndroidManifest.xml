@@ -38,6 +38,29 @@
                     android:name = "android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".QuicktileLogo"
+            android:icon="@drawable/asus_rog_logo"
+            android:label="Toggle Logo LED"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".QuicktileSecondLed"
+            android:icon="@drawable/second_led"
+            android:label="Toggle Second LED"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
