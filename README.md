@@ -133,9 +133,22 @@ If another notification comes in while there is already leds blinking for a noti
 7. add quicktiles for toggling logo led (done), second led (done) and notifications ( in progress )
 
 # Version
+9. [3.6-ui-detection-easter-eggs](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/9) 
+```
+    Allow more scrolling in all three tabs, this way on smaller screen settings you can 
+    scroll down so the power buttons are not blocking the view.
+
+    Implemented os and device checks. App will only run on asus and android 10.
+
+    SystemWriter updated to read files for future.
+
+    UI update
+
+    Easter eggs - animate bg....
+```
 8. [3.5-quick-tile](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/8) 
 ```
-Added two quick tiles for toggling the logo led and second led.
+    Added two quick tiles for toggling the logo led and second led.
 ```
 7. [3.4-beta-delay](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/7) 
 ```
