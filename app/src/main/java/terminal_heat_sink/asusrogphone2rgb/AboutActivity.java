@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class AboutActivity extends Fragment {
+    private ScrollView scrollView;
+
     public AboutActivity() {
         // Required empty public constructor
     }
@@ -85,6 +88,25 @@ public class AboutActivity extends Fragment {
         TextView text = (TextView) root.findViewById(R.id.textViewAbout);
         text.setTextColor(getResources().getColor(R.color.colorText));
         text.setText(R.string.about_text);
+
+
+        scrollView = (ScrollView) root.findViewById(R.id.scrollViewabout);
+        ImageView easterEgg = (ImageView) root.findViewById(R.id.eastereggabout);
+
+        easterEgg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //scrollView.fullScroll(ScrollView.FOCUS_UP);
+                scrollView.smoothScrollTo(0,0);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse("https://www.youtube.com/watch?v=yX8yrOAjfKM"));
+                startActivity(intent);
+            }
+        });
+
+        scrollView.smoothScrollTo(0,0);
 
         return root;
     }

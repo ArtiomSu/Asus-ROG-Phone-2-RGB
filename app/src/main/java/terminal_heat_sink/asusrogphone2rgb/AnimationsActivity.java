@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
@@ -19,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -51,6 +53,9 @@ public class AnimationsActivity extends Fragment {
     private Button button_select_apps;
     private SeekBar timeout_seekbar;
     private TextView timeout_text;
+    private ScrollView scrollView;
+
+    private boolean easter_egg_clicked = false;
 
     private String[][] animation_options = {
             {"0","off"},
@@ -78,6 +83,17 @@ public class AnimationsActivity extends Fragment {
 
 
         LinearLayout animations_linear_layout = (LinearLayout) root.findViewById(R.id.animations_linear_layout);
+        scrollView = (ScrollView) root.findViewById(R.id.animations_scroll_layout);
+
+        ImageView easterEgg = (ImageView) root.findViewById(R.id.easteregg);
+
+        easterEgg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                easter_egg_clicked = !easter_egg_clicked;
+                easter_egg();
+            }
+        });
 
         SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
@@ -95,9 +111,11 @@ public class AnimationsActivity extends Fragment {
             }
         }
 
+
         create_animation_switches(animations_linear_layout,root);
 
         create_notification_settings(animations_linear_layout, prefs);
+        scrollView.smoothScrollTo(0,0);
 
         return root;
     }
@@ -109,12 +127,13 @@ public class AnimationsActivity extends Fragment {
         for (int i = 0; i < animation_options.length; i++) {
 
             Switch sw = new Switch(getActivity().getApplicationContext());
+            sw.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
             sw.setId(i);
             final int id_ = sw.getId();
             if(id_ == current_selected){
                 sw.setChecked(true);
                 sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                 sw.setTextColor(getResources().getColor(R.color.colorON));
             }else{
                 sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
@@ -122,7 +141,7 @@ public class AnimationsActivity extends Fragment {
                 sw.setTextColor(getResources().getColor(R.color.colorOFF));
             }
             sw.setText(animation_options[i][1]);
-
+            //timeout_seekbar.setThumb(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
             switches[i] = sw;
             animations_linear_layout.addView(sw);
             sw = ((Switch) root.findViewById(id_));
@@ -138,7 +157,7 @@ public class AnimationsActivity extends Fragment {
                                 prefs.edit().putInt(current_selected_shared_preference_key, current_selected).apply();
                                 all_off = false;
                                 switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                                 switches[i].setTextColor(getResources().getColor(R.color.colorON));
                             }else{
                                 switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
@@ -157,7 +176,7 @@ public class AnimationsActivity extends Fragment {
                         current_selected = 0;
                         switches[0].setChecked(true);
                         switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                        switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                        switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                         switches[0].setTextColor(getResources().getColor(R.color.colorON));
                         SystemWriter.write_animation(0,getActivity().getApplicationContext());
                     }else{
@@ -197,12 +216,14 @@ public class AnimationsActivity extends Fragment {
         // react to notifications
         switch_enable_notifications = new Switch(getActivity().getApplicationContext());
         switch_enable_notifications.setText("React To Notifications");
+        switch_enable_notifications.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+
 
         boolean notifications_enabled = prefs.getBoolean(notifications_on_shared_preference_key,false);
 
         if(notifications_enabled){
             switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_notifications.setChecked(true);
         }else{
@@ -227,7 +248,7 @@ public class AnimationsActivity extends Fragment {
                 }else{
                     s.setChecked(true);
                     s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, true).apply();
 
@@ -243,11 +264,13 @@ public class AnimationsActivity extends Fragment {
         // use second led also for notifications
         switch_enable_second_led_notifications = new Switch(getActivity().getApplicationContext());
         switch_enable_second_led_notifications.setText("Use second led for notifications also");
+        switch_enable_second_led_notifications.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+
         boolean notifications_second_led_enabled = prefs.getBoolean(notifications_second_led_on_shared_preference_key,false);
 
         if(notifications_second_led_enabled){
             switch_enable_second_led_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_enable_second_led_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_enable_second_led_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_enable_second_led_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_second_led_notifications.setChecked(true);
         }else{
@@ -272,7 +295,7 @@ public class AnimationsActivity extends Fragment {
                 }else{
                     s.setChecked(true);
                     s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(notifications_second_led_on_shared_preference_key, true).apply();
 
@@ -287,11 +310,12 @@ public class AnimationsActivity extends Fragment {
         // use second led for notifications only
         switch_use_second_led_for_notifications_only = new Switch(getActivity().getApplicationContext());
         switch_use_second_led_for_notifications_only.setText("Use Only the second led for notifications");
+        switch_use_second_led_for_notifications_only.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
         boolean notifications_second_led_enabled_only = prefs.getBoolean(use_notifications_second_led_only_on_shared_preference_key,false);
 
         if(notifications_second_led_enabled_only){
             switch_use_second_led_for_notifications_only.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_use_second_led_for_notifications_only.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_use_second_led_for_notifications_only.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_use_second_led_for_notifications_only.setTextColor(getResources().getColor(R.color.colorON));
             switch_use_second_led_for_notifications_only.setChecked(true);
         }else{
@@ -316,7 +340,7 @@ public class AnimationsActivity extends Fragment {
                 }else{
                     s.setChecked(true);
                     s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(use_notifications_second_led_only_on_shared_preference_key, true).apply();
                 }
@@ -407,11 +431,13 @@ public class AnimationsActivity extends Fragment {
 
         Switch switch_timeout = new Switch(getActivity().getApplicationContext());
         switch_timeout.setText("Notification timeout");
+        switch_timeout.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+
         boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
         notification_settings_ll.addView(switch_timeout);
         if(use_timeout){
             switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_timeout.setTextColor(getResources().getColor(R.color.colorON));
             switch_timeout.setChecked(true);
             create_timeout_settings(prefs);
@@ -440,7 +466,7 @@ public class AnimationsActivity extends Fragment {
                 }else{
                     s.setChecked(true);
                     s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(use_notifications_timeout_shared_preference_key, true).apply();
                     create_timeout_settings(prefs);
@@ -533,6 +559,76 @@ public class AnimationsActivity extends Fragment {
         Log.i("AsusRogPhone2RGBTimeoutSelected","milli:"+time+" "+output);
 
         return output;
+    }
+
+    private void easter_egg(){
+        scrollView.smoothScrollTo(0,0);
+
+        int[] colors1 = {Color.parseColor("#000000"), Color.parseColor("#0f9b0f")};
+        GradientDrawable frame1 = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors1);
+        GradientDrawable frame11 = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,colors1);
+
+        int[] colors2 = {Color.parseColor("#DA22FF"), Color.parseColor("#9733EE")};
+        GradientDrawable frame2 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,colors2);
+
+        int[] colors3 = {Color.parseColor("#7b4397"), Color.parseColor("#7b4397")};
+        GradientDrawable frame3 = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT,colors3);
+
+        int[] colors4 = {Color.parseColor("#a8ff78"), Color.parseColor("#78ffd6")};
+        GradientDrawable frame4 = new GradientDrawable(GradientDrawable.Orientation.BL_TR,colors4);
+
+        int[] colors5 = {Color.parseColor("#0F2027"), Color.parseColor("#2C5364")};
+        GradientDrawable frame5 = new GradientDrawable(GradientDrawable.Orientation.TR_BL,colors5);
+
+        int[] colors6 = {Color.parseColor("#e1eec3"), Color.parseColor("#f05053")};
+        GradientDrawable frame6 = new GradientDrawable(GradientDrawable.Orientation.BR_TL,colors6);
+
+        int[] colors7 = {Color.parseColor("#2980B9"), Color.parseColor("#FFFFFF")};
+        GradientDrawable frame7 = new GradientDrawable(GradientDrawable.Orientation.TL_BR,colors7);
+        GradientDrawable frame77 = new GradientDrawable(GradientDrawable.Orientation.TL_BR,colors7);
+
+
+        int[] colors8 = {Color.parseColor("#8E0E00"), Color.parseColor("#1F1C18")};
+        GradientDrawable frame8 = new GradientDrawable(GradientDrawable.Orientation.BL_TR,colors8);
+
+        int frame_seconds = 3000;
+
+        AnimationDrawable animationDrawable = new AnimationDrawable();
+        animationDrawable.addFrame(frame1,frame_seconds);
+        animationDrawable.addFrame(frame2,frame_seconds);
+        animationDrawable.addFrame(frame3,frame_seconds);
+        animationDrawable.addFrame(frame4,frame_seconds);
+        animationDrawable.addFrame(frame5,frame_seconds);
+        animationDrawable.addFrame(frame6,frame_seconds);
+        animationDrawable.addFrame(frame7,frame_seconds);
+
+        animationDrawable.setEnterFadeDuration(1500);
+        animationDrawable.setExitFadeDuration(1500);
+
+        scrollView.setBackground(animationDrawable);
+
+        int frame_seconds1 = 3000;
+        AnimationDrawable animationDrawable1 = new AnimationDrawable();
+        animationDrawable1.addFrame(frame77,frame_seconds1);
+        animationDrawable1.addFrame(frame6,frame_seconds1);
+        animationDrawable1.addFrame(frame5,frame_seconds1);
+        animationDrawable1.addFrame(frame8,frame_seconds1);
+        animationDrawable1.addFrame(frame3,frame_seconds1);
+        animationDrawable1.addFrame(frame2,frame_seconds1);
+        animationDrawable1.addFrame(frame11,frame_seconds1);
+        animationDrawable1.setEnterFadeDuration(1500);
+        animationDrawable1.setExitFadeDuration(1500);
+
+        notification_settings_ll.setBackground(animationDrawable1);
+        if(easter_egg_clicked){
+            animationDrawable.start();
+            animationDrawable1.start();
+        }else{
+            animationDrawable.stop();
+            animationDrawable1.stop();
+        }
+
+
     }
 
 

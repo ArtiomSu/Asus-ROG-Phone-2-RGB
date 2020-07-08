@@ -66,7 +66,7 @@
         </LinearLayout>
 
             <ScrollView
-                android:id="@+id/scrollView2"
+                android:id="@+id/scrollViewabout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
@@ -85,6 +85,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="TextView" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="2000dp"/>
+
+                        <ImageView
+                            android:id="@+id/eastereggabout"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:layout_centerInParent="true"
+                            android:paddingBottom="20dp"
+                            android:src="@drawable/easter_egg_1"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
             </ScrollView>
