@@ -34,6 +34,8 @@ Only works on android 10 roms as the android 9 rgb driver doesn't react to chang
 2. Find it in your downloads folder and click on it to install.
 3. Grant the root request
 
+If you want a video guide here is a youtube video showing all the features and how to use them for release 9 [click to view](https://www.youtube.com/watch?v=8rNJtEDuV1I)
+
 # Animations currently available 
 0. off
 1. solid one colour
