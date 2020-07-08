@@ -2,7 +2,7 @@
 This app allows you to control the logo rgb on custom roms. 
 Works on stock rom too after release 2.0-hotfix
 
-Note I have only tested it on android 10.
+Only works on android 10 roms as the android 9 rgb driver doesn't react to changes, therefore it is probably not possible to make it work on android 9 using current methods. 
 
 #### Only use this if you are using Asus Rog Phone 2
 #### You need to be rooted to use this since it writes to system files
