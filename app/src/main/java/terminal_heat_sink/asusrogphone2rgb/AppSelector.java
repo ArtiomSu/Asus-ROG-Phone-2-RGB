@@ -10,22 +10,23 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class AppSelector extends AppCompatActivity {
@@ -33,6 +34,9 @@ public class AppSelector extends AppCompatActivity {
     private String TAG = "AsusRogPhone2RGBAppSelector";
     private String apps_selected_for_notifications_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_apps_selected";
     private Set<String> apps_to_notify;
+
+    private ArrayList<String> package_names;
+    private ArrayList<LinearLayout> packages_enclosure_ll = new ArrayList<>();
 
     private Bitmap getBitmapFromDrawable( Drawable drawable) {
         final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -63,7 +67,7 @@ public class AppSelector extends AppCompatActivity {
         app_selector_ll.setBackgroundColor(getResources().getColor(R.color.colorBG));
         //app_selector_ll.setPadding(10,10,10,10);
 
-        TextView header_text = new TextView(context);
+        TextView header_text = findViewById(R.id.text_view_app_selector);
         header_text.setText("Select Apps");
         header_text.setTextSize(header_text.getTextSize()+1);
         header_text.setTextColor(getResources().getColor(R.color.colorText));
@@ -71,14 +75,53 @@ public class AppSelector extends AppCompatActivity {
         header_text.setPadding(10,10,10,10);
         header_text.setGravity(Gravity.CENTER);
 
-        app_selector_ll.addView(header_text);
+
+        TextInputEditText filter_text = findViewById(R.id.text_input_app_selector);
+        filter_text.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        filter_text.setTextColor(getResources().getColor(R.color.colorText));
+        filter_text.setHintTextColor(getResources().getColor(R.color.colorText));
+        filter_text.setLines(1);
+        filter_text.setCursorVisible(false);
+        filter_text.setSingleLine(true);
+
+
+
+
+        filter_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i("AppSelector",charSequence.toString());
+
+                for(int package_num=0; package_num<package_names.size(); package_num++){
+                    if(package_names.get(package_num).contains(charSequence.toString().toLowerCase())){
+                        //show packages
+                        packages_enclosure_ll.get(package_num).setVisibility(View.VISIBLE);
+                    }else{
+                        //hide packages
+                        packages_enclosure_ll.get(package_num).setVisibility(View.GONE);
+                        //Log.i("AppSelector","hiding package "+package_names.get(package_num));
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         final PackageManager pm = getPackageManager();
-//get a list of installed apps.
+        //get a list of installed apps.
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         //Map package_names = new HashMap();
-        ArrayList<String> package_names = new ArrayList<>();
+        package_names = new ArrayList<>();
 
         for (ApplicationInfo packageInfo : packages) {
             //Log.d(TAG, "Installed package :" + packageInfo.packageName);
@@ -135,12 +178,9 @@ public class AppSelector extends AppCompatActivity {
 
             enclosure.addView(icon_view);
             enclosure.addView(box);
+                packages_enclosure_ll.add(enclosure);
 
             app_selector_ll.addView(enclosure);
-
-
-
-
 
 
             box = ((CheckBox) findViewById(id_));
@@ -150,11 +190,14 @@ public class AppSelector extends AppCompatActivity {
             box.setButtonTintList(new ColorStateList(states,colors));
             box.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
+
             if(apps_to_notify.contains(package_names.get(i))){
                 box.setChecked(true);
+                box.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
                 box.setTextColor(getResources().getColor(R.color.colorON));
             }else{
                 box.setChecked(false);
+                box.setButtonDrawable(R.drawable.empty_check_box);
                 box.setTextColor(getResources().getColor(R.color.colorOFF));
             }
 
@@ -173,6 +216,7 @@ public class AppSelector extends AppCompatActivity {
 
                     if(box.isChecked()){
                         box.setChecked(true);
+                        box.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
                         box.setTextColor(getResources().getColor(R.color.colorON));
                         if(!apps_to_notify.contains(box.getText().toString())){
                             apps_to_notify.add(box.getText().toString());
@@ -181,6 +225,7 @@ public class AppSelector extends AppCompatActivity {
                         }
                     }else{
                         box.setChecked(false);
+                        box.setButtonDrawable(R.drawable.empty_check_box);
                         box.setTextColor(getResources().getColor(R.color.colorOFF));
                         if(apps_to_notify.contains(box.getText().toString())){
                             apps_to_notify.remove(box.getText().toString());
