@@ -23,7 +23,7 @@ Only works on android 10 roms as the android 9 rgb driver doesn't react to chang
 
 [Issues](#issues)
 
-[Features to be implemented](#features-to-be-implemented)
+[Features](#features)
 
 [Version](#version)
 
@@ -125,7 +125,7 @@ If another notification comes in while there is already leds blinking for a noti
 2. app list can take a while to load because it gets the app icon for each application on the phone.
 3. notification service keeps on restarting when killed.
 
-# Features to be implemented
+# Features
 1. animation speed should be possible (might not be possible)
 2. blink delay should be possible too (might not be possible)
 3. maybe custom animations? (in progress)
@@ -133,8 +133,13 @@ If another notification comes in while there is already leds blinking for a noti
 5. enable the use of second led (done)
 6. allow timeout for notifications (done)
 7. add quicktiles for toggling logo led (done), second led (done) and notifications ( in progress )
+8. allow filtering when selecting apps (done)
 
 # Version
+10. [3.6-ui-detection-easter-eggs](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/10) 
+```
+Added ability to type to filter applications in app select
+```
 9. [3.6-ui-detection-easter-eggs](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/9) 
 ```
     Allow more scrolling in all three tabs, this way on smaller screen settings you can 
@@ -200,3 +205,4 @@ If another notification comes in while there is already leds blinking for a noti
 ![screenshot 9](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/9.jpg)
 ![screenshot 10](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/10.jpg)
 ![screenshot 11](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/11.jpg)
+![screenshot 12](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/12.jpg)
