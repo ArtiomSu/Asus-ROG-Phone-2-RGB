@@ -1,6 +1,7 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -68,8 +70,8 @@ public class AppSelector extends AppCompatActivity {
         //app_selector_ll.setPadding(10,10,10,10);
 
         TextView header_text = findViewById(R.id.text_view_app_selector);
-        header_text.setText("Select Apps");
-        header_text.setTextSize(header_text.getTextSize()+1);
+        header_text.setText("Select Apps\nClick on App Icon to set custom animations");
+        header_text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f);
         header_text.setTextColor(getResources().getColor(R.color.colorText));
         header_text.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         header_text.setPadding(10,10,10,10);
@@ -165,6 +167,20 @@ public class AppSelector extends AppCompatActivity {
             catch (PackageManager.NameNotFoundException e)
             {
             }
+            icon_view.setId(1000+i);
+
+            icon_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImageView img = (ImageView) view;
+                    int id = (img.getId()) - 1000;
+                    //Log.i("Appselector","image click on "+ package_names.get(id));
+                    Intent intent = new Intent(getApplicationContext(), PerAppCustomisations.class);
+                    intent.putExtra("package_name",package_names.get(id));
+                    startActivity(intent);
+                }
+            });
+
 
             LinearLayout enclosure = new LinearLayout(context);
             enclosure.setOrientation(LinearLayout.HORIZONTAL);

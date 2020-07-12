@@ -22,7 +22,7 @@ import top.defaults.colorpicker.ColorPickerView;
 public class ColourWheelActivity extends Fragment {
 
     private static final String SAVED_STATE_KEY_COLOR = "saved_state_key_color";
-    private static final String SAVED_PREFS_KEY_COLOR = "saved_prefs_key_color";
+    private String SAVED_PREFS_KEY_COLOR = "terminal_heat_sink.asusrogphone2rgb.saved_prefs_key_color";
 
     private ColorPickerView colorPickerView;
     private ScrollView scrollView;

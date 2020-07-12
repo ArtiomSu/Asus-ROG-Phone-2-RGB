@@ -148,12 +148,12 @@ public class AnimationsActivity extends Fragment {
             sw.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     boolean all_off = true;
+                    SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                            "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                     for (int i = 0; i < switches.length; i++) {
                         if(i == id_){
                             if(switches[i].isChecked()){
                                 current_selected = i;
-                                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                                 prefs.edit().putInt(current_selected_shared_preference_key, current_selected).apply();
                                 all_off = false;
                                 switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
@@ -178,6 +178,7 @@ public class AnimationsActivity extends Fragment {
                         switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
                         switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                         switches[0].setTextColor(getResources().getColor(R.color.colorON));
+                        prefs.edit().putInt(current_selected_shared_preference_key, 0).apply();
                         SystemWriter.write_animation(0,getActivity().getApplicationContext());
                     }else{
                         //set effect

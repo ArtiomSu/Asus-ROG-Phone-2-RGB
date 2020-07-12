@@ -31,6 +31,13 @@ public class NotificationService extends NotificationListenerService {
     private String use_notifications_timeout_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_notifications_timeout_shared_preference_key";
     private String notifications_timeout_seconds_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_timeout_seconds_shared_preference_key";
 
+    private String SAVED_PREFS_KEY_COLOR = "terminal_heat_sink.asusrogphone2rgb.saved_prefs_key_color";
+
+
+    //per app_animation keys
+    private String package_color_preference_pretext = "sharedPreferencePerAppColor";
+    private String package_animation_preference_pretext = "sharedPreferencePerAppAnimationMode";
+
     private String latest_notification = "";
 
     Context context ;
@@ -150,7 +157,25 @@ public class NotificationService extends NotificationListenerService {
             }else{
 
             }
-            SystemWriter.notification_start(mode,false,0,0,0,context,use_second_led_for_notification,use_second_led_only);
+
+            //check if the notification uses custom animations
+            int custom_mode = prefs.getInt(package_animation_preference_pretext+name,0);
+            boolean use_colour = false;
+            int red = 0, green = 0, blue = 0;
+
+            if(custom_mode != 0){
+                mode = custom_mode;
+                int colour = prefs.getInt(package_color_preference_pretext+name,0);
+                if(colour != 0){
+                    use_colour = true;
+                    red = Color.red(colour);
+                    green = Color.green(colour);
+                    blue = Color.blue(colour);
+                }
+
+            }
+
+            SystemWriter.notification_start(mode,use_colour,red,green,blue,context,use_second_led_for_notification,use_second_led_only);
 
             boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
             if(use_timeout){//create timeout
@@ -184,14 +209,12 @@ public class NotificationService extends NotificationListenerService {
         int animation = prefs.getInt(current_selected_shared_preference_key,0);
         boolean use_second_led = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
 
-        int mode = prefs.getInt(notifications_animation_on_shared_preference_key, 1);
+        int color = prefs.getInt(SAVED_PREFS_KEY_COLOR,-1031);
 
 
-        if(mode >= 20){ //using custom animations so might need to restore colour
-            SystemWriter.notification_stop(!on,animation,false,0,0,0,context,use_second_led);
-        }else{
-            SystemWriter.notification_stop(!on,animation,false,0,0,0,context,use_second_led);
-        }
+
+        SystemWriter.notification_stop(!on,animation,true,Color.red(color),Color.green(color),Color.blue(color),context,use_second_led);
+
         latest_notification = "";
     }
 
