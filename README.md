@@ -23,6 +23,8 @@ Only works on android 10 roms as the android 9 rgb driver doesn't react to chang
 
 [Per App Custom Animations and Colours](#per-app-custom-animations-and-colours)
 
+[Save Restore App Data](#save-restore-app-data)
+
 [Issues](#issues)
 
 [Features](#features)
@@ -35,6 +37,7 @@ Only works on android 10 roms as the android 9 rgb driver doesn't react to chang
 1. Download the latest apk from [releases](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases).
 2. Find it in your downloads folder and click on it to install.
 3. Grant the root request
+4. Take a look at [Save Restore App Data](#save-restore-app-data) to restore old data.
 
 If you want a video guide here is a youtube video showing all the features and how to use them for release 9 [click to view](https://www.youtube.com/watch?v=8rNJtEDuV1I)
 
@@ -134,6 +137,21 @@ It allows each app to have it own unique animation and colours for the leds. So 
 4. From here you can enable your desired animation for this app.
 5. Also make sure the standard notification options are enabled as here [Notifications](notifications)
 
+### Save Restore App Data
+Since release 13 you can now save and restore your data, this way you dont have to setup all of the settings for custom notifications each time you reinstall the app.
+
+###### How to
+1. Change any setting in the app that you want and when finished go to the about tab.
+2. Click on the "Export Settings" button to save.
+3. After reinstalling the app or whenever. You can click on "Import Settings", the app will restart and your previous settings will be applied.
+
+###### How does it work
+Because this app uses root access we can take advantage of the shared preferences file.
+
+When you save your settings, the app copies `/data/data/terminal_heat_sink.asusrogphone2rgb/shared_prefs/terminal_heat_sink.asusrogphone2rgb.xml` into `/sdcard/.terminal_heat_sink.asusrogphone2rgb.xml` 
+
+When you restore the settings, the app copies the file back into the shared preferences folder and restarts the app so that it can read the new shared preferences therby restoring the apps settings to what they were.
+
 # Issues
 1. colour wheel performance. This is improved as of version 3 but could still be smoother.
 2. app list can take a while to load because it gets the app icon for each application on the phone.
@@ -148,9 +166,15 @@ It allows each app to have it own unique animation and colours for the leds. So 
 6. allow timeout for notifications (done)
 7. add quicktiles for toggling logo led (done), second led (done) and notifications ( in progress )
 8. allow filtering when selecting apps (done)
-9. set custom animations and colours for each app
+9. set custom animations and colours for each app (done)
+10. save restore app settings (done)
 
 # Version
+13. [4.0-save-data](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/13) 
+```
+Added two buttons in the about tab to save and restore all of the settings in the app.
+This way you wont have to set up all of the custom notifications for each app every time there is a new release.
+```
 12. [3.9-ui-update](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/12) 
 ```
 Changed all of the switches to use checkboxes, functionality is identical to previous release just visuals changed
