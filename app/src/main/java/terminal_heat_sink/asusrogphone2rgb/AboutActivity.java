@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -105,6 +106,29 @@ public class AboutActivity extends Fragment {
                 startActivity(intent);
             }
         });
+
+        Button export_settings = (Button) root.findViewById(R.id.export_settings);
+        export_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SystemWriter.save_shared_preferences(getActivity().getApplicationContext());
+            }
+        });
+
+        Button import_settings = (Button) root.findViewById(R.id.import_settings);
+        import_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SystemWriter.restore_shared_preferences(getActivity().getApplicationContext());
+                Intent i = getActivity().getApplicationContext().getPackageManager().
+                        getLaunchIntentForPackage(getActivity().getApplicationContext().getPackageName());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                System.exit(0);
+            }
+        });
+
 
         scrollView.smoothScrollTo(0,0);
 

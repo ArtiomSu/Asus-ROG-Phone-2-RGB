@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="terminal_heat_sink.asusrogphone2rgb.xml"/>
+</full-backup-content>

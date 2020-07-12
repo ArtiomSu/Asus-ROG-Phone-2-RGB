@@ -65,6 +65,38 @@
                 android:src="@drawable/icons8_youtube_squared" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
+
+            <Button
+                android:id="@+id/export_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorButton"
+                android:text="Export Settings"
+                android:textColor="@color/colorText" />
+
+            <Button
+                android:id="@+id/import_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorButton"
+                android:text="Import Settings"
+                android:textColor="@color/colorText" />
+
+
+        </LinearLayout>
+
             <ScrollView
                 android:id="@+id/scrollViewabout"
                 android:layout_width="match_parent"
@@ -74,9 +106,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
+                    android:orientation="vertical"
+                    >
 
 
 
@@ -87,11 +118,8 @@
                         android:text="TextView" />
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+
+
 
                         <Space
                             android:layout_width="match_parent"
@@ -108,7 +136,6 @@
                             android:paddingBottom="20dp"
                             android:src="@drawable/easter_egg_1"/>
 
-                    </LinearLayout>
 
                 </LinearLayout>
             </ScrollView>

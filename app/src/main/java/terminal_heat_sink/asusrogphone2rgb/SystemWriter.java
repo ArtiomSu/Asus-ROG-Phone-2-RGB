@@ -69,7 +69,6 @@ public class SystemWriter {
             p = Runtime.getRuntime().exec("su");
 
             DataOutputStream os = new DataOutputStream(p.getOutputStream());
-            DataInputStream in = new DataInputStream(p.getInputStream());
             os.writeBytes(command);
             // Close the terminal
             os.writeBytes("exit\n");
@@ -80,15 +79,6 @@ public class SystemWriter {
 
                     if(p.exitValue() == 0){
                         Log.i("SystemWriter","wrote successfully");
-
-//                        int i;
-//                        String output = "";
-//                        char c;
-//                        while((i = in.read())!=-1) {
-//                            c = (char)i;
-//                            output +=c;
-//                        }
-//                        Log.i("SystemWriter","inputstream="+output);
 
                     }else{
                         Log.i("SystemWriter","failed to write");
@@ -201,5 +191,13 @@ public class SystemWriter {
                 "echo 1 > "+ "/sys/class/leds/aura_sync/apply" + " \n ";
 
         write_to_sys(command,context);
+    }
+
+    public static void save_shared_preferences(Context context){
+        write_to_sys("cat /data/data/terminal_heat_sink.asusrogphone2rgb/shared_prefs/terminal_heat_sink.asusrogphone2rgb.xml > /sdcard/.terminal_heat_sink.asusrogphone2rgb.xml \n",context);
+    }
+
+    public static void restore_shared_preferences(Context context){
+        write_to_sys("cat /sdcard/.terminal_heat_sink.asusrogphone2rgb.xml > /data/data/terminal_heat_sink.asusrogphone2rgb/shared_prefs/terminal_heat_sink.asusrogphone2rgb.xml \n",context);
     }
 }
