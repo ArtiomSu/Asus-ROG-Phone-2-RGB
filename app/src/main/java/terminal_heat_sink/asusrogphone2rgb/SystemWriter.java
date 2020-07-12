@@ -200,4 +200,12 @@ public class SystemWriter {
     public static void restore_shared_preferences(Context context){
         write_to_sys("cat /sdcard/.terminal_heat_sink.asusrogphone2rgb.xml > /data/data/terminal_heat_sink.asusrogphone2rgb/shared_prefs/terminal_heat_sink.asusrogphone2rgb.xml \n",context);
     }
+
+    public static void notification_access(boolean allow,Context context){
+        if(allow){
+            write_to_sys("cmd notification allow_listener terminal_heat_sink.asusrogphone2rgb/terminal_heat_sink.asusrogphone2rgb.NotificationService \n",context);
+        }else{
+            write_to_sys("cmd notification disallow_listener terminal_heat_sink.asusrogphone2rgb/terminal_heat_sink.asusrogphone2rgb.NotificationService \n",context);
+        }
+    }
 }

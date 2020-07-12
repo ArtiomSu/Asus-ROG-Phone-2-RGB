@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 13
-        versionName "4.0-save-data"
+        versionCode 14
+        versionName "4.1-settings-bypass"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

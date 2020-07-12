@@ -241,11 +241,13 @@ public class AnimationsActivity extends Fragment {
             //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_notifications.setChecked(true);
+            SystemWriter.notification_access(true,getActivity().getApplicationContext());
         }else{
             switch_enable_notifications.setChecked(false);
             //switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorOFF));
+            SystemWriter.notification_access(false,getActivity().getApplicationContext());
         }
 
         switch_enable_notifications.setOnClickListener(new View.OnClickListener() {
@@ -261,12 +263,15 @@ public class AnimationsActivity extends Fragment {
                     //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, false).apply();
+                    SystemWriter.notification_access(false,getActivity().getApplicationContext());
+
                 }else{
                     s.setChecked(true);
                     //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
                     //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, true).apply();
+                    SystemWriter.notification_access(true,getActivity().getApplicationContext());
 
                     Intent notification_intent = new Intent(getActivity().getApplicationContext(), NotificationService.class);
                     getActivity().getApplicationContext().startService(notification_intent);
@@ -373,23 +378,6 @@ public class AnimationsActivity extends Fragment {
         });
 
         notification_settings_ll.addView(switch_use_second_led_for_notifications_only);
-
-        // open settings to enable notification access
-        open_settings = new Button(getActivity().getApplicationContext());
-        open_settings.setText("Click to enable App to read notifications in settings");
-        open_settings.setTextColor(getResources().getColor(R.color.colorText));
-        open_settings.setBackgroundColor(getResources().getColor(R.color.colorButton));
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0,0,0,10);
-        open_settings.setLayoutParams(params);
-
-        open_settings.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" ) ;
-                startActivity(intent);
-            }});
-
-        notification_settings_ll.addView(open_settings);
 
         // select which apps to use for notifications
         button_select_apps = new Button(getActivity().getApplicationContext());
