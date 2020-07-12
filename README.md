@@ -151,6 +151,10 @@ It allows each app to have it own unique animation and colours for the leds. So 
 9. set custom animations and colours for each app
 
 # Version
+12. [3.9-ui-update](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/12) 
+```
+Changed all of the switches to use checkboxes, functionality is identical to previous release just visuals changed
+```
 11. [3.8-per-app-animations](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/11) 
 ```
 You can now set custom animations/colours for each app by clicking on the app icon in app select
@@ -228,4 +232,3 @@ Added ability to type to filter applications in app select
 ![screenshot 13](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/13.jpg)
 ![screenshot 14](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/14.jpg)
 ![screenshot 15](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/15.jpg)
-![screenshot 16](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/16.jpg)
