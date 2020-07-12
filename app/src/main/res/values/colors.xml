@@ -10,6 +10,7 @@
     <color name="colorOFF">#CD1A1A</color>
     <color name="colorThumbOn">#4E0A0A</color>
     <color name="colorON">#06B306</color>
+    <color name="colorDisabled">#2B2525</color>
     <color name="seperator">#0E0E0E</color>
     <color name="notification_settings_on">#2B63F1</color>
     <color name="notification_settings_off">#001E68</color>

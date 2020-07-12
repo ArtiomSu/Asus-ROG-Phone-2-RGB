@@ -202,18 +202,18 @@ public class AppSelector extends AppCompatActivity {
             box = ((CheckBox) findViewById(id_));
 
             int states[][] = {{android.R.attr.state_checked}, {}};
-            int colors[] = {getResources().getColor(R.color.colorON), getResources().getColor(R.color.colorOFF)};
+            int colors[] = {getResources().getColor(R.color.colorON), getResources().getColor(R.color.colorDisabled)};
             box.setButtonTintList(new ColorStateList(states,colors));
             box.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-
+            box.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
 
             if(apps_to_notify.contains(package_names.get(i))){
                 box.setChecked(true);
-                box.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+
                 box.setTextColor(getResources().getColor(R.color.colorON));
             }else{
                 box.setChecked(false);
-                box.setButtonDrawable(R.drawable.empty_check_box);
+                //box.setButtonDrawable(R.drawable.empty_check_box);
                 box.setTextColor(getResources().getColor(R.color.colorOFF));
             }
 
@@ -232,7 +232,7 @@ public class AppSelector extends AppCompatActivity {
 
                     if(box.isChecked()){
                         box.setChecked(true);
-                        box.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+                        //box.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
                         box.setTextColor(getResources().getColor(R.color.colorON));
                         if(!apps_to_notify.contains(box.getText().toString())){
                             apps_to_notify.add(box.getText().toString());
@@ -241,7 +241,7 @@ public class AppSelector extends AppCompatActivity {
                         }
                     }else{
                         box.setChecked(false);
-                        box.setButtonDrawable(R.drawable.empty_check_box);
+                        //box.setButtonDrawable(R.drawable.empty_check_box);
                         box.setTextColor(getResources().getColor(R.color.colorOFF));
                         if(apps_to_notify.contains(box.getText().toString())){
                             apps_to_notify.remove(box.getText().toString());

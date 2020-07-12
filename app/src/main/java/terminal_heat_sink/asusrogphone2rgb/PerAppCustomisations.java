@@ -9,6 +9,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -122,21 +123,29 @@ public class PerAppCustomisations extends AppCompatActivity {
 
     private void create_animation_switches(LinearLayout animations_linear_layout){
 
-        final Switch[] switches = new Switch[animation_options.length];
+        final CheckBox[] switches = new CheckBox[animation_options.length];
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
         current_selected = prefs.getInt(package_animation_preference_pretext+package_name,0);
 
+        int states[][] = {{android.R.attr.state_checked}, {}};
+        int colors[] = {getResources().getColor(R.color.colorON), getResources().getColor(R.color.colorDisabled)};
+
+
         for (int i = 0; i < animation_options.length; i++) {
 
-            Switch sw = new Switch(getApplicationContext());
-            sw.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+            CheckBox sw = new CheckBox(getApplicationContext());
+            //sw.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+            sw.setButtonTintList(new ColorStateList(states,colors));
+            sw.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            sw.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+            sw.setPadding(0,0,0,10);
             sw.setId(i);
             final int id_ = sw.getId();
             if(id_ == current_selected){
                 sw.setChecked(true);
-                sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                //sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                //sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                 sw.setTextColor(getResources().getColor(R.color.colorON));
 
                 for(int b=0;b<show_colour.length;b++){
@@ -150,15 +159,15 @@ public class PerAppCustomisations extends AppCompatActivity {
 
 
             }else{
-                sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                //sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                //sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                 sw.setTextColor(getResources().getColor(R.color.colorOFF));
             }
             sw.setText(animation_options[i][1]);
             //timeout_seekbar.setThumb(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
             switches[i] = sw;
             animations_linear_layout.addView(sw);
-            sw = ((Switch) findViewById(id_));
+            sw = ((CheckBox) findViewById(id_));
             sw.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     boolean all_off = true;
@@ -172,8 +181,8 @@ public class PerAppCustomisations extends AppCompatActivity {
 
                                 prefs.edit().putInt(package_animation_preference_pretext+package_name, current_selected).apply();
                                 all_off = false;
-                                switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                                //switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                                //switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                                 switches[i].setTextColor(getResources().getColor(R.color.colorON));
                                 for(int b=0;b<show_colour.length;b++){
                                     if(show_colour[b] == id_){
@@ -183,14 +192,14 @@ public class PerAppCustomisations extends AppCompatActivity {
 
                                 }
                             }else{
-                                switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                                //switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                                //switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                                 switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
                             }
                         }else{
                             switches[i].setChecked(false);
-                            switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                            switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                            //switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                            //switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                             switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
                         }
                     }
@@ -198,8 +207,8 @@ public class PerAppCustomisations extends AppCompatActivity {
                     if(all_off) {
                         current_selected = 0;
                         switches[0].setChecked(true);
-                        switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                        switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                        //switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                        //switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                         switches[0].setTextColor(getResources().getColor(R.color.colorON));
                         prefs.edit().putInt(package_animation_preference_pretext + package_name, 0).apply();
                         colorPickerView.setVisibility(View.GONE);

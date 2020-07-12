@@ -19,12 +19,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 public class AnimationsActivity extends Fragment {
@@ -46,10 +46,10 @@ public class AnimationsActivity extends Fragment {
 
     private LinearLayout notification_settings_ll;
     private Button open_settings;
-    private Switch switch_enable_notifications;
+    private CheckBox switch_enable_notifications;
     private Spinner notificationAnimationSelector;
-    private Switch switch_enable_second_led_notifications;
-    private Switch switch_use_second_led_for_notifications_only;
+    private CheckBox switch_enable_second_led_notifications;
+    private CheckBox switch_use_second_led_for_notifications_only;
     private Button button_select_apps;
     private SeekBar timeout_seekbar;
     private TextView timeout_text;
@@ -71,9 +71,11 @@ public class AnimationsActivity extends Fragment {
             {"10","quick two flashes rainbow"},
             {"11","breathe rainbow"},
             {"12","some strange breathe rainbow"},
-            {"13","slow glitchy rainbow"},
-            {"14","yellow light? rofl"},
+            {"13","slow glitchy rainbow"}
     };
+
+    private int check_box_states[][];
+    private int check_box_colors[];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,6 +83,8 @@ public class AnimationsActivity extends Fragment {
 
         View root = inflater.inflate(R.layout.activity_animations, container, false);
 
+        check_box_states = new int[][]{{android.R.attr.state_checked}, {}};
+        check_box_colors = new int[]{getResources().getColor(R.color.colorON), getResources().getColor(R.color.colorDisabled)};
 
         LinearLayout animations_linear_layout = (LinearLayout) root.findViewById(R.id.animations_linear_layout);
         scrollView = (ScrollView) root.findViewById(R.id.animations_scroll_layout);
@@ -122,29 +126,36 @@ public class AnimationsActivity extends Fragment {
 
     private void create_animation_switches(LinearLayout animations_linear_layout, View root){
 
-        final Switch[] switches = new Switch[animation_options.length];
+        final CheckBox[] switches = new CheckBox[animation_options.length];
 
         for (int i = 0; i < animation_options.length; i++) {
 
-            Switch sw = new Switch(getActivity().getApplicationContext());
-            sw.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+
+            CheckBox sw = new CheckBox(getActivity().getApplicationContext());
+            sw.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+            sw.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            sw.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+            sw.setPadding(0,0,0,10);
+
+
+            //sw.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
             sw.setId(i);
             final int id_ = sw.getId();
             if(id_ == current_selected){
                 sw.setChecked(true);
-                sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                //sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                //sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                 sw.setTextColor(getResources().getColor(R.color.colorON));
             }else{
-                sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                //sw.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                //sw.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                 sw.setTextColor(getResources().getColor(R.color.colorOFF));
             }
             sw.setText(animation_options[i][1]);
             //timeout_seekbar.setThumb(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
             switches[i] = sw;
             animations_linear_layout.addView(sw);
-            sw = ((Switch) root.findViewById(id_));
+            sw = ((CheckBox) root.findViewById(id_));
             sw.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     boolean all_off = true;
@@ -156,18 +167,18 @@ public class AnimationsActivity extends Fragment {
                                 current_selected = i;
                                 prefs.edit().putInt(current_selected_shared_preference_key, current_selected).apply();
                                 all_off = false;
-                                switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                                //switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                                //switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                                 switches[i].setTextColor(getResources().getColor(R.color.colorON));
                             }else{
-                                switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                                switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                                //switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                                //switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                                 switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
                             }
                         }else{
                             switches[i].setChecked(false);
-                            switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                            switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                            //switches[i].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                            //switches[i].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                             switches[i].setTextColor(getResources().getColor(R.color.colorOFF));
                         }
                     }
@@ -175,8 +186,8 @@ public class AnimationsActivity extends Fragment {
                     if(all_off){
                         current_selected = 0;
                         switches[0].setChecked(true);
-                        switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                        switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                        //switches[0].setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                        //switches[0].setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                         switches[0].setTextColor(getResources().getColor(R.color.colorON));
                         prefs.edit().putInt(current_selected_shared_preference_key, 0).apply();
                         SystemWriter.write_animation(0,getActivity().getApplicationContext());
@@ -215,22 +226,25 @@ public class AnimationsActivity extends Fragment {
         notification_settings_ll.addView(custom_text_view);
 
         // react to notifications
-        switch_enable_notifications = new Switch(getActivity().getApplicationContext());
+        switch_enable_notifications = new CheckBox(getActivity().getApplicationContext());
         switch_enable_notifications.setText("React To Notifications");
-        switch_enable_notifications.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        //switch_enable_notifications.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        switch_enable_notifications.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        switch_enable_notifications.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        switch_enable_notifications.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
 
 
         boolean notifications_enabled = prefs.getBoolean(notifications_on_shared_preference_key,false);
 
         if(notifications_enabled){
-            switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+            //switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_notifications.setChecked(true);
         }else{
             switch_enable_notifications.setChecked(false);
-            switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorOFF));
         }
 
@@ -239,17 +253,18 @@ public class AnimationsActivity extends Fragment {
                 SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                         "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                 boolean notifications_enabled = prefs.getBoolean(notifications_on_shared_preference_key,false);
-                Switch s = (Switch) view;
+                CheckBox s = (CheckBox) view;
+
                 if(notifications_enabled){
                     s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, false).apply();
                 }else{
                     s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, true).apply();
 
@@ -263,21 +278,24 @@ public class AnimationsActivity extends Fragment {
         notification_settings_ll.addView(switch_enable_notifications);
 
         // use second led also for notifications
-        switch_enable_second_led_notifications = new Switch(getActivity().getApplicationContext());
+        switch_enable_second_led_notifications = new CheckBox(getActivity().getApplicationContext());
         switch_enable_second_led_notifications.setText("Use second led for notifications also");
-        switch_enable_second_led_notifications.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        //switch_enable_second_led_notifications.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        switch_enable_second_led_notifications.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        switch_enable_second_led_notifications.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        switch_enable_second_led_notifications.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
 
         boolean notifications_second_led_enabled = prefs.getBoolean(notifications_second_led_on_shared_preference_key,false);
 
         if(notifications_second_led_enabled){
-            switch_enable_second_led_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_enable_second_led_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+            //switch_enable_second_led_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            //switch_enable_second_led_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_enable_second_led_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_second_led_notifications.setChecked(true);
         }else{
             switch_enable_second_led_notifications.setChecked(false);
-            switch_enable_second_led_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_enable_second_led_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_enable_second_led_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_enable_second_led_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_enable_second_led_notifications.setTextColor(getResources().getColor(R.color.colorOFF));
         }
 
@@ -286,17 +304,18 @@ public class AnimationsActivity extends Fragment {
                 SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                         "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                 boolean notifications_second_led_enabled = prefs.getBoolean(notifications_second_led_on_shared_preference_key,false);
-                Switch s = (Switch) view;
+
+                CheckBox s = (CheckBox) view;
                 if(notifications_second_led_enabled){
                     s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(notifications_second_led_on_shared_preference_key, false).apply();
                 }else{
                     s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(notifications_second_led_on_shared_preference_key, true).apply();
 
@@ -309,20 +328,24 @@ public class AnimationsActivity extends Fragment {
 
 
         // use second led for notifications only
-        switch_use_second_led_for_notifications_only = new Switch(getActivity().getApplicationContext());
+        switch_use_second_led_for_notifications_only = new CheckBox(getActivity().getApplicationContext());
         switch_use_second_led_for_notifications_only.setText("Use Only the second led for notifications");
-        switch_use_second_led_for_notifications_only.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        //switch_use_second_led_for_notifications_only.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        switch_use_second_led_for_notifications_only.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        switch_use_second_led_for_notifications_only.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        switch_use_second_led_for_notifications_only.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+
         boolean notifications_second_led_enabled_only = prefs.getBoolean(use_notifications_second_led_only_on_shared_preference_key,false);
 
         if(notifications_second_led_enabled_only){
-            switch_use_second_led_for_notifications_only.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_use_second_led_for_notifications_only.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+            //switch_use_second_led_for_notifications_only.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            //switch_use_second_led_for_notifications_only.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_use_second_led_for_notifications_only.setTextColor(getResources().getColor(R.color.colorON));
             switch_use_second_led_for_notifications_only.setChecked(true);
         }else{
             switch_use_second_led_for_notifications_only.setChecked(false);
-            switch_use_second_led_for_notifications_only.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_use_second_led_for_notifications_only.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_use_second_led_for_notifications_only.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_use_second_led_for_notifications_only.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_use_second_led_for_notifications_only.setTextColor(getResources().getColor(R.color.colorOFF));
         }
 
@@ -331,17 +354,17 @@ public class AnimationsActivity extends Fragment {
                 SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                         "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                 boolean notifications_second_led_enabled_only = prefs.getBoolean(use_notifications_second_led_only_on_shared_preference_key,false);
-                Switch s = (Switch) view;
+                CheckBox s = (CheckBox) view;
                 if(notifications_second_led_enabled_only){
                     s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(use_notifications_second_led_only_on_shared_preference_key, false).apply();
                 }else{
                     s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(use_notifications_second_led_only_on_shared_preference_key, true).apply();
                 }
@@ -403,9 +426,9 @@ public class AnimationsActivity extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     int animation_mode = i+1;
-                    if(animation_mode >= 14){
+                    if(animation_mode >= 13){
                         Log.i("Notification_animation_selector:","custom animation selected "+animation_mode);
-                        animation_mode = 20 + (animation_mode-14);
+                        animation_mode = 20 + (animation_mode-13);
                     }else{
                         Log.i("Notification_animation_selector:","animation selected "+animation_options[animation_mode][1]);
                     }
@@ -430,22 +453,25 @@ public class AnimationsActivity extends Fragment {
         notification_settings_ll.addView(notificationAnimationSelector);
 
 
-        Switch switch_timeout = new Switch(getActivity().getApplicationContext());
+        CheckBox switch_timeout = new CheckBox(getActivity().getApplicationContext());
         switch_timeout.setText("Notification timeout");
-        switch_timeout.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        //switch_timeout.setThumbDrawable(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
+        switch_timeout.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        switch_timeout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        switch_timeout.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
 
         boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
         notification_settings_ll.addView(switch_timeout);
         if(use_timeout){
-            switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-            switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+            //switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+            //switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_timeout.setTextColor(getResources().getColor(R.color.colorON));
             switch_timeout.setChecked(true);
             create_timeout_settings(prefs);
         }else{
             switch_timeout.setChecked(false);
-            switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-            switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_timeout.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+            //switch_timeout.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_timeout.setTextColor(getResources().getColor(R.color.colorOFF));
         }
 
@@ -454,11 +480,11 @@ public class AnimationsActivity extends Fragment {
                 SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                         "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                 boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
-                Switch s = (Switch) view;
+                CheckBox s = (CheckBox) view;
                 if(use_timeout){
                     s.setChecked(false);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(use_notifications_timeout_shared_preference_key, false).apply();
                     notification_settings_ll.removeView(timeout_seekbar);
@@ -466,8 +492,8 @@ public class AnimationsActivity extends Fragment {
 
                 }else{
                     s.setChecked(true);
-                    s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
-                    s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
+                    //s.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
+                    //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(use_notifications_timeout_shared_preference_key, true).apply();
                     create_timeout_settings(prefs);

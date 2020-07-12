@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 11
-        versionName "3.8-per-app-animations"
+        versionCode 12
+        versionName "3.9-ui-update"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
