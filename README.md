@@ -25,6 +25,8 @@ Only works on android 10 roms as the android 9 rgb driver doesn't react to chang
 
 [Save Restore App Data](#save-restore-app-data)
 
+[Battery Animations](#battery-animations)
+
 [Issues](#issues)
 
 [Features](#features)
