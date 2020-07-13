@@ -80,7 +80,7 @@ To use the notifications
 
 1. You will find notification settings in the animations tab.
 2. Press on React to Notifications to start the service.
-3. Press on the "Click to enable app to read notifications in settings" button and allow Asus Rog Phone 2 RGB to read notifications
+3. Only needed before release 14 ~~Press on the "Click to enable app to read notifications in settings" button and allow Asus Rog Phone 2 RGB to read notifications~~
 4. Select which animation you want to run when there is a notification
 5. Press on "Select which apps trigger notifications" and tick on all the apps you want the app to use leds when a notification come in.
 6. Optionaly you can select notification timeout see [Notification Timeout](#notification-timeout)
@@ -170,6 +170,12 @@ When you restore the settings, the app copies the file back into the shared pref
 10. save restore app settings (done)
 
 # Version
+14. [4.1-settings-bypass](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/14) 
+```
+Tiny update that removes the need for the "Click to enable App to read notifications in settings" button. This is because I have figured out how to grant this permission using a command.
+
+The "React to Notifications" checkbox now enables and disables access accordingly.
+```
 13. [4.0-save-data](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/13) 
 ```
 Added two buttons in the about tab to save and restore all of the settings in the app.
