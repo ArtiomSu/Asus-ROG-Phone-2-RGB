@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AboutActivity extends Fragment {
     private ScrollView scrollView;
@@ -112,6 +113,7 @@ public class AboutActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 SystemWriter.save_shared_preferences(getActivity().getApplicationContext());
+                Toast.makeText(getActivity().getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
             }
         });
 

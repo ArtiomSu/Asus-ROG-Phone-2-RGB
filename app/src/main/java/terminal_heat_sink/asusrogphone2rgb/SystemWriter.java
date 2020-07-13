@@ -208,4 +208,5 @@ public class SystemWriter {
             write_to_sys("cmd notification disallow_listener terminal_heat_sink.asusrogphone2rgb/terminal_heat_sink.asusrogphone2rgb.NotificationService \n",context);
         }
     }
+
 }

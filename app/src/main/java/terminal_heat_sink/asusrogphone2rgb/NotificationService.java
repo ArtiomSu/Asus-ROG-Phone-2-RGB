@@ -38,6 +38,10 @@ public class NotificationService extends NotificationListenerService {
     private String package_color_preference_pretext = "sharedPreferencePerAppColor";
     private String package_animation_preference_pretext = "sharedPreferencePerAppAnimationMode";
 
+    //notification animation running? needed for the battery.
+    private String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
+
+
     private String latest_notification = "";
 
     Context context ;
@@ -175,6 +179,7 @@ public class NotificationService extends NotificationListenerService {
 
             }
 
+            prefs.edit().putBoolean(notification_animation_running_shared_preference_key,true).apply();
             SystemWriter.notification_start(mode,use_colour,red,green,blue,context,use_second_led_for_notification,use_second_led_only);
 
             boolean use_timeout = prefs.getBoolean(use_notifications_timeout_shared_preference_key,false);
@@ -212,7 +217,7 @@ public class NotificationService extends NotificationListenerService {
         int color = prefs.getInt(SAVED_PREFS_KEY_COLOR,-1031);
 
 
-
+        prefs.edit().putBoolean(notification_animation_running_shared_preference_key,false).apply();
         SystemWriter.notification_stop(!on,animation,true,Color.red(color),Color.green(color),Color.blue(color),context,use_second_led);
 
         latest_notification = "";
