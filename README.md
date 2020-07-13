@@ -152,6 +152,19 @@ When you save your settings, the app copies `/data/data/terminal_heat_sink.asusr
 
 When you restore the settings, the app copies the file back into the shared preferences folder and restarts the app so that it can read the new shared preferences therby restoring the apps settings to what they were.
 
+### Battery Animations
+This feature is available since release 15. When enabled a service will receive broadcasts about the battery status and will apply a colour based on the battery percentage. 0% = red, 100% = green, anything in between will be a smooth gradient achieved by adjusting the hue.
+
+
+This feature takes notifications into account, so if there is a notification present then the battery service wont update the leds, as notification visualisation is more important then battery.
+
+
+The service updates the leds about every 5 seconds, This is because the build in android system only broadcasts battery changes every 5 second on average.
+
+
+However connecting and disconnecting from the charger is broadcast almost immediately so there is no issues there.
+
+
 # Issues
 1. colour wheel performance. This is improved as of version 3 but could still be smoother.
 2. app list can take a while to load because it gets the app icon for each application on the phone.
@@ -168,8 +181,14 @@ When you restore the settings, the app copies the file back into the shared pref
 8. allow filtering when selecting apps (done)
 9. set custom animations and colours for each app (done)
 10. save restore app settings (done)
+11. battery charging animations (done-beta) 
 
 # Version
+15. [4.2-battery](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/15) 
+```
+Added battery animations when charging.
+UI update to fix logos from touching each other
+```
 14. [4.1-settings-bypass](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/14) 
 ```
 Tiny update that removes the need for the "Click to enable App to read notifications in settings" button. This is because I have figured out how to grant this permission using a command.
@@ -262,3 +281,6 @@ Added ability to type to filter applications in app select
 ![screenshot 13](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/13.jpg)
 ![screenshot 14](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/14.jpg)
 ![screenshot 15](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/15.jpg)
+![screenshot 16](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/16.jpg)
+![screenshot 17](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/17.jpg)
+![screenshot 18](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/18.jpg)
