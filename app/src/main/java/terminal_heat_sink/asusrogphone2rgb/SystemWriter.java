@@ -209,4 +209,8 @@ public class SystemWriter {
         }
     }
 
+    public static void permissions(Context context){
+        write_to_sys("pm grant terminal_heat_sink.asusrogphone2rgb android.permission.RECORD_AUDIO \n",context);
+    }
+
 }

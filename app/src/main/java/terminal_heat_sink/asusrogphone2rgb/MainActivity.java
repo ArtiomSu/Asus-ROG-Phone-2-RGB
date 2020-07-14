@@ -3,7 +3,6 @@ package terminal_heat_sink.asusrogphone2rgb;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -17,9 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-
 
 import terminal_heat_sink.asusrogphone2rgb.ui.main.SectionsPagerAdapter;
 
@@ -35,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SystemWriter.permissions(getApplicationContext());
+
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);

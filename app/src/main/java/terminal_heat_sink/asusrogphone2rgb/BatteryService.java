@@ -10,8 +10,6 @@ import android.graphics.Color;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
 import androidx.core.graphics.ColorUtils;
 
 public class BatteryService extends Service {
@@ -120,6 +118,8 @@ public class BatteryService extends Service {
         ifilter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         ifilter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(mBatteryStateReceiver, ifilter);
+        Log.i("BatteryService","started");
+
     }
 
 
@@ -133,6 +133,16 @@ public class BatteryService extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(mBatteryStateReceiver);
+        Log.i("BatteryService","stopped");
+        //turn off and restore
+        SharedPreferences prefs = getApplication().getApplicationContext().getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+        boolean on = prefs.getBoolean(fab_on_shared_preference_key,false);
+        int animation = prefs.getInt(current_selected_shared_preference_key,0);
+        boolean use_second_led = prefs.getBoolean(use_second_led_on_shared_preference_key,false);
+
+        int color = prefs.getInt(SAVED_PREFS_KEY_COLOR,-1031);
+        SystemWriter.notification_stop(!on,animation,true,Color.red(color),Color.green(color),Color.blue(color),getApplication().getApplicationContext(),use_second_led);
     }
 
 
