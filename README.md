@@ -27,6 +27,8 @@ Only works on android 10 roms as the android 9 rgb driver doesn't react to chang
 
 [Battery Animations](#battery-animations)
 
+[Music Visualiser](#music-visualiser)
+
 [Issues](#issues)
 
 [Features](#features)
@@ -166,6 +168,14 @@ The service updates the leds about every 5 seconds, This is because the build in
 
 However connecting and disconnecting from the charger is broadcast almost immediately so there is no issues there.
 
+### Music Visualiser
+Introduced in release 16. When enabled the leds dance to the music currently playing on the phone.
+
+Notifications take priority over the visualiser. Once notifications are cleared visualiser will continue.
+
+###### Modes
+1. rgb, the hue is changed according to the waveform
+2. glow, the lightness of the colour is changed according to the waveform, It will use the colour you selected in the colorwheel tab.
 
 # Issues
 1. colour wheel performance. This is improved as of version 3 but could still be smoother.
@@ -184,8 +194,13 @@ However connecting and disconnecting from the charger is broadcast almost immedi
 9. set custom animations and colours for each app (done)
 10. save restore app settings (done)
 11. battery charging animations (done-beta) 
+12. music visualiser (done)(can be improved)
 
 # Version
+16. [4.3-audio-visualiser](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/16) 
+```
+added an audio visualiser. It has two different mode at the moment. rainbow and single colour mode that you can select from the colourwheel tab
+```
 15. [4.2-battery](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/15) 
 ```
 Added battery animations when charging.
