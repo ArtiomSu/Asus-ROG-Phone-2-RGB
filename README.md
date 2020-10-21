@@ -4,7 +4,8 @@ Works on stock rom too after release 2.0-hotfix
 
 Only works on android 10 roms as the android 9 rgb driver doesn't react to changes, therefore it is probably not possible to make it work on android 9 using current methods. 
 
-#### Only use this if you are using Asus Rog Phone 2
+#### Only use this if you are using Asus Rog Phone 2 or *3
+Rog 3 works with latest release, however at the moment the second led cannot be lit on its own, the logo led must also be on to use second led
 #### You need to be rooted to use this since it writes to system files
 #### This modifies system files so use it at your own risk
 
@@ -197,37 +198,45 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 12. music visualiser (done)(can be improved)
 
 # Version
+17. [4.4-audio-visualiser](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/17) 
+```
+    Rog 3 support added.
+    All functions work except being able to use only the second led
+    Thanks to @jawadzoha from my telegram group for massive testing.
+
+    fixed out of bounds bug that crashes app
+```
 16. [4.3-audio-visualiser](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/16) 
 ```
-added an audio visualiser. It has two different mode at the moment. rainbow and single colour mode that you can select from the colourwheel tab
+    added an audio visualiser. It has two different mode at the moment. rainbow and single colour mode that you can select from the colourwheel tab
 ```
 15. [4.2-battery](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/15) 
 ```
-Added battery animations when charging.
-UI update to fix logos from touching each other
+    Added battery animations when charging.
+    UI update to fix logos from touching each other
 ```
 14. [4.1-settings-bypass](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/14) 
 ```
-Tiny update that removes the need for the "Click to enable App to read notifications in settings" button. This is because I have figured out how to grant this permission using a command.
+    Tiny update that removes the need for the "Click to enable App to read notifications in settings" button. This is because I have figured out how to grant this  permission using a command.
 
-The "React to Notifications" checkbox now enables and disables access accordingly.
+    The "React to Notifications" checkbox now enables and disables access accordingly.
 ```
 13. [4.0-save-data](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/13) 
 ```
-Added two buttons in the about tab to save and restore all of the settings in the app.
-This way you wont have to set up all of the custom notifications for each app every time there is a new release.
+    Added two buttons in the about tab to save and restore all of the settings in the app.
+    This way you wont have to set up all of the custom notifications for each app every time there is a new release.
 ```
 12. [3.9-ui-update](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/12) 
 ```
-Changed all of the switches to use checkboxes, functionality is identical to previous release just visuals changed
+    Changed all of the switches to use checkboxes, functionality is identical to previous release just visuals changed
 ```
 11. [3.8-per-app-animations](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/11) 
 ```
-You can now set custom animations/colours for each app by clicking on the app icon in app select
+    You can now set custom animations/colours for each app by clicking on the app icon in app select
 ```
 10. [3.6-ui-detection-easter-eggs](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/10) 
 ```
-Added ability to type to filter applications in app select
+    Added ability to type to filter applications in app select
 ```
 9. [3.6-ui-detection-easter-eggs](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/9) 
 ```
