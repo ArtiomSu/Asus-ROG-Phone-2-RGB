@@ -198,7 +198,7 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 12. music visualiser (done)(can be improved)
 
 # Version
-17. [4.4-audio-visualiser](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/17) 
+17. [4.4-rog3](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/17) 
 ```
     Rog 3 support added.
     All functions work except being able to use only the second led
