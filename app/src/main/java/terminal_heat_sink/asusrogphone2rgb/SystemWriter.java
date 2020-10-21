@@ -10,6 +10,8 @@ import java.io.IOException;
 
 public class SystemWriter {
 
+    public static boolean isRog3 = true;
+
     private static String read_from_sys(String command, Context context){
         Process p;
         String result = "";
@@ -133,11 +135,20 @@ public class SystemWriter {
     }
 
     public static void turn_on_second_led(boolean on, Context context){
-        if(on){
-            write_to_sys("echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable \n",context);
+        if(isRog3){
+            if(on){
+                write_to_sys("echo 1 > /sys/class/leds/aura_sync/CSCmode \n",context);
+            }else{
+                write_to_sys("echo 0 > /sys/class/leds/aura_sync/CSCmode \n",context);
+            }
         }else{
-            write_to_sys("echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode \n",context);
+            if(on){
+                write_to_sys("echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable \n",context);
+            }else{
+                write_to_sys("echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode \n",context);
+            }
         }
+
     }
 
     public static void notification_start(int mode, boolean use_color, int red, int green, int blue, Context context, boolean use_second_led, boolean use_second_led_only){
@@ -151,9 +162,18 @@ public class SystemWriter {
         }
 
         if(use_second_led || use_second_led_only){
-            command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable && ";
+            if(isRog3){
+                command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && ";
+            }else{
+                command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable && ";
+            }
         }else{
-            command += "echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+            if(isRog3){
+                command += "echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+            }else{
+                command += "echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+            }
+
         }
 
         if(use_color){
@@ -171,9 +191,18 @@ public class SystemWriter {
         String command = "";
 
         if(use_second_led){
-            command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable && ";
+            if(isRog3){
+                command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && ";
+            }else{
+                command += "echo 1 > /sys/class/leds/aura_sync/CSCmode && echo 1 > /sys/class/leds/aura_sync/bumper_enable && ";
+            }
+
         }else{
-            command += "echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+            if(isRog3){
+                command += "echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+            }else{
+                command += "echo 0 > /sys/class/leds/aura_sync/bumper_enable && echo 0 > /sys/class/leds/aura_sync/CSCmode && ";
+            }
         }
 
         if(turn_off){

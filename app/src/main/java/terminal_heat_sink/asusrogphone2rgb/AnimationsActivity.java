@@ -429,7 +429,11 @@ public class AnimationsActivity extends Fragment {
         //notificationAnimationSelector.setBackgroundColor(getResources().getColor(R.color.colorBG));
 
         int notifications_animation = prefs.getInt(notifications_animation_on_shared_preference_key,1);
-        notificationAnimationSelector.setSelection(notifications_animation-1,true);
+        if(notifications_animation >=13){
+            notificationAnimationSelector.setSelection((notifications_animation-20-1)+13,true);
+        }else{
+            notificationAnimationSelector.setSelection(notifications_animation-1,true);
+        }
 
 
         notificationAnimationSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

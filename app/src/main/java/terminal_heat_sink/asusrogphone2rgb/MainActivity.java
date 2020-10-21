@@ -123,7 +123,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         Log.i("MainActivity","android build model: "+ Build.MODEL+ " android build manufacturer: "+ Build.MANUFACTURER+" android build brand: "
-                +Build.BRAND+" android build VERSION.RELEASE: "+Build.VERSION.RELEASE+" android build VERSION.SDK_INT: "+Build.VERSION.SDK_INT);
+                +Build.BRAND+" android build VERSION.RELEASE: "+Build.VERSION.RELEASE+" android build VERSION.SDK_INT: "+Build.VERSION.SDK_INT+ " android build device: "+ Build.DEVICE
+                +" android build product: "+Build.PRODUCT+" android build hardware: "+Build.HARDWARE);
 
         if(!Build.MANUFACTURER.equals("asus")){
             Log.i("MainActivity","phone is not asus");

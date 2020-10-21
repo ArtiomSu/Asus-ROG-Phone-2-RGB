@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 16
-        versionName "4.3-audio-visualiser"
+        versionCode 17
+        versionName "4.4-rog3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
