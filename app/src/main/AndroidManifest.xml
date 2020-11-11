@@ -3,19 +3,18 @@
     package="terminal_heat_sink.asusrogphone2rgb">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:fullBackupContent="@xml/backup"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -29,53 +28,49 @@
         <activity
             android:name=".AppSelector"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".PerAppCustomisations"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Startup"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <service
-            android:name = ".NotificationService"
-            android:label = "@string/app_name"
-            android:permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+            android:name=".NotificationService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
-                <action
-                    android:name = "android.service.notification.NotificationListenerService" />
+                <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
         <service
             android:name=".QuicktileLogo"
             android:icon="@drawable/asus_rog_logo"
             android:label="Toggle Logo LED"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".QuicktileSecondLed"
             android:icon="@drawable/second_led"
             android:label="Toggle Second LED"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
-        <service android:name=".BatteryService"
+        <service
+            android:name=".BatteryService"
             android:enabled="true"
-            android:exported="true"/>
-
-        <service android:name=".VisualiserService"
+            android:exported="true" />
+        <service
+            android:name=".VisualiserService"
             android:enabled="true"
-            android:exported="true"/>
-
+            android:exported="true" />
     </application>
 
 </manifest>

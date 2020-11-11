@@ -135,7 +135,7 @@ public class VisualiserService extends Service {
     @Override
     public void onDestroy() {
 
-        Log.i("BatteryService","stopped");
+        Log.i("Visualiser Service","stopped");
         //turn off and restore
         visualizer.release();
 

@@ -3,6 +3,7 @@ package terminal_heat_sink.asusrogphone2rgb;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean second_led_on = false;
     private String fab_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.fab_on";
     private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
+    private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
 
     @Override
@@ -117,11 +119,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-    }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
+        final Context context = getApplicationContext();
+
+        SharedPreferences prefs = context.getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+
         Log.i("MainActivity","android build model: "+ Build.MODEL+ " android build manufacturer: "+ Build.MANUFACTURER+" android build brand: "
                 +Build.BRAND+" android build VERSION.RELEASE: "+Build.VERSION.RELEASE+" android build VERSION.SDK_INT: "+Build.VERSION.SDK_INT+ " android build device: "+ Build.DEVICE
                 +" android build product: "+Build.PRODUCT+" android build hardware: "+Build.HARDWARE);
@@ -134,13 +137,13 @@ public class MainActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .setPositiveButton("ok I'll buy an asus phone", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            finishAndRemoveTask();
+                            //finishAndRemoveTask();
+                            SystemWriter.uninstall_self(context);
                         }
                     })
                     .show();
 
-        }
-        if(Build.VERSION.SDK_INT != 29){
+        }else if(Build.VERSION.SDK_INT < 29){
             Log.i("MainActivity","phone is not running android 10");
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Can't run this app")
@@ -148,17 +151,49 @@ public class MainActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .setPositiveButton("ok I'll update my phone sorry", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            finishAndRemoveTask();
+                            //finishAndRemoveTask();
+                            SystemWriter.uninstall_self(context);
+                            //finishAffinity();
                         }
                     })
                     .show();
 
+        }else{
+            String phone = prefs.getString(isphone_rog3_shared_preference_key,"");
+            if(phone == ""){
+                SystemWriter.turn_off_magisk_notifications(context);
+                Intent app_selector = new Intent(context, Startup.class);
+                startActivityForResult(app_selector, 404);
+            }
         }
+
+
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("fab_on", fab_on);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==404)
+        {
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                    "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+            String message=data.getStringExtra("PHONE");
+            Log.i("startup","selected rog "+message+" yo");
+            prefs.edit().putString(isphone_rog3_shared_preference_key,message).apply();
+        }
     }
 }

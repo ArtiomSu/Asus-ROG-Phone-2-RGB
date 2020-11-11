@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 17
-        versionName "4.4-rog3"
+        versionCode 18
+        versionName "4.5-rog3_notifications"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

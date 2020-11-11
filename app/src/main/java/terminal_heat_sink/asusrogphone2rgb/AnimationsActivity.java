@@ -89,6 +89,8 @@ public class AnimationsActivity extends Fragment {
 
     private int check_box_states[][];
     private int check_box_colors[];
+
+    private static final boolean testing  = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,6 +128,23 @@ public class AnimationsActivity extends Fragment {
                 current_selected = 0;
             }
         }
+
+        if(testing){
+            final TextView test_text_view = new TextView(getActivity().getApplicationContext());
+            LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+            custom_text_view_params.setMargins(0,0,0,20);
+            test_text_view.setLayoutParams(custom_text_view_params);
+            test_text_view.setTextColor(getResources().getColor(R.color.colorText));
+            test_text_view.setText("Testing value 1");
+            test_text_view.setTextSize(test_text_view.getTextSize()+1);
+            test_text_view.setTypeface(null, Typeface.BOLD);
+            test_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+            test_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
+
+            animations_linear_layout.addView(test_text_view);
+        }
+
+        //SystemWriter.rog_3_crap(getActivity().getApplicationContext());
 
 
         create_animation_switches(animations_linear_layout,root);
