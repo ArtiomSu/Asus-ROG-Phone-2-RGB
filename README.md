@@ -203,6 +203,7 @@ Notifications take priority over the visualiser. Once notifications are cleared 
     notification support for rog3
     choice between rog 2 / rog 3 on first launch.
     app should launch on android 11 now
+    magisk root notifications are turned off on first launch
 ```
 17. [4.4-rog3](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/17) 
 ```
