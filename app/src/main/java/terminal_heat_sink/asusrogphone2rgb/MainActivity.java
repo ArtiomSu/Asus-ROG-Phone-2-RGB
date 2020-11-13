@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
     private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
+    //notification animation running?.
+    private String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON) ));
         }else{
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorBG) ));
+            if(! prefs.getBoolean(notification_animation_running_shared_preference_key,false) && prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
+                Log.i("startup","resetting driver for rog 3");
+                SystemWriter.rog_3_crap(context);
+            }
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -159,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
                     .show();
 
         }else{
-            String phone = prefs.getString(isphone_rog3_shared_preference_key,"");
-            if(phone == ""){
+            String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
+            if(phone == " "){
                 SystemWriter.turn_off_magisk_notifications(context);
                 Intent app_selector = new Intent(context, Startup.class);
                 startActivityForResult(app_selector, 404);
@@ -192,8 +198,12 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                     "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
             String message=data.getStringExtra("PHONE");
-            Log.i("startup","selected rog "+message+" yo");
+            Log.i("startup","selected rog "+message+"");
             prefs.edit().putString(isphone_rog3_shared_preference_key,message).apply();
+            if(message.charAt(0) == '3'){
+                Log.i("startup","preparing driver for rog 3");
+                SystemWriter.rog_3_crap(getApplicationContext());
+            }
         }
     }
 }

@@ -144,8 +144,6 @@ public class AnimationsActivity extends Fragment {
             animations_linear_layout.addView(test_text_view);
         }
 
-        //SystemWriter.rog_3_crap(getActivity().getApplicationContext());
-
 
         create_animation_switches(animations_linear_layout,root);
 

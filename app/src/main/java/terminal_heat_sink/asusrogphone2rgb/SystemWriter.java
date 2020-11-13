@@ -13,7 +13,6 @@ import java.io.IOException;
 public class SystemWriter {
 
     private static boolean isRog3 = false;
-    public static int rog_3_red_colour = 0;
     private static String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
     private static String read_from_sys(String command, Context context){
@@ -225,10 +224,10 @@ public class SystemWriter {
 
         if(isRog3 && turn_off){
             command += "echo 1 > /sys/class/leds/aura_sync/led_on && "+
-                    "echo " + "1" + " > "+ "/sys/class/leds/aura_sync/mode" + " && " +
-                    "echo " + rog_3_red_colour + " > " + "/sys/class/leds/aura_sync/red_pwm" + " && " +
-                    "echo " + "0" + " > " + "/sys/class/leds/aura_sync/green_pwm" + " && " +
-                    "echo " + "0" + " > " + "/sys/class/leds/aura_sync/blue_pwm" + " && " +
+                    "echo 1 > /sys/class/leds/aura_sync/mode" + " && " +
+                    "echo 0 > /sys/class/leds/aura_sync/red_pwm" + " && " +
+                    "echo 0 > /sys/class/leds/aura_sync/green_pwm" + " && " +
+                    "echo 0 > /sys/class/leds/aura_sync/blue_pwm" + " && " +
                     "echo 1 > "+ "/sys/class/leds/aura_sync/apply" + " \n ";
 
         }else{
@@ -243,10 +242,10 @@ public class SystemWriter {
     public static void rog_3_crap(Context context){
         String command = "";
         command += "echo 1 > /sys/class/leds/aura_sync/led_on && "+
-                "echo " + rog_3_red_colour + " > " + "/sys/class/leds/aura_sync/red_pwm" + " && " +
-                "echo " + "0" + " > " + "/sys/class/leds/aura_sync/green_pwm" + " && " +
-                "echo " + "0" + " > " + "/sys/class/leds/aura_sync/blue_pwm" + " && "+
-                "echo " + "1" + " > "+ "/sys/class/leds/aura_sync/mode" + " && "+
+                "echo 1 > /sys/class/leds/aura_sync/mode" + " && " +
+                "echo 0 > /sys/class/leds/aura_sync/red_pwm" + " && " +
+                "echo 0 > /sys/class/leds/aura_sync/green_pwm" + " && " +
+                "echo 0 > /sys/class/leds/aura_sync/blue_pwm" + " && " +
         "echo 1 > "+ "/sys/class/leds/aura_sync/apply" + " \n ";
         write_to_sys(command,context);
     }
