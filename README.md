@@ -198,6 +198,12 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 12. music visualiser (done)(can be improved)
 
 # Version
+18. [4.5-rog3_notifications](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/18) 
+```
+    notification support for rog3
+    choice between rog 2 / rog 3 on first launch.
+    app should launch on android 11 now
+```
 17. [4.4-rog3](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/17) 
 ```
     Rog 3 support added.
