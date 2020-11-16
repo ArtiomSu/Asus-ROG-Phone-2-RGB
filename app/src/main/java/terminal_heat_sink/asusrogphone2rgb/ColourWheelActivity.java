@@ -26,6 +26,7 @@ public class ColourWheelActivity extends Fragment {
 
     private ColorPickerView colorPickerView;
     private ScrollView scrollView;
+    private LinearLayout colour_preview;
 
     public ColourWheelActivity() {
         // Required empty public constructor
@@ -38,12 +39,14 @@ public class ColourWheelActivity extends Fragment {
 
         LinearLayout ll = (LinearLayout) root.findViewById(R.id.colorPickerLinear);
 
+        colour_preview = root.findViewById(R.id.llcolour_wheel_real_colour);
+
         colorPickerView = new ColorPickerView(getActivity().getApplicationContext());
 
         ll.addView(colorPickerView);
 
         colorPickerView.setEnabledAlpha(false);
-        colorPickerView.setEnabledBrightness(false);
+        colorPickerView.setEnabledBrightness(true);
 
         colorPickerView.subscribe(new ColorObserver() {
             @Override
@@ -55,6 +58,7 @@ public class ColourWheelActivity extends Fragment {
                 int previous_color = prefs.getInt(SAVED_PREFS_KEY_COLOR,0);
                 if(previous_color != color || previous_color == 0){
                     prefs.edit().putInt(SAVED_PREFS_KEY_COLOR, color).apply();
+                    colour_preview.setBackgroundColor(color);
                     //Color c = Color.valueOf(color);
                     //Log.e("color"," color picked "+color + " RGB is "+ Color.red(color)+ " " + Color.green(color)+ " "+ Color.blue(color));
 
@@ -78,6 +82,7 @@ public class ColourWheelActivity extends Fragment {
         }
 
         colorPickerView.setInitialColor(color);
+        colour_preview.setBackgroundColor(color);
 
         scrollView = (ScrollView) root.findViewById(R.id.scrollviewcolor);
 

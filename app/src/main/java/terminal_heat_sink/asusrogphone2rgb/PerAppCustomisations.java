@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +49,7 @@ public class PerAppCustomisations extends AppCompatActivity {
 
     private int current_selected = 0;
     private ColorPickerView colorPickerView;
+    private LinearLayout ll_colour_preview;
     private String package_name = null;
     private String package_color_preference_pretext = "sharedPreferencePerAppColor";
     private String package_animation_preference_pretext = "sharedPreferencePerAppAnimationMode";
@@ -79,6 +83,7 @@ public class PerAppCustomisations extends AppCompatActivity {
         ll_colour.setPadding(10,10,10,10);
         create_colour_picker(ll_colour);
         colorPickerView.setVisibility(View.GONE);
+        ll_colour_preview.setVisibility(View.GONE);
         create_animation_switches(ll);
 
 
@@ -86,13 +91,15 @@ public class PerAppCustomisations extends AppCompatActivity {
 
     }
 
+
+
     private void create_colour_picker(LinearLayout ll){
         colorPickerView = new ColorPickerView(getApplicationContext());
 
         ll.addView(colorPickerView);
 
         colorPickerView.setEnabledAlpha(false);
-        colorPickerView.setEnabledBrightness(false);
+        colorPickerView.setEnabledBrightness(true);
 
         colorPickerView.subscribe(new ColorObserver() {
             @Override
@@ -104,6 +111,7 @@ public class PerAppCustomisations extends AppCompatActivity {
                 int previous_color = prefs.getInt(package_color_preference_pretext+package_name,0);
                 if(previous_color != color || previous_color == 0){
                     prefs.edit().putInt(package_color_preference_pretext+package_name, color).apply();
+                    ll_colour_preview.setBackgroundColor(color);
                     //Log.i("PerAppCustomisations",package_name+": color picked "+color + " RGB is "+ Color.red(color)+ " " + Color.green(color)+ " "+ Color.blue(color));
                 }
 
@@ -119,6 +127,30 @@ public class PerAppCustomisations extends AppCompatActivity {
         }
 
         colorPickerView.setInitialColor(color);
+
+        ll_colour_preview = new LinearLayout(getApplicationContext());
+        ll_colour_preview.setGravity(Gravity.CENTER);
+        ll_colour_preview.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams prms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int)getApplicationContext().getResources().getDisplayMetrics().density*50);
+        int margins = (int)getApplicationContext().getResources().getDisplayMetrics().density*15;
+        prms.setMargins(margins,margins,margins,margins);
+        ll_colour_preview.setLayoutParams(prms);
+        ll_colour_preview.setBackgroundColor(color);
+
+        TextView text = new TextView(getApplicationContext());
+        text.setText("Selected Colour");
+        LinearLayout.LayoutParams textprms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        text.setLayoutParams(textprms);
+        text.setShadowLayer(1.6f,1.5f,1.3f,getColor(R.color.colorPrimary));
+        text.setTextColor(getColor(R.color.colorAccent));
+        text.setAllCaps(true);
+        text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+        ll_colour_preview.addView(text);
+        ll.addView(ll_colour_preview);
+
+
+
     }
 
     private void create_animation_switches(LinearLayout animations_linear_layout){
@@ -151,6 +183,7 @@ public class PerAppCustomisations extends AppCompatActivity {
                 for(int b=0;b<show_colour.length;b++){
                     if(show_colour[b] == id_){
                         colorPickerView.setVisibility(View.VISIBLE);
+                        ll_colour_preview.setVisibility(View.VISIBLE);
                         Log.i("test","it should be visible");
                         break;
                     }
@@ -174,6 +207,7 @@ public class PerAppCustomisations extends AppCompatActivity {
                     SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                             "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                     colorPickerView.setVisibility(View.GONE);
+                    ll_colour_preview.setVisibility(View.GONE);
                     for (int i = 0; i < switches.length; i++) {
                         if(i == id_){
                             if(switches[i].isChecked()){
@@ -187,6 +221,7 @@ public class PerAppCustomisations extends AppCompatActivity {
                                 for(int b=0;b<show_colour.length;b++){
                                     if(show_colour[b] == id_){
                                         colorPickerView.setVisibility(View.VISIBLE);
+                                        ll_colour_preview.setVisibility(View.VISIBLE);
                                         break;
                                     }
 
@@ -212,6 +247,7 @@ public class PerAppCustomisations extends AppCompatActivity {
                         switches[0].setTextColor(getResources().getColor(R.color.colorON));
                         prefs.edit().putInt(package_animation_preference_pretext + package_name, 0).apply();
                         colorPickerView.setVisibility(View.GONE);
+                        ll_colour_preview.setVisibility(View.GONE);
                     }
 
                 }

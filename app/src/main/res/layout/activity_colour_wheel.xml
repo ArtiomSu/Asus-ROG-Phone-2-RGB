@@ -30,6 +30,27 @@
                 android:orientation="vertical"
                 >
 
+                <LinearLayout
+                    android:id="@+id/llcolour_wheel_real_colour"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="15dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textAllCaps="true"
+                        android:shadowColor="#000000"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:text="Selected Colour">
+                    </TextView>
+                </LinearLayout>
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="2000dp"/>

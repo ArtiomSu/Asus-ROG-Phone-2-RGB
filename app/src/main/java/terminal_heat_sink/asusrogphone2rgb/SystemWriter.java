@@ -250,6 +250,12 @@ public class SystemWriter {
         write_to_sys(command,context);
     }
 
+    public static void rog_3_loop(Context context){
+        String command = "";
+        command += "echo 1 > /sys/class/leds/aura_sync/led_on\n ";
+        write_to_sys(command,context);
+    }
+
     public static void save_shared_preferences(Context context){
         write_to_sys("cat /data/data/terminal_heat_sink.asusrogphone2rgb/shared_prefs/terminal_heat_sink.asusrogphone2rgb.xml > /sdcard/.terminal_heat_sink.asusrogphone2rgb.xml \n",context);
     }

@@ -41,6 +41,9 @@ public class NotificationService extends NotificationListenerService {
     //notification animation running? needed for the battery.
     private String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
 
+    //check if phone is rog 3 then run the loop
+    private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+
 
     private String latest_notification = "";
 
@@ -58,6 +61,21 @@ public class NotificationService extends NotificationListenerService {
                 stopNotificationAndRestore();
             }else{
                 timerHandler.postDelayed(this, 1000);
+            }
+
+        }
+    };
+
+    Handler timerHandlerRog3Loop = new Handler();
+    Runnable timerRunnableRog3Loop = new Runnable() {
+
+        @Override
+        public void run() {
+            SharedPreferences prefs = context.getSharedPreferences(
+                    "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+            if(prefs.getBoolean(notifications_on_shared_preference_key,false)){
+                SystemWriter.rog_3_loop(context);
+                timerHandler.postDelayed(this, 30*1000);
             }
 
         }
@@ -99,6 +117,13 @@ public class NotificationService extends NotificationListenerService {
                     .build();
 
             Log.i( "AsusRogPhone2RGBNotificationService" , "Creating Service Notification");
+
+            if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
+                Log.i("AsusRogPhone2RGBNotificationService","Starting Rog 3 driver loop");
+                //SystemWriter.rog_3_crap(context);
+                timerHandlerRog3Loop.postDelayed(timerRunnableRog3Loop, 30*1000);//10 seconds because that is the lowest time.
+
+            }
 
 
             startForeground(2, notification);
