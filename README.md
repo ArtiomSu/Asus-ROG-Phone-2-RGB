@@ -198,6 +198,15 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 12. music visualiser (done)(can be improved)
 
 # Version
+19. [4.6-colour_brightness_rog3_loop](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/19) 
+```
+    Added Brightness bar to colour wheel tab and when you select PerApp notification colours. 
+    Also added a preview at the bottom of the colour picker so that you can get a more accurate idea of what it will look like.
+
+    Rog 3 notifications update: 
+    In rog 3 mode there is now a timer refreshing the driver every 30 seconds because rog 3 is a good phone.
+    Thanks again to @jawadzoha from my telegram group for rog 3 testing.
+```
 18. [4.5-rog3_notifications](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/18) 
 ```
     notification support for rog3
