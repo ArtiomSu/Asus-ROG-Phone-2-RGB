@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
@@ -66,6 +67,8 @@ public class NotificationService extends NotificationListenerService {
         }
     };
 
+    private PowerManager.WakeLock wakeLock;
+
     Handler timerHandlerRog3Loop = new Handler();
     Runnable timerRunnableRog3Loop = new Runnable() {
 
@@ -74,8 +77,11 @@ public class NotificationService extends NotificationListenerService {
             SharedPreferences prefs = context.getSharedPreferences(
                     "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
             if(prefs.getBoolean(notifications_on_shared_preference_key,false)){
+                Log.i("AsusRogPhone2RGBNotificationService","Rog 3 driver loop update");
                 SystemWriter.rog_3_loop(context);
                 timerHandler.postDelayed(this, 30*1000);
+            }else{
+                wakeLock.release();
             }
 
         }
@@ -121,6 +127,11 @@ public class NotificationService extends NotificationListenerService {
             if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
                 Log.i("AsusRogPhone2RGBNotificationService","Starting Rog 3 driver loop");
                 //SystemWriter.rog_3_crap(context);
+                PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+                wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                        "MyApp::MyWakelockTag");
+                wakeLock.acquire();
+
                 timerHandlerRog3Loop.postDelayed(timerRunnableRog3Loop, 30*1000);//10 seconds because that is the lowest time.
 
             }

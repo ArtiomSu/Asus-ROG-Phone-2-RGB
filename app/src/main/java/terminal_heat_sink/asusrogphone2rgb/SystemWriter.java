@@ -251,9 +251,7 @@ public class SystemWriter {
     }
 
     public static void rog_3_loop(Context context){
-        String command = "";
-        command += "echo 1 > /sys/class/leds/aura_sync/led_on\n ";
-        write_to_sys(command,context);
+        write_to_sys("echo 1 > /sys/class/leds/aura_sync/led_on\n",context);
     }
 
     public static void save_shared_preferences(Context context){

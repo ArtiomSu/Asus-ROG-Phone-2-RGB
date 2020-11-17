@@ -95,6 +95,8 @@ public class PerAppCustomisations extends AppCompatActivity {
 
     private void create_colour_picker(LinearLayout ll){
         colorPickerView = new ColorPickerView(getApplicationContext());
+        ll_colour_preview = new LinearLayout(getApplicationContext());
+        ll.addView(ll_colour_preview);
 
         ll.addView(colorPickerView);
 
@@ -128,7 +130,7 @@ public class PerAppCustomisations extends AppCompatActivity {
 
         colorPickerView.setInitialColor(color);
 
-        ll_colour_preview = new LinearLayout(getApplicationContext());
+
         ll_colour_preview.setGravity(Gravity.CENTER);
         ll_colour_preview.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams prms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(int)getApplicationContext().getResources().getDisplayMetrics().density*50);
@@ -147,7 +149,7 @@ public class PerAppCustomisations extends AppCompatActivity {
         text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         ll_colour_preview.addView(text);
-        ll.addView(ll_colour_preview);
+
 
 
 
