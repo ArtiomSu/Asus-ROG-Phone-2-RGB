@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 20
-        versionName "4.7-colour_crash_wakelock"
+        versionCode 21
+        versionName "4.8-notification_service"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -250,8 +250,12 @@ public class SystemWriter {
         write_to_sys(command,context);
     }
 
-    public static void rog_3_loop(Context context){
-        write_to_sys("echo 1 > /sys/class/leds/aura_sync/led_on\n",context);
+    public static void rog_3_wakelock(Context context){
+        write_to_sys("echo asusrogphonergb > /sys/power/wake_lock\n",context);
+    }
+
+    public static void rog_3_wakeunlock(Context context){
+        write_to_sys("echo asusrogphonergb > /sys/power/wake_unlock\n",context);
     }
 
     public static void save_shared_preferences(Context context){

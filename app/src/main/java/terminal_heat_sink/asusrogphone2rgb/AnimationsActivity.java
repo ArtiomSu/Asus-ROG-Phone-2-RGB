@@ -54,6 +54,9 @@ public class AnimationsActivity extends Fragment {
     private String visualiser_use_second_led_only_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_use_second_led_only";
     private String visualiser_animation_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_animation_mode";
 
+    //check if phone is rog 3
+    private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+
     private LinearLayout notification_settings_ll;
     private CheckBox switch_enable_notifications;
     private Spinner notificationAnimationSelector;
@@ -135,7 +138,7 @@ public class AnimationsActivity extends Fragment {
             custom_text_view_params.setMargins(0,0,0,20);
             test_text_view.setLayoutParams(custom_text_view_params);
             test_text_view.setTextColor(getResources().getColor(R.color.colorText));
-            test_text_view.setText("Testing value 1");
+            test_text_view.setText("shell wakelock?");
             test_text_view.setTextSize(test_text_view.getTextSize()+1);
             test_text_view.setTypeface(null, Typeface.BOLD);
             test_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
@@ -279,12 +282,23 @@ public class AnimationsActivity extends Fragment {
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_notifications.setChecked(true);
             SystemWriter.notification_access(true,getActivity().getApplicationContext());
+
+            if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
+                Log.i("AsusRogPhone2RGBNotificationService", "Rog3 wakelock");
+                SystemWriter.rog_3_wakelock(getActivity().getApplicationContext());
+            }
+
         }else{
             switch_enable_notifications.setChecked(false);
             //switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorOFF));
             SystemWriter.notification_access(false,getActivity().getApplicationContext());
+
+            if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
+                Log.i("AsusRogPhone2RGBNotificationService", "Rog3 release wakelock");
+                SystemWriter.rog_3_wakeunlock(getActivity().getApplicationContext());
+            }
         }
 
         switch_enable_notifications.setOnClickListener(new View.OnClickListener() {
@@ -301,6 +315,9 @@ public class AnimationsActivity extends Fragment {
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, false).apply();
                     SystemWriter.notification_access(false,getActivity().getApplicationContext());
+
+                    Intent notification_intent = new Intent(getActivity().getApplicationContext(), NotificationService.class);
+                    getActivity().getApplicationContext().stopService(notification_intent);
 
                 }else{
                     s.setChecked(true);

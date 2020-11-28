@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON) ));
         }else{
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorBG) ));
-            if(! prefs.getBoolean(notification_animation_running_shared_preference_key,false) && prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
-                Log.i("startup","resetting driver for rog 3");
-                SystemWriter.rog_3_crap(context);
-            }
+//            if(! prefs.getBoolean(notification_animation_running_shared_preference_key,false) && prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
+//                Log.i("startup","resetting driver for rog 3");
+//                SystemWriter.rog_3_crap(context);
+//            }
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
