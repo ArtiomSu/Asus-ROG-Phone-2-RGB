@@ -32,6 +32,8 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
                 Intent notification_intent = new Intent(context, NotificationService.class);
                 context.stopService(notification_intent);
 
+                SystemWriter.turn_on(false,context);
+
 
             }else if(snooze_on && !notification_service_on) {
                 Log.i("reciever","starting notification service");

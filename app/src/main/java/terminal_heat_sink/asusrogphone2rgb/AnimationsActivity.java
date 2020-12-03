@@ -1,9 +1,11 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -55,6 +57,8 @@ public class AnimationsActivity extends Fragment {
     private String show_notifications_snooze_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.show_notifications_snooze_shared_preference_key";
     private String notifications_snooze_start_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_snooze_start_shared_preference_key";
     private String notifications_snooze_end_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_snooze_end_shared_preference_key";
+    private String notifications_snooze_first_launch_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_snooze_first_launch_shared_preference_key";
+
     private AlarmManager alarmMgr;
     private AlarmManager alarmMgr_stop;
     private PendingIntent notification_snooze_start_intent;
@@ -120,7 +124,7 @@ public class AnimationsActivity extends Fragment {
     private int check_box_states[][];
     private int check_box_colors[];
 
-    private static final boolean testing  = true;
+    private static final boolean testing  = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -634,6 +638,21 @@ public class AnimationsActivity extends Fragment {
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(show_notifications_snooze_shared_preference_key, true).apply();
                     draw_notification_snooze_options(prefs);
+
+                    boolean launched_first_time = prefs.getBoolean(notifications_snooze_first_launch_shared_preference_key,false);
+                    if(!launched_first_time){
+                        prefs.edit().putBoolean(notifications_snooze_first_launch_shared_preference_key, true).apply();
+                        new AlertDialog.Builder(requireActivity())
+                                .setTitle("How to use Notification Snooze")
+                                .setMessage("Select \"Set start time\" this is when you want the notification service to stop. set a future time. so for example if right now its 20:45 set 20:46 since if you set 20:44 it will trigger tommorow.\n\nSelect \"set end time\" set this after your start time.\n\nselect \"enable snooze\" to start the thing.\n\nNOTE: if you change the start time or end time you will need to select \"enable snooze\" again it will be unselected anyway once you change the settings.\n\nNOTE on Delay: cause of how repeating alarm manager works the times you set will not be accurate.\n\nSo for example if you set start time for 20:10 it will probably stop the notification service at like 20:15 maybe earlier or even later.")
+                                .setCancelable(false)
+                                .setPositiveButton("I understand now", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .show();
+                    }
+
                 }
 
             }

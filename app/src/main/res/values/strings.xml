@@ -35,7 +35,9 @@
         For notifications you now have the following options relating to the second led.\n
         \"use second led for notifications also\" This lights up the second led and the logo led when a notification comes in.\n
         \"Use Only the second led for notifications\" This lights up only the second led.\n
-        If you have both 1 and 2 disabled then only the logo led with light up.\n
+        If you have both 1 and 2 disabled then only the logo led with light up.\n\n
+
+        Notifications now can be snoozed. You can set up a time period where the notification service does not run. This is especially useful for rog 3 users as rog 3 needs a wakelock for notifications to work\n\n
 
         If you like what I do you can check out my github, youtube and telegram channel by clicking the icons at the top.\n\n
 
