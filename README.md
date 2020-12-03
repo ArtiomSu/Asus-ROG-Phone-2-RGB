@@ -227,6 +227,7 @@ I made this because I use the second led as a flashlight sometimes so this is a 
 11. battery charging animations (done-beta) 
 12. music visualiser (done)(can be improved)
 13. Notification Snooze (done-beta)
+14. Triple shake (done)
 
 # Version
 23. [5.0-shake](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/23) 
