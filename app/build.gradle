@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 21
-        versionName "4.8-notification_service"
+        versionCode 22
+        versionName "4.9-notification_snooze"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
