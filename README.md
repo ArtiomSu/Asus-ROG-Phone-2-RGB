@@ -32,6 +32,8 @@ Rog 3 works with latest release, however at the moment the second led cannot be 
 
 [Music Visualiser](#music-visualiser)
 
+[Triple Shake](#triple-shake)
+
 [Issues](#issues)
 
 [Features](#features)
@@ -197,6 +199,15 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 1. rgb, the hue is changed according to the waveform
 2. glow, the lightness of the colour is changed according to the waveform, It will use the colour you selected in the colorwheel tab.
 
+### Triple Shake
+Triple Shake allows you to quickly shake your phone 3 times to toggle the second led when enabled.
+
+The second led will use whatever mode you selected above at the very top of the App.
+
+It will also use the colour you selected in the colour wheel for the appropriate modes.
+
+I made this because I use the second led as a flashlight sometimes so this is a quick shortcut lol
+
 # Issues
 1. colour wheel performance. This is improved as of version 3 but could still be smoother.
 2. app list can take a while to load because it gets the app icon for each application on the phone.
@@ -218,6 +229,11 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 13. Notification Snooze (done-beta)
 
 # Version
+23. [5.0-shake](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/23) 
+```
+    Added triple shake to miscellaneous settings.
+    When enabled this allows you to shake your phone 3 times quickly to toggle the second led
+```
 22. [4.9-notification_snooze](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/22) 
 ```
     Added notification snooze feature which turns off the notification service during set times
