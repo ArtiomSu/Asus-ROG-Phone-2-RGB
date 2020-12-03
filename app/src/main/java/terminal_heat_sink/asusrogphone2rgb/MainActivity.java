@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SystemWriter.permissions(getApplicationContext());
+
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
             if(phone == " "){
-                SystemWriter.turn_off_magisk_notifications(context);
                 Intent app_selector = new Intent(context, Startup.class);
                 startActivityForResult(app_selector, 404);
             }
@@ -204,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("startup","preparing driver for rog 3");
                 SystemWriter.rog_3_crap(getApplicationContext());
             }
+            SystemWriter.permissions(getApplicationContext());
+            SystemWriter.turn_off_magisk_notifications(getApplicationContext());
         }
     }
 }

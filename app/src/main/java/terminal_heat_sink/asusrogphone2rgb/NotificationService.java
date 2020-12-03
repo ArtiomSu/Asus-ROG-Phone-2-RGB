@@ -235,7 +235,7 @@ public class NotificationService extends NotificationListenerService {
     //gets called when the notification access is removed from settings
     @Override
     public void onDestroy() {
-        Log.i("AsusRogPhone2RGBNotificationService", "onCreate() , service stopped...");
+        Log.i("AsusRogPhone2RGBNotificationService", "onDestroy() , service stopped...");
         if(context.getSharedPreferences("terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE).getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
             Log.i("AsusRogPhone2RGBNotificationService", "Rog3 Releasing wakelock");
             SystemWriter.rog_3_wakeunlock(context);

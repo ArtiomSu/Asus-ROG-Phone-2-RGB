@@ -1,5 +1,8 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,8 +27,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class AnimationsActivity extends Fragment {
     public AnimationsActivity() {
@@ -41,6 +49,16 @@ public class AnimationsActivity extends Fragment {
     private String use_notifications_timeout_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_notifications_timeout_shared_preference_key";
     private String notifications_timeout_seconds_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_timeout_seconds_shared_preference_key";
     private String notifications_timeout_progress_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_timeout_progress_shared_preference_key";
+
+    //notification snooze
+    private String use_notifications_snooze_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_notifications_snooze_shared_preference_key";
+    private String show_notifications_snooze_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.show_notifications_snooze_shared_preference_key";
+    private String notifications_snooze_start_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_snooze_start_shared_preference_key";
+    private String notifications_snooze_end_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_snooze_end_shared_preference_key";
+    private AlarmManager alarmMgr;
+    private AlarmManager alarmMgr_stop;
+    private PendingIntent notification_snooze_start_intent;
+    private PendingIntent notification_snooze_stop_intent;
 
     //battery charging preferences
     private String battery_animate_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_animate";
@@ -66,6 +84,15 @@ public class AnimationsActivity extends Fragment {
     private SeekBar timeout_seekbar;
     private TextView timeout_text;
     private ScrollView scrollView;
+
+    private LinearLayout notification_snooze_ll;
+    private CheckBox use_notification_snooze;
+    private LinearLayout notification_snooze_start_ll;
+    private TextView start_text;
+    private Button button_start;
+    private LinearLayout notification_snooze_end_ll;
+    private TextView end_text;
+    private Button button_end;
 
     private LinearLayout battery_settings_ll;
 
@@ -93,7 +120,7 @@ public class AnimationsActivity extends Fragment {
     private int check_box_states[][];
     private int check_box_colors[];
 
-    private static final boolean testing  = false;
+    private static final boolean testing  = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,7 +165,7 @@ public class AnimationsActivity extends Fragment {
             custom_text_view_params.setMargins(0,0,0,20);
             test_text_view.setLayoutParams(custom_text_view_params);
             test_text_view.setTextColor(getResources().getColor(R.color.colorText));
-            test_text_view.setText("shell wakelock?");
+            test_text_view.setText("Notification snooze test");
             test_text_view.setTextSize(test_text_view.getTextSize()+1);
             test_text_view.setTypeface(null, Typeface.BOLD);
             test_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
@@ -242,12 +269,12 @@ public class AnimationsActivity extends Fragment {
     private void create_notification_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
         notification_settings_ll = new LinearLayout(getActivity().getApplicationContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(0,20,0,20);
+        params.setMargins(0,20,0,0);
         notification_settings_ll.setLayoutParams(params);
         notification_settings_ll.setOrientation(LinearLayout.VERTICAL);
         notification_settings_ll.setGravity(Gravity.FILL_VERTICAL);
         notification_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
-        notification_settings_ll.setPadding(0,20,0,20);
+        notification_settings_ll.setPadding(0,20,0,0);
 
 
         final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
@@ -551,8 +578,334 @@ public class AnimationsActivity extends Fragment {
         });
 
         animations_linear_layout.addView(notification_settings_ll);
+        create_notification_snooze(animations_linear_layout,prefs);
+
     }
 
+    private void create_notification_snooze(LinearLayout animations_linear_layout, SharedPreferences prefs){
+        notification_snooze_ll = new LinearLayout(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,0,0,20);
+        notification_snooze_ll.setLayoutParams(params);
+        notification_snooze_ll.setOrientation(LinearLayout.VERTICAL);
+        notification_snooze_ll.setGravity(Gravity.FILL_VERTICAL);
+        notification_snooze_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+        notification_snooze_ll.setPadding(0,20,0,20);
+
+
+        //Show snooze Options
+        CheckBox show_notification_snooze  = new CheckBox(getActivity().getApplicationContext());
+        notification_snooze_ll.addView(show_notification_snooze);
+        show_notification_snooze.setText("Show Notification Snooze Settings");
+        show_notification_snooze.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        show_notification_snooze.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        show_notification_snooze.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+        show_notification_snooze.setPadding(0,0,0,25);
+
+        boolean show_notification_snooze_b = prefs.getBoolean(show_notifications_snooze_shared_preference_key,false);
+
+        if(show_notification_snooze_b){
+            show_notification_snooze.setTextColor(getResources().getColor(R.color.colorON));
+            show_notification_snooze.setChecked(true);
+            draw_notification_snooze_options(prefs);
+        }else{
+            show_notification_snooze.setChecked(false);
+            show_notification_snooze.setTextColor(getResources().getColor(R.color.colorOFF));
+        }
+
+        show_notification_snooze.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                boolean notifications_enabled = prefs.getBoolean(show_notifications_snooze_shared_preference_key,false);
+                CheckBox s = (CheckBox) view;
+
+                if(notifications_enabled){
+                    s.setChecked(false);
+                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+                    prefs.edit().putBoolean(show_notifications_snooze_shared_preference_key, false).apply();
+                    notification_snooze_ll.removeView(use_notification_snooze);
+                    notification_snooze_ll.removeView(notification_snooze_start_ll);
+                    notification_snooze_ll.removeView(notification_snooze_end_ll);
+
+
+                }else{
+                    s.setChecked(true);
+                    s.setTextColor(getResources().getColor(R.color.colorON));
+                    prefs.edit().putBoolean(show_notifications_snooze_shared_preference_key, true).apply();
+                    draw_notification_snooze_options(prefs);
+                }
+
+            }
+        });
+
+
+        animations_linear_layout.addView(notification_snooze_ll);
+    }
+
+    private void draw_notification_snooze_options(final SharedPreferences prefs){
+        //Enable snooze
+        use_notification_snooze  = new CheckBox(getActivity().getApplicationContext());
+        use_notification_snooze.setText("Enable Snooze");
+        use_notification_snooze.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        use_notification_snooze.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        use_notification_snooze.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+        use_notification_snooze.setPadding(0,0,0,25);
+
+
+        boolean notifications_enabled = prefs.getBoolean(use_notifications_snooze_shared_preference_key,false);
+
+        if(notifications_enabled){
+            use_notification_snooze.setTextColor(getResources().getColor(R.color.colorON));
+            use_notification_snooze.setChecked(true);
+        }else{
+            use_notification_snooze.setChecked(false);
+            use_notification_snooze.setTextColor(getResources().getColor(R.color.colorOFF));
+        }
+
+        use_notification_snooze.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                boolean notifications_enabled = prefs.getBoolean(use_notifications_snooze_shared_preference_key,false);
+                CheckBox s = (CheckBox) view;
+
+                if(notifications_enabled){
+                    s.setChecked(false);
+                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+                    prefs.edit().putBoolean(use_notifications_snooze_shared_preference_key, false).apply();
+
+                    //cancel alarms
+                    if (alarmMgr!= null) {
+                        alarmMgr.cancel(notification_snooze_start_intent);
+                    }
+                    if (alarmMgr_stop!= null) {
+                        alarmMgr_stop.cancel(notification_snooze_stop_intent);
+                    }
+
+
+                }else{
+                    s.setChecked(true);
+                    s.setTextColor(getResources().getColor(R.color.colorON));
+                    prefs.edit().putBoolean(use_notifications_snooze_shared_preference_key, true).apply();
+
+//                    //cancel alarms
+                    if (alarmMgr!= null) {
+                        alarmMgr.cancel(notification_snooze_start_intent);
+                    }
+                    if (alarmMgr_stop!= null) {
+                        alarmMgr_stop.cancel(notification_snooze_stop_intent);
+                    }
+
+                    //apply alarm
+                    String start_time = prefs.getString(notifications_snooze_start_shared_preference_key,"");
+                    String end_time = prefs.getString(notifications_snooze_end_shared_preference_key,"");
+                    if(start_time == "" || end_time == ""){
+                        //invalid time
+                        s.setChecked(false);
+                        s.setTextColor(getResources().getColor(R.color.colorOFF));
+                        prefs.edit().putBoolean(use_notifications_snooze_shared_preference_key, false).apply();
+                        Toast.makeText(getActivity().getApplicationContext(), "Please set start and end times first", Toast.LENGTH_LONG).show();
+                    }else {
+                        //extract time
+                        //start time
+                        int start_hour = Integer.parseInt(start_time.split(":")[0]);
+                        int start_minute = Integer.parseInt(start_time.split(":")[1]);
+
+                        int end_hour = Integer.parseInt(end_time.split(":")[0]);
+                        int end_minute = Integer.parseInt(end_time.split(":")[1]);
+
+                        Log.i("NotificationSnooze",""+start_hour+" "+start_minute+" "+end_hour+" "+end_minute);
+
+                        alarmMgr = (AlarmManager)getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                        Intent intent = new Intent(getActivity().getApplicationContext(), NotificationSnoozeReceiver.class);
+                        intent.putExtra("start",true);
+                        notification_snooze_start_intent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        calendar.set(Calendar.HOUR_OF_DAY, start_hour);
+                        calendar.set(Calendar.MINUTE, start_minute);
+                        calendar.set(Calendar.SECOND,0);
+                        calendar.set(Calendar.MILLISECOND,0);
+
+                        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                                AlarmManager.INTERVAL_DAY, notification_snooze_start_intent);
+
+
+
+                        alarmMgr_stop = (AlarmManager)getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                        Intent intent_stop = new Intent(getActivity().getApplicationContext(), NotificationSnoozeReceiver.class);
+                        intent.putExtra("start",false);
+                        notification_snooze_stop_intent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 192838, intent_stop, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                        Calendar calendar_stop = Calendar.getInstance();
+                        calendar_stop.setTimeInMillis(System.currentTimeMillis());
+                        calendar_stop.set(Calendar.HOUR_OF_DAY, end_hour);
+                        calendar_stop.set(Calendar.MINUTE, end_minute);
+                        calendar.set(Calendar.SECOND,0);
+                        calendar.set(Calendar.MILLISECOND,0);
+
+                        alarmMgr_stop.setRepeating(AlarmManager.RTC_WAKEUP, calendar_stop.getTimeInMillis(),
+                                AlarmManager.INTERVAL_DAY, notification_snooze_stop_intent);
+
+
+
+
+
+                    }
+
+                }
+
+            }
+        });
+
+        notification_snooze_ll.addView(use_notification_snooze);
+
+        //Start snooze layouts
+        notification_snooze_start_ll = new LinearLayout(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams paramss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        notification_snooze_start_ll.setLayoutParams(paramss);
+        notification_snooze_start_ll.setOrientation(LinearLayout.HORIZONTAL);
+        notification_snooze_start_ll.setGravity(Gravity.FILL_HORIZONTAL);
+
+        String snooze_start_string = prefs.getString(notifications_snooze_start_shared_preference_key,"not set");
+
+        start_text = new TextView(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params_text = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        params_text.weight = 0.75f;
+        start_text.setLayoutParams(params_text);
+        start_text.setTextColor(getResources().getColor(R.color.colorText));
+        start_text.setText("Starting Snooze at: "+snooze_start_string);
+
+        notification_snooze_start_ll.addView(start_text);
+
+        button_start = new Button(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        params_button.weight = 0.25f;
+        button_start.setLayoutParams(params_button);
+        button_start.setText("Set Start Time");
+        button_start.setTextColor(getResources().getColor(R.color.colorText));
+        button_start.setBackgroundColor(getResources().getColor(R.color.colorButton));
+
+        button_start.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                final Calendar myCalender = Calendar.getInstance();
+                int hour = myCalender.get(Calendar.HOUR_OF_DAY);
+                int minute = myCalender.get(Calendar.MINUTE);
+
+
+                TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        if (view.isShown()) {
+                            myCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                            myCalender.set(Calendar.MINUTE, minute);
+
+                            String hour = "";
+                            hour= (hourOfDay < 10) ? "0"+hourOfDay: ""+hourOfDay;
+                            String minute_s = "";
+                            minute_s= (minute < 10) ? "0"+minute: ""+minute;
+                            start_text.setText("Starting Snooze at: "+hour+":"+minute_s);
+                            prefs.edit().putString(notifications_snooze_start_shared_preference_key, hour+":"+minute_s).apply();
+                            //turn off enable to reaply and cancel any pending alarms;
+                            prefs.edit().putBoolean(use_notifications_snooze_shared_preference_key, false).apply();
+                            use_notification_snooze.setChecked(false);
+                            use_notification_snooze.setTextColor(getResources().getColor(R.color.colorOFF));
+                            //cancel alarms
+//                            if (alarmMgr!= null) {
+//                                alarmMgr.cancel(notification_snooze_start_intent);
+//                            }
+//                            if (alarmMgr_stop!= null) {
+//                                alarmMgr_stop.cancel(notification_snooze_stop_intent);
+//                            }
+
+                        }
+                    }
+                };
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), android.R.style.Theme_DeviceDefault_Dialog_MinWidth, myTimeListener, hour, minute, true);
+                timePickerDialog.setTitle("Choose Snooze Start Time");
+                timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                timePickerDialog.show();
+
+            }});
+
+        notification_snooze_start_ll.addView(button_start);
+
+
+        //End snooze layouts
+        notification_snooze_end_ll = new LinearLayout(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams paramsss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        notification_snooze_end_ll.setLayoutParams(paramsss);
+        notification_snooze_end_ll.setOrientation(LinearLayout.HORIZONTAL);
+        notification_snooze_end_ll.setGravity(Gravity.FILL_HORIZONTAL);
+
+        String snooze_end_string = prefs.getString(notifications_snooze_end_shared_preference_key,"not set");
+
+        end_text = new TextView(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params_text_end = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        params_text_end.weight = 0.75f;
+        end_text.setLayoutParams(params_text_end);
+        end_text.setTextColor(getResources().getColor(R.color.colorText));
+        end_text.setText("Ending Snooze at: " +snooze_end_string);
+
+        notification_snooze_end_ll.addView(end_text);
+
+        button_end = new Button(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params_button_end = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        params_button_end.weight = 0.25f;
+        button_end.setLayoutParams(params_button_end);
+        button_end.setText("Set End Time");
+        button_end.setTextColor(getResources().getColor(R.color.colorText));
+        button_end.setBackgroundColor(getResources().getColor(R.color.colorButton));
+
+        button_end.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                final Calendar myCalender = Calendar.getInstance();
+                int hour = myCalender.get(Calendar.HOUR_OF_DAY);
+                int minute = myCalender.get(Calendar.MINUTE);
+
+
+                TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        if (view.isShown()) {
+                            myCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                            myCalender.set(Calendar.MINUTE, minute);
+
+                            String hour = "";
+                            hour= (hourOfDay < 10) ? "0"+hourOfDay: ""+hourOfDay;
+                            String minute_s = "";
+                            minute_s= (minute < 10) ? "0"+minute: ""+minute;
+                            end_text.setText("Ending Snooze at: "+hour+":"+minute_s);
+                            prefs.edit().putString(notifications_snooze_end_shared_preference_key, hour+":"+minute_s).apply();
+                            //turn off enable to reaply and cancel any pending alarms;
+                            prefs.edit().putBoolean(use_notifications_snooze_shared_preference_key, false).apply();
+                            use_notification_snooze.setChecked(false);
+                            use_notification_snooze.setTextColor(getResources().getColor(R.color.colorOFF));
+                            //cancel alarms
+//                            if (alarmMgr!= null) {
+//                                alarmMgr.cancel(notification_snooze_start_intent);
+//                            }
+//                            if (alarmMgr_stop!= null) {
+//                                alarmMgr_stop.cancel(notification_snooze_stop_intent);
+//                            }
+
+                        }
+                    }
+                };
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), android.R.style.Theme_DeviceDefault_Dialog_MinWidth, myTimeListener, hour, minute, true);
+                timePickerDialog.setTitle("Choose Snooze End Time");
+                timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                timePickerDialog.show();
+            }});
+
+        notification_snooze_end_ll.addView(button_end);
+
+        notification_snooze_ll.addView(notification_snooze_start_ll);
+        notification_snooze_ll.addView(notification_snooze_end_ll);
+    }
 
     private void create_timeout_settings(SharedPreferences prefs){
 

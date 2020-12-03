@@ -71,6 +71,7 @@
             android:name=".VisualiserService"
             android:enabled="true"
             android:exported="true" />
+        <receiver android:name=".NotificationSnoozeReceiver" ></receiver>
     </application>
 
 </manifest>
