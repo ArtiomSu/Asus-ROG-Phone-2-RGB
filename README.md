@@ -24,6 +24,8 @@ Rog 3 works with latest release, however at the moment the second led cannot be 
 
 [Per App Custom Animations and Colours](#per-app-custom-animations-and-colours)
 
+[Notification Snooze](#notification-snooze)
+
 [Save Restore App Data](#save-restore-app-data)
 
 [Battery Animations](#battery-animations)
@@ -142,6 +144,23 @@ It allows each app to have it own unique animation and colours for the leds. So 
 4. From here you can enable your desired animation for this app.
 5. Also make sure the standard notification options are enabled as here [Notifications](notifications)
 
+### Notification Snooze
+This feature allows you to set a time window for when the notification service can be stopped. So if you dont want your leds to be blinking during the night then this feature is for you.
+
+This feature is also recommended for rog 3 users as in order for rog 3 leds to work the app needs to hold a wakelock which consumes battery. So with notification snooze the wakelock is released thereby saving rog 3 users some battery.
+
+###### How to Use Notification Snooze
+1. Click on "Show notification snooze settings" to expand the menu.
+2. Select "Set start time" this is when you want the notification service to stop. set a future time. so for example if right now its 20:45 set 20:46 since if you set 20:44 it will trigger tommorow.
+3. Select "set end time" set this after your start time.
+4. select "enable snooze" to start the thing.
+
+###### Notification Snooze Best Practises
+NOTE: if you change the start time or end time you will need to select "enable snooze" again it will be unselected anyway once you change the settings.
+
+NOTE on Delay: cause of how repeating alarm manager works the times you set will not be accurate.
+So for example if you set start time for 20:10 it will probably stop the notification service at like 20:15 maybe earlier or even later.
+
 ### Save Restore App Data
 Since release 13 you can now save and restore your data, this way you dont have to setup all of the settings for custom notifications each time you reinstall the app.
 
@@ -196,8 +215,15 @@ Notifications take priority over the visualiser. Once notifications are cleared 
 10. save restore app settings (done)
 11. battery charging animations (done-beta) 
 12. music visualiser (done)(can be improved)
+13. Notification Snooze (done-beta)
 
 # Version
+22. [4.9-notification_snooze](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/22) 
+```
+    Added notification snooze feature which turns off the notification service during set times
+    Show instructions for notification snooze on the first time you enable it
+    Updated about
+```
 21. [4.8-notification_service](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/21) 
 ```
     Improved notification service. It now exists properly if not needed.
