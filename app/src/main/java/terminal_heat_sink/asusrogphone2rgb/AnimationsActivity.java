@@ -76,6 +76,10 @@ public class AnimationsActivity extends Fragment {
     private String visualiser_use_second_led_only_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_use_second_led_only";
     private String visualiser_animation_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_animation_mode";
 
+    //miscellaneous preferences
+    private String shake_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.shake_on";
+    private String shake_on_first_launch_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.shake_on_first_launch";
+
     //check if phone is rog 3
     private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
@@ -169,7 +173,7 @@ public class AnimationsActivity extends Fragment {
             custom_text_view_params.setMargins(0,0,0,20);
             test_text_view.setLayoutParams(custom_text_view_params);
             test_text_view.setTextColor(getResources().getColor(R.color.colorText));
-            test_text_view.setText("Notification snooze test");
+            test_text_view.setText("Shake test");
             test_text_view.setTextSize(test_text_view.getTextSize()+1);
             test_text_view.setTypeface(null, Typeface.BOLD);
             test_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
@@ -186,6 +190,8 @@ public class AnimationsActivity extends Fragment {
         create_battery_settings(animations_linear_layout,prefs);
 
         create_visualiser_settings(animations_linear_layout,prefs);
+
+        create_miscellaneous_settings(animations_linear_layout, prefs);
 
         scrollView.smoothScrollTo(0,0);
 
@@ -1482,6 +1488,106 @@ public class AnimationsActivity extends Fragment {
 
 
         animations_linear_layout.addView(visualiser_settings_ll);
+    }
+
+
+
+
+
+    public void create_miscellaneous_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
+        LinearLayout miscellaneous_settings_ll = new LinearLayout(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,20,0,20);
+        miscellaneous_settings_ll.setLayoutParams(params);
+        miscellaneous_settings_ll.setOrientation(LinearLayout.VERTICAL);
+        miscellaneous_settings_ll.setGravity(Gravity.FILL_VERTICAL);
+        miscellaneous_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+        miscellaneous_settings_ll.setPadding(0,20,0,20);
+
+
+        TextView custom_text_view = new TextView(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        custom_text_view_params.setMargins(0,0,0,20);
+        custom_text_view.setLayoutParams(custom_text_view_params);
+        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
+        custom_text_view.setText("Miscellaneous Settings");
+        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+        custom_text_view.setTypeface(null, Typeface.BOLD);
+        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
+
+
+        miscellaneous_settings_ll.addView(custom_text_view);
+
+
+        CheckBox enable_shake = new CheckBox(getActivity().getApplicationContext());
+        enable_shake.setText("Enable Triple Shake");
+        enable_shake.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+        enable_shake.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        enable_shake.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+        enable_shake.setPadding(0,0,0,25);
+
+
+        boolean enable_shake_on = prefs.getBoolean(shake_on_shared_preference_key,false);
+
+        if(enable_shake_on){
+            enable_shake.setTextColor(getResources().getColor(R.color.colorON));
+            enable_shake.setChecked(true);
+
+            Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+            getActivity().getApplicationContext().startService(shake_intent);
+
+        }else{
+            enable_shake.setChecked(false);
+            enable_shake.setTextColor(getResources().getColor(R.color.colorOFF));
+            Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+            getActivity().getApplicationContext().stopService(shake_intent);
+        }
+
+        enable_shake.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                boolean animate_battery = prefs.getBoolean(shake_on_shared_preference_key,false);
+                CheckBox s = (CheckBox) view;
+
+                if(animate_battery){
+                    s.setChecked(false);
+                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+                    prefs.edit().putBoolean(shake_on_shared_preference_key, false).apply();
+                    Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+                    getActivity().getApplicationContext().stopService(shake_intent);
+
+                }else{
+                    s.setChecked(true);
+                    s.setTextColor(getResources().getColor(R.color.colorON));
+                    prefs.edit().putBoolean(shake_on_shared_preference_key, true).apply();
+
+                    Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+                    getActivity().getApplicationContext().startService(shake_intent);
+
+                    boolean launched_first_time = prefs.getBoolean(shake_on_first_launch_shared_preference_key,false);
+                    if(!launched_first_time){
+                        prefs.edit().putBoolean(shake_on_first_launch_shared_preference_key, true).apply();
+                        new AlertDialog.Builder(requireActivity())
+                                .setTitle("What is Triple Shake Feature?")
+                                .setMessage("Triple Shake allows you to quickly shake your phone 3 times to toggle the second led.\n\nThe second led will use whatever mode you selected above at the very top of this page.\n\nIt will also use the colour you selected in the colour wheel for the appropriate modes.\n\nI made this because I use the second led as a flashlight sometimes so this is a quick shortcut lol")
+                                .setCancelable(false)
+                                .setPositiveButton("I understand now", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .show();
+                    }
+
+                }
+
+            }
+        });
+
+        miscellaneous_settings_ll.addView(enable_shake);
+
+        animations_linear_layout.addView(miscellaneous_settings_ll);
     }
 
 

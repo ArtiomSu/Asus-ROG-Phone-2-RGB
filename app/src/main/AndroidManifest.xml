@@ -71,6 +71,10 @@
             android:name=".VisualiserService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".ShakeService"
+            android:enabled="true"
+            android:exported="true"/>
         <receiver android:name=".NotificationSnoozeReceiver" ></receiver>
     </application>
 
