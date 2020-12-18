@@ -6,12 +6,9 @@
     tools:context=".ColourWheelActivity">
     <!-- TODO: Update blank fragment layout -->
 
-    <ScrollView
-        android:id="@+id/scrollviewcolor"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/scrollviewcolor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -51,26 +48,11 @@
                     </TextView>
                 </LinearLayout>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="2000dp"/>
-
-                <ImageView
-                    android:id="@+id/eastereggcolor"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:layout_centerInParent="true"
-                    android:paddingBottom="20dp"
-                    android:src="@drawable/easter_egg"/>
 
             </LinearLayout>
 
 
         </LinearLayout>
-    </ScrollView>
 
 
 

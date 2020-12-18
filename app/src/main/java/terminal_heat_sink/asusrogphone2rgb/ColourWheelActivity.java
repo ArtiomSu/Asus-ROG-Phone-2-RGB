@@ -25,7 +25,6 @@ public class ColourWheelActivity extends Fragment {
     private String SAVED_PREFS_KEY_COLOR = "terminal_heat_sink.asusrogphone2rgb.saved_prefs_key_color";
 
     private ColorPickerView colorPickerView;
-    private ScrollView scrollView;
     private LinearLayout colour_preview;
 
     public ColourWheelActivity() {
@@ -83,25 +82,6 @@ public class ColourWheelActivity extends Fragment {
 
         colorPickerView.setInitialColor(color);
         colour_preview.setBackgroundColor(color);
-
-        scrollView = (ScrollView) root.findViewById(R.id.scrollviewcolor);
-
-        ImageView easterEgg = (ImageView) root.findViewById(R.id.eastereggcolor);
-
-        easterEgg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //scrollView.fullScroll(ScrollView.FOCUS_UP);
-                scrollView.smoothScrollTo(0,0);
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
-                startActivity(intent);
-            }
-        });
-
-        scrollView.smoothScrollTo(0,0);
 
 
         return root;
