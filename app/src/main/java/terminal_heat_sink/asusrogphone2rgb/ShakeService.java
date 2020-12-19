@@ -64,7 +64,7 @@ public class ShakeService extends Service implements SensorEventListener {
         float delta = mAccelCurrent - mAccelLast;
         mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
-        if (mAccel > 11) {
+        if (mAccel > 30) {
 
             if(previous_shake == 0L){
                 previous_shake = new Date().getTime();
