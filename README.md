@@ -230,6 +230,12 @@ I made this because I use the second led as a flashlight sometimes so this is a 
 14. Triple shake (done)
 
 # Version
+24. [5.1-fixes](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/24) 
+```
+    triple shake should be less sensitive now ( so it shouldn't trigger in your pocket )
+    fixed triple shake being always active even when turning off the service
+    improve drag/swipe inside colour picker. You still can't drag on the brightness bar unfortunately
+```
 23. [5.0-shake](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/23) 
 ```
     Added triple shake to miscellaneous settings.
