@@ -230,6 +230,19 @@ I made this because I use the second led as a flashlight sometimes so this is a 
 14. Triple shake (done)
 
 # Version
+25. [5.2-magisk](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/25) 
+```
+    New magisk mode added that can be triggered from the about tab and pressing the create magisk module button.
+
+    This will generate a magisk module, uninstall the app and reboot your phone.
+    The magisk module should allow all services to run without needing the notification as android hopefully wont kill a system app.
+
+    To uninstall simply remove the magisk module from magisk manager.
+
+    NOTE: This is completely optional the functionality is identical for the magisk version as the default.
+
+    NOTE: This is a testing feature so there could be some issues. I will test it for about a week before uploading to the playstore if everything is ok
+```
 24. [5.1-fixes](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/24) 
 ```
     triple shake should be less sensitive now ( so it shouldn't trigger in your pocket )
