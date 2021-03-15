@@ -127,7 +127,7 @@ public class BatteryService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
@@ -143,6 +143,7 @@ public class BatteryService extends Service {
 
         int color = prefs.getInt(SAVED_PREFS_KEY_COLOR,-1031);
         SystemWriter.notification_stop(!on,animation,true,Color.red(color),Color.green(color),Color.blue(color),getApplication().getApplicationContext(),use_second_led);
+        stopSelf();
     }
 
 

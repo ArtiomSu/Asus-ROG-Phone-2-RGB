@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     //notification animation running?.
     private String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
 
+    //check if magisk mode
+    private String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +173,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent app_selector = new Intent(context, Startup.class);
                 startActivityForResult(app_selector, 404);
             }
+
+            //check if magisk mode is present
+            if(SystemWriter.check_if_system_app(context).equals("terminal_heat_sink.asusrogphone2rgb\n")){
+                Log.i("MainActivity", " running in magisk mode");
+                prefs.edit().putBoolean(magisk_mode_shared_preference_key, true).apply();
+            }else{
+                prefs.edit().putBoolean(magisk_mode_shared_preference_key, false).apply();
+            }
+
+
         }
 
 

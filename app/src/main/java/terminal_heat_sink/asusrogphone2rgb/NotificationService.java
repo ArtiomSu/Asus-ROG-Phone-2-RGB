@@ -45,6 +45,10 @@ public class NotificationService extends NotificationListenerService {
     //check if phone is rog 3 then run the loop
     private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
+    //check if magisk mode
+    private String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
+    private boolean magisk_mode;
+
 
     private String latest_notification = "";
 
@@ -67,6 +71,10 @@ public class NotificationService extends NotificationListenerService {
         }
     };
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
 
     @Override
     public void onCreate () {
@@ -79,6 +87,7 @@ public class NotificationService extends NotificationListenerService {
         SharedPreferences prefs = context.getSharedPreferences(
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
         boolean test = prefs.getBoolean(notifications_on_shared_preference_key,false);
+        magisk_mode = prefs.getBoolean(magisk_mode_shared_preference_key,false);
         if(test){
             String NOTIFICATION_CHANNEL_ID = "terminal_heat_sink.asusrogphone2rgb";
             String channelName = "Notification Service";
@@ -89,18 +98,7 @@ public class NotificationService extends NotificationListenerService {
             assert manager != null;
             manager.createNotificationChannel(chan);
 
-            Intent notificationIntent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent =
-                    PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
-            Notification notification = notificationBuilder.setOngoing(true)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Notification service running")
-                    .setContentIntent(pendingIntent)
-                    .setPriority(NotificationManager.IMPORTANCE_MIN)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .build();
 
             Log.i( "AsusRogPhone2RGBNotificationService" , "Creating Service Notification");
 
@@ -109,10 +107,26 @@ public class NotificationService extends NotificationListenerService {
                 SystemWriter.rog_3_wakelock(context);
             }
 
+            if(!magisk_mode) {
+                Intent notificationIntent = new Intent(context, MainActivity.class);
+                PendingIntent pendingIntent =
+                        PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-            startForeground(2, notification);
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+                Notification notification = notificationBuilder.setOngoing(true)
+                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setContentTitle("Notification service running")
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationManager.IMPORTANCE_MIN)
+                        .setCategory(Notification.CATEGORY_SERVICE)
+                        .build();
+
+                startForeground(2, notification);
+            }
         }else {
-            stopForeground(true);
+            if(!magisk_mode) {
+                stopForeground(true);
+            }
             stopSelf();
         }
 
@@ -135,7 +149,9 @@ public class NotificationService extends NotificationListenerService {
         Log. i ( "AsusRogPhone2RGBNotificationService" , "adding notification:"+added+" notifications_enabled:"+test+" package name:"+package_name);
 
         if(!test){
-            stopForeground(true);
+            if(!magisk_mode) {
+                stopForeground(true);
+            }
             stopSelf();
         }else{
 
@@ -229,6 +245,8 @@ public class NotificationService extends NotificationListenerService {
         prefs.edit().putBoolean(notification_animation_running_shared_preference_key,false).apply();
         SystemWriter.notification_stop(!on,animation,true,Color.red(color),Color.green(color),Color.blue(color),context,use_second_led);
 
+        //Log.e("AsusRogPhone2RGBNotificationService", "stop notification: on:"+on+" animation:"+animation+" use_second_led:"+use_second_led);
+
         latest_notification = "";
     }
 
@@ -241,7 +259,9 @@ public class NotificationService extends NotificationListenerService {
             SystemWriter.rog_3_wakeunlock(context);
         }
 
-        stopForeground(true);
+        if(!magisk_mode) {
+            stopForeground(true);
+        }
         stopSelf();
         super.onDestroy();
 

@@ -1,9 +1,15 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +21,9 @@ import android.widget.Toast;
 
 public class AboutActivity extends Fragment {
     private ScrollView scrollView;
+
+    //check if magisk mode
+    private String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
 
     public AboutActivity() {
         // Required empty public constructor
@@ -131,6 +140,30 @@ public class AboutActivity extends Fragment {
             }
         });
 
+        Context context = getContext();
+        SharedPreferences prefs = context.getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+
+        boolean running_in_magisk_mode = prefs.getBoolean(magisk_mode_shared_preference_key, false);
+
+        Button convert_to_magisk = (Button) root.findViewById(R.id.convert_to_magisk);
+        convert_to_magisk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PackageManager pm = getContext().getPackageManager();
+                String path = "";
+                for (ApplicationInfo app : pm.getInstalledApplications(0)) {
+                    if(app.packageName.equals("terminal_heat_sink.asusrogphone2rgb")){
+                        path = app.sourceDir;
+                    }
+                }
+                SystemWriter.create_magisk_module(getContext(),path);
+            }
+        });
+
+        if(running_in_magisk_mode){
+            convert_to_magisk.setVisibility(View.GONE);
+        }
 
         scrollView.smoothScrollTo(0,0);
 

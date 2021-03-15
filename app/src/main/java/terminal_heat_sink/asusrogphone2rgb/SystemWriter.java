@@ -43,9 +43,9 @@ public class SystemWriter {
                         }
                         result = output.toString();
                     }else{
-                        Log.i("SystemWriter","failed to read");
-                        Toast toast = Toast.makeText(context, "Could not read files please allow AsusRogPhone2RGB root access in magisk", Toast.LENGTH_LONG);
-                        toast.show();
+                        //Log.i("SystemWriter","failed to read");
+                        //Toast toast = Toast.makeText(context, "Could not read files please allow AsusRogPhone2RGB root access in magisk", Toast.LENGTH_LONG);
+                        //toast.show();
                     }
 
                 }
@@ -289,6 +289,22 @@ public class SystemWriter {
             isRog3 = false;
         }
         //Log.i("writer","phone is rog 3 "+isRog3+" phone="+phone);
+    }
+
+    public static void create_magisk_module(Context context, String path_to_apk){
+        write_to_sys("mkdir -p /data/adb/modules/asusrogphone2rgb/system/priv-app/terminal_heat_sink.asusrogphone2rgb && " +
+                "cp "+path_to_apk+" /data/adb/modules/asusrogphone2rgb/system/priv-app/terminal_heat_sink.asusrogphone2rgb/asusrogphone2rgb.apk && " +
+                "echo id=asusrogphone2rgb > /data/adb/modules/asusrogphone2rgb/module.prop && " +
+                "echo name=Asus Rog Phone RGB >> /data/adb/modules/asusrogphone2rgb/module.prop && " +
+                "echo version=v1 >> /data/adb/modules/asusrogphone2rgb/module.prop && " +
+                "echo versionCode=1 >> /data/adb/modules/asusrogphone2rgb/module.prop && " +
+                "echo author=Terminal_Heat_Sink >> /data/adb/modules/asusrogphone2rgb/module.prop && " +
+                "echo description=Asus Rog Phone RGB Magisk version >> /data/adb/modules/asusrogphone2rgb/module.prop && " +
+                "pm uninstall terminal_heat_sink.asusrogphone2rgb && reboot\n",context);
+    }
+
+    public static String check_if_system_app(Context context){
+        return read_from_sys("ls /system/priv-app/ | grep terminal_heat_sink.asusrogphone2rgb \n", context);
     }
 
     /*

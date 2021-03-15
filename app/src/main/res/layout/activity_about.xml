@@ -97,6 +97,26 @@
 
         </LinearLayout>
 
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+            <Button
+                android:id="@+id/convert_to_magisk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorButton"
+                android:text="Convert To magisk module"
+                android:textColor="@color/colorText" />
+
+        </LinearLayout>
+
             <ScrollView
                 android:id="@+id/scrollViewabout"
                 android:layout_width="match_parent"

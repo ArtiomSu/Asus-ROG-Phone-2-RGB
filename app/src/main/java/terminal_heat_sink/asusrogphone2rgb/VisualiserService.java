@@ -34,6 +34,11 @@ public class VisualiserService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
 
@@ -147,5 +152,6 @@ public class VisualiserService extends Service {
 
         int color = prefs.getInt(SAVED_PREFS_KEY_COLOR,-1031);
         SystemWriter.notification_stop(!on,animation,true,Color.red(color),Color.green(color),Color.blue(color),getApplication().getApplicationContext(),use_second_led);
+        stopSelf();
     }
 }

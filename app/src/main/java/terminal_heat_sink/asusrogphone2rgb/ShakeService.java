@@ -102,6 +102,7 @@ public class ShakeService extends Service implements SensorEventListener {
         mSensorManager.unregisterListener(this);
         Log.i("shake_service","shutting down "+"light on:"+light_on);
         SystemWriter.turn_on_second_led(false,getApplicationContext());
+        stopSelf();
         super.onDestroy();
     }
 
