@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
 
     <application
         android:allowBackup="true"
@@ -28,15 +29,16 @@
         <activity
             android:name=".AppSelector"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PerAppCustomisations"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Startup"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".NotificationService"
             android:label="@string/app_name"
@@ -74,8 +76,22 @@
         <service
             android:name=".ShakeService"
             android:enabled="true"
+            android:exported="true" />
+
+        <receiver android:name=".NotificationSnoozeReceiver" />
+
+        <service
+            android:name=".PowerMenuButtonsService"
+            android:label="Asus Rog Phone RGB Power Menu Shortcuts"
+            android:permission="android.permission.BIND_CONTROLS">
+            <intent-filter>
+                <action android:name="android.service.controls.ControlsProviderService" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".PowerMenuActivityHandler"
+            android:enabled="true"
             android:exported="true"/>
-        <receiver android:name=".NotificationSnoozeReceiver" ></receiver>
     </application>
 
 </manifest>
