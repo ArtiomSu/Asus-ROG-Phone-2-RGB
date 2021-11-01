@@ -12,6 +12,11 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean fab_on = false;
     private boolean second_led_on = false;
-    private String fab_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.fab_on";
-    private String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
-    private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+    private final String fab_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.fab_on";
+    private final String use_second_led_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_second_led";
+    private final String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
     //notification animation running?.
-    private String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
+    private final String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
 
     //check if magisk mode
-    private String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
+    private final String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,11 +129,50 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    boolean checkSdk(Context context, SharedPreferences prefs){
+        if(Build.VERSION.SDK_INT < 29){
+            Log.i("MainActivity","phone is not running android 10+");
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Warning")
+                    .setMessage("Android 10 or higher is required to run this app. App will not function properly on android 9")
+                    .setCancelable(false)
+                    .setPositiveButton("I accept the risk", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            launchPhonePicker(context, prefs);
+                        }
+                    })
+                    .setNegativeButton("Exit App", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //finishAndRemoveTask();
+                            SystemWriter.uninstall_self(context);
+                        }
+                    })
+                    .show();
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    private void launchPhonePicker(Context context, SharedPreferences prefs){
+        String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
+        if(phone == " "){
+            Intent app_selector = new Intent(context, Startup.class);
+            startActivityForResult(app_selector, 404);
+        }
+
+        //check if magisk mode is present
+        if(SystemWriter.check_if_system_app(context).equals("terminal_heat_sink.asusrogphone2rgb\n")){
+            Log.i("MainActivity", " running in magisk mode");
+            prefs.edit().putBoolean(magisk_mode_shared_preference_key, true).apply();
+        }else{
+            prefs.edit().putBoolean(magisk_mode_shared_preference_key, false).apply();
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-
-
         final Context context = getApplicationContext();
 
         SharedPreferences prefs = context.getSharedPreferences(
@@ -141,10 +185,17 @@ public class MainActivity extends AppCompatActivity {
         if(!Build.MANUFACTURER.equals("asus")){
             Log.i("MainActivity","phone is not asus");
             new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Can't run this app")
-                    .setMessage("Phone is not Asus")
+                    .setTitle("Warning")
+                    .setMessage("This App is made to work only with Asus Rog phone 2 and 3. Usage on other devices may damage the device. You have been warned.")
                     .setCancelable(false)
-                    .setPositiveButton("ok I'll buy an asus phone", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("I accept the risk", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            checkSdk(context, prefs);
+
+
+                        }
+                    })
+                    .setNegativeButton("Exit App", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             //finishAndRemoveTask();
                             SystemWriter.uninstall_self(context);
@@ -152,40 +203,11 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .show();
 
-        }else if(Build.VERSION.SDK_INT < 29){
-            Log.i("MainActivity","phone is not running android 10");
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Can't run this app")
-                    .setMessage("Android 10 is required to run this app")
-                    .setCancelable(false)
-                    .setPositiveButton("ok I'll update my phone sorry", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            //finishAndRemoveTask();
-                            SystemWriter.uninstall_self(context);
-                            //finishAffinity();
-                        }
-                    })
-                    .show();
+        }else if(!checkSdk(context,prefs)){
 
         }else{
-            String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
-            if(phone == " "){
-                Intent app_selector = new Intent(context, Startup.class);
-                startActivityForResult(app_selector, 404);
-            }
-
-            //check if magisk mode is present
-            if(SystemWriter.check_if_system_app(context).equals("terminal_heat_sink.asusrogphone2rgb\n")){
-                Log.i("MainActivity", " running in magisk mode");
-                prefs.edit().putBoolean(magisk_mode_shared_preference_key, true).apply();
-            }else{
-                prefs.edit().putBoolean(magisk_mode_shared_preference_key, false).apply();
-            }
-
-
+            launchPhonePicker(context, prefs);
         }
-
-
     }
 
     @Override

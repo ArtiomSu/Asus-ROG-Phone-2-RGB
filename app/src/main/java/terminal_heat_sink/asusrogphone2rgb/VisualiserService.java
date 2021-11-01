@@ -8,9 +8,7 @@ import android.graphics.Color;
 import android.media.audiofx.Visualizer;
 import android.os.IBinder;
 import android.util.Log;
-
 import androidx.core.graphics.ColorUtils;
-
 
 public class VisualiserService extends Service {
 

@@ -23,7 +23,7 @@ public class AboutActivity extends Fragment {
     private ScrollView scrollView;
 
     //check if magisk mode
-    private String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
+    private final String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
 
     public AboutActivity() {
         // Required empty public constructor

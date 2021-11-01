@@ -1,11 +1,9 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

@@ -230,6 +230,15 @@ I made this because I use the second led as a flashlight sometimes so this is a 
 14. Triple shake (done)
 
 # Version
+25. [5.5-tools-update](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/28) 
+```
+    Updated all build tools.
+    Changed wrong phone and wrong os errors to warnings. ( Some people using GSI had wrong build props..... so this will be easier for them. )
+```
+25. [5.4-a11fix](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/27) 
+```
+    added permission for android 11 that allows to view all user apps.
+```
 25. [5.2-magisk](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/25) 
 ```
     New magisk mode added that can be triggered from the about tab and pressing the create magisk module button.
