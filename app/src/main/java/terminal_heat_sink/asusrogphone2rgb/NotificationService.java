@@ -101,9 +101,12 @@ public class NotificationService extends NotificationListenerService {
 
             Log.i( "AsusRogPhone2RGBNotificationService" , "Creating Service Notification");
 
-            if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
-                Log.i("AsusRogPhone2RGBNotificationService","Starting Rog 3 wakelock");
-                SystemWriter.rog_3_wakelock(context);
+            String isrog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
+            if(!isrog3.equals(" ")){
+                if(isrog3.charAt(0) == '3'){
+                    Log.i("AsusRogPhone2RGBNotificationService","Starting Rog 3 wakelock");
+                    SystemWriter.rog_3_wakelock(context);
+                }
             }
 
             if(!magisk_mode) {
@@ -253,9 +256,12 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onDestroy() {
         Log.i("AsusRogPhone2RGBNotificationService", "onDestroy() , service stopped...");
-        if(context.getSharedPreferences("terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE).getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
-            Log.i("AsusRogPhone2RGBNotificationService", "Rog3 Releasing wakelock");
-            SystemWriter.rog_3_wakeunlock(context);
+        String isRog3 = context.getSharedPreferences("terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE).getString(isphone_rog3_shared_preference_key," ");
+        if(!isRog3.equals(" ")) {
+            if (isRog3.charAt(0) == '3') {
+                Log.i("AsusRogPhone2RGBNotificationService", "Rog3 Releasing wakelock");
+                SystemWriter.rog_3_wakeunlock(context);
+            }
         }
 
         if(!magisk_mode) {

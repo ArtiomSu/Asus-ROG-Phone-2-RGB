@@ -281,10 +281,14 @@ public class SystemWriter {
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
 
         String phone = prefs.getString(isphone_rog3_shared_preference_key,"");
-        if(phone.charAt(0) == '3'){
-            isRog3 = true;
-        }else{
+        if(phone.equals("")){ // fallback to rog 2 mode otherwise app crashes
             isRog3 = false;
+        }else {
+            if (phone.charAt(0) == '3') {
+                isRog3 = true;
+            } else {
+                isRog3 = false;
+            }
         }
         //Log.i("writer","phone is rog 3 "+isRog3+" phone="+phone);
     }

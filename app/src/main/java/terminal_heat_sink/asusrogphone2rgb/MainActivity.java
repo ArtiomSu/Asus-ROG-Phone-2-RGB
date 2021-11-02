@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchPhonePicker(Context context, SharedPreferences prefs){
         String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
-        if(phone == " "){
+        if(phone.equals(" ")){
             Intent app_selector = new Intent(context, Startup.class);
             startActivityForResult(app_selector, 404);
         }

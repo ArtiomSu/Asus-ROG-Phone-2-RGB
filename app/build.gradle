@@ -8,8 +8,8 @@ android {
         applicationId "terminal_heat_sink.asusrogphone2rgb"
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 27
-        versionName "5.5-tools-update"
+        versionCode 29
+        versionName "5.6-rog2-fallback"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

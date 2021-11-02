@@ -230,6 +230,10 @@ I made this because I use the second led as a flashlight sometimes so this is a 
 14. Triple shake (done)
 
 # Version
+26. [5.6-rog2-fallback](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/29) 
+```
+    Fallback to rog 2 mode if failed to determine which phone. ( can happen with android 12 gsi )
+```
 25. [5.5-tools-update](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/28) 
 ```
     Updated all build tools.

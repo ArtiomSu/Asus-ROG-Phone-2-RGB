@@ -320,9 +320,12 @@ public class AnimationsActivity extends Fragment {
             switch_enable_notifications.setChecked(true);
             SystemWriter.notification_access(true,getActivity().getApplicationContext());
 
-            if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
-                Log.i("AsusRogPhone2RGBNotificationService", "Rog3 wakelock");
-                SystemWriter.rog_3_wakelock(getActivity().getApplicationContext());
+            String isRog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
+            if(!isRog3.equals(" ")){
+                if(isRog3.charAt(0) == '3'){
+                    Log.i("AsusRogPhone2RGBNotificationService", "Rog3 wakelock");
+                    SystemWriter.rog_3_wakelock(getActivity().getApplicationContext());
+                }
             }
 
         }else{
@@ -332,9 +335,12 @@ public class AnimationsActivity extends Fragment {
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorOFF));
             SystemWriter.notification_access(false,getActivity().getApplicationContext());
 
-            if(prefs.getString(isphone_rog3_shared_preference_key," ").charAt(0) == '3'){
-                Log.i("AsusRogPhone2RGBNotificationService", "Rog3 release wakelock");
-                SystemWriter.rog_3_wakeunlock(getActivity().getApplicationContext());
+            String isRog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
+            if(!isRog3.equals(" ")) {
+                if (isRog3.charAt(0) == '3'){
+                    Log.i("AsusRogPhone2RGBNotificationService", "Rog3 release wakelock");
+                    SystemWriter.rog_3_wakeunlock(getActivity().getApplicationContext());
+                }
             }
         }
 
