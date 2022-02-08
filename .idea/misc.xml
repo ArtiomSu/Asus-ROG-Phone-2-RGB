@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable-v24/asus_rog_logo_scaled.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/asus_rog_logo.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/drawable/button_red.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/drawable/easter_egg.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/drawable/empty_check_box.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/ic_baseline_battery_full_24.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/ic_baseline_notifications_24.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/ic_baseline_notifications_paused_24.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/ic_baseline_timer_24.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/drawable/icons8_telegram_app.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/drawable/linearlayoutborder.xml" value="0.281" />
+        <entry key="app/src/main/res/drawable/second_led.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/layout/activity_colour_wheel.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

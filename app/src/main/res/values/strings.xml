@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Asus ROG Phone 2 RGB</string>
-    <string name="tab_text_1">Animations</string>
+    <string name="tab_text_1">Settings</string>
     <string name="tab_text_2">Colour Wheel</string>
     <string name="tab_text_3">About</string>
     <string name="title_activity_animations">AnimationsActivity</string>

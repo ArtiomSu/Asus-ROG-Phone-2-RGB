@@ -71,14 +71,14 @@
             android:name=".BatteryService"
             android:enabled="true"
             android:exported="true" />
-        <service
-            android:name=".VisualiserService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".ShakeService"
-            android:enabled="true"
-            android:exported="true" />
+<!--        <service-->
+<!--            android:name=".VisualiserService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true" />-->
+<!--        <service-->
+<!--            android:name=".ShakeService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true" />-->
 
         <receiver android:name=".NotificationSnoozeReceiver" />
 
@@ -91,9 +91,6 @@
             </intent-filter>
         </service>
 
-        <service android:name=".PowerMenuActivityHandler"
-            android:enabled="true"
-            android:exported="true"/>
     </application>
 
 </manifest>

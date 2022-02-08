@@ -12,6 +12,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -106,6 +107,8 @@ public class AnimationsActivity extends Fragment {
 
     private LinearLayout visualiser_settings_ll;
 
+    private LinearLayout animations_mode_ll;
+
     private boolean easter_egg_clicked = false;
 
     private String[][] animation_options = {
@@ -189,9 +192,9 @@ public class AnimationsActivity extends Fragment {
 
         create_battery_settings(animations_linear_layout,prefs);
 
-        create_visualiser_settings(animations_linear_layout,prefs);
+        //create_visualiser_settings(animations_linear_layout,prefs);
 
-        create_miscellaneous_settings(animations_linear_layout, prefs);
+        //create_miscellaneous_settings(animations_linear_layout, prefs);
 
         scrollView.smoothScrollTo(0,0);
 
@@ -199,6 +202,32 @@ public class AnimationsActivity extends Fragment {
     }
 
     private void create_animation_switches(LinearLayout animations_linear_layout, View root){
+
+        animations_mode_ll = new LinearLayout(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,10,0,0);
+        animations_mode_ll.setLayoutParams(params);
+        animations_mode_ll.setOrientation(LinearLayout.VERTICAL);
+        animations_mode_ll.setGravity(Gravity.FILL_VERTICAL);
+        animations_mode_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+        animations_mode_ll.setPadding(0,0,0,0);
+        animations_mode_ll.setBackground(getResources().getDrawable(R.drawable.linearlayoutborder));
+
+        animations_linear_layout.addView(animations_mode_ll);
+
+        final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        custom_text_view_params.setMargins(0,0,0,20);
+        custom_text_view.setLayoutParams(custom_text_view_params);
+        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
+        custom_text_view.setText("Animation Modes");
+        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+        custom_text_view.setTypeface(null, Typeface.BOLD);
+        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
+
+
+        animations_mode_ll.addView(custom_text_view);
 
         final CheckBox[] switches = new CheckBox[animation_options.length];
 
@@ -228,7 +257,7 @@ public class AnimationsActivity extends Fragment {
             sw.setText(animation_options[i][1]);
             //timeout_seekbar.setThumb(getResources().getDrawable(R.drawable.asus_rog_logo_scaled));
             switches[i] = sw;
-            animations_linear_layout.addView(sw);
+            animations_mode_ll.addView(sw);
             sw = ((CheckBox) root.findViewById(id_));
             sw.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -273,6 +302,8 @@ public class AnimationsActivity extends Fragment {
                 }
             });
         }
+
+        //animations_linear_layout.addView(animations_mode_ll);
     }
 
 
@@ -284,7 +315,8 @@ public class AnimationsActivity extends Fragment {
         notification_settings_ll.setOrientation(LinearLayout.VERTICAL);
         notification_settings_ll.setGravity(Gravity.FILL_VERTICAL);
         notification_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
-        notification_settings_ll.setPadding(0,20,0,0);
+        notification_settings_ll.setPadding(0,0,0,0);
+        notification_settings_ll.setBackground(getResources().getDrawable(R.drawable.linearlayoutborder));
 
 
         final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
@@ -594,19 +626,19 @@ public class AnimationsActivity extends Fragment {
         });
 
         animations_linear_layout.addView(notification_settings_ll);
-        create_notification_snooze(animations_linear_layout,prefs);
+        create_notification_snooze(notification_settings_ll,prefs);
 
     }
 
     private void create_notification_snooze(LinearLayout animations_linear_layout, SharedPreferences prefs){
         notification_snooze_ll = new LinearLayout(getActivity().getApplicationContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(0,0,0,20);
+        params.setMargins(0,20,0,20);
         notification_snooze_ll.setLayoutParams(params);
         notification_snooze_ll.setOrientation(LinearLayout.VERTICAL);
         notification_snooze_ll.setGravity(Gravity.FILL_VERTICAL);
         notification_snooze_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
-        notification_snooze_ll.setPadding(0,20,0,20);
+        notification_snooze_ll.setPadding(0,0,0,0);
 
 
         //Show snooze Options
@@ -1092,11 +1124,14 @@ public class AnimationsActivity extends Fragment {
 
     public void create_battery_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
         battery_settings_ll = new LinearLayout(getActivity().getApplicationContext());
-        battery_settings_ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,20,0,0);
+        battery_settings_ll.setLayoutParams(params);
         battery_settings_ll.setOrientation(LinearLayout.VERTICAL);
         battery_settings_ll.setGravity(Gravity.FILL_VERTICAL);
         battery_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
-        battery_settings_ll.setPadding(0,20,0,20);
+        battery_settings_ll.setPadding(0,0,0,0);
+        battery_settings_ll.setBackground(getResources().getDrawable(R.drawable.linearlayoutborder));
 
 
         final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
