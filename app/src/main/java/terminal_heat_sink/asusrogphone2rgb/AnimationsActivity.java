@@ -1327,210 +1327,210 @@ public class AnimationsActivity extends Fragment {
 
         animations_linear_layout.addView(battery_settings_ll);
     }
-
-    public void create_visualiser_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
-        visualiser_settings_ll = new LinearLayout(getActivity().getApplicationContext());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(0,20,0,20);
-        visualiser_settings_ll.setLayoutParams(params);
-        visualiser_settings_ll.setOrientation(LinearLayout.VERTICAL);
-        visualiser_settings_ll.setGravity(Gravity.FILL_VERTICAL);
-        visualiser_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
-        visualiser_settings_ll.setPadding(0,20,0,20);
-
-
-        TextView custom_text_view = new TextView(getActivity().getApplicationContext());
-        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        custom_text_view_params.setMargins(0,0,0,20);
-        custom_text_view.setLayoutParams(custom_text_view_params);
-        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
-        custom_text_view.setText("Audio Visualiser Settings");
-        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
-        custom_text_view.setTypeface(null, Typeface.BOLD);
-        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
-        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
-
-
-        visualiser_settings_ll.addView(custom_text_view);
-
-
-        CheckBox enable_visualiser = new CheckBox(getActivity().getApplicationContext());
-        enable_visualiser.setText("Enable Visualiser");
-        enable_visualiser.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
-        enable_visualiser.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        enable_visualiser.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
-        enable_visualiser.setPadding(0,0,0,25);
-
-
-        boolean enable_visualiser_test = prefs.getBoolean(visualiser_on_shared_preference_key,false);
-
-        if(enable_visualiser_test){
-            enable_visualiser.setTextColor(getResources().getColor(R.color.colorON));
-            enable_visualiser.setChecked(true);
-            Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
-            getActivity().getApplicationContext().startService(notification_intent);
-
-        }else{
-            enable_visualiser.setChecked(false);
-            enable_visualiser.setTextColor(getResources().getColor(R.color.colorOFF));
-            Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
-            getActivity().getApplicationContext().stopService(notification_intent);
-        }
-
-        enable_visualiser.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                boolean animate_battery = prefs.getBoolean(visualiser_on_shared_preference_key,false);
-                CheckBox s = (CheckBox) view;
-
-                if(animate_battery){
-                    s.setChecked(false);
-                    s.setTextColor(getResources().getColor(R.color.colorOFF));
-                    prefs.edit().putBoolean(visualiser_on_shared_preference_key, false).apply();
-                    Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
-                    getActivity().getApplicationContext().stopService(notification_intent);
-
-                }else{
-                    s.setChecked(true);
-                    s.setTextColor(getResources().getColor(R.color.colorON));
-                    prefs.edit().putBoolean(visualiser_on_shared_preference_key, true).apply();
-
-                    Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
-                    getActivity().getApplicationContext().startService(notification_intent);
-                }
-
-            }
-        });
-
-        visualiser_settings_ll.addView(enable_visualiser);
-
-
-        // use second led also for battery
-        CheckBox enable_second_led_visualiser = new CheckBox(getActivity().getApplicationContext());
-        enable_second_led_visualiser.setText("Use second led for visualiser also");
-        enable_second_led_visualiser.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
-        enable_second_led_visualiser.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        enable_second_led_visualiser.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
-        enable_second_led_visualiser.setPadding(0,0,0,25);
-
-        boolean second_led_enabled = prefs.getBoolean(visualiser_use_second_led_shared_preference_key,false);
-
-        if(second_led_enabled){
-            enable_second_led_visualiser.setTextColor(getResources().getColor(R.color.colorON));
-            enable_second_led_visualiser.setChecked(true);
-        }else{
-            enable_second_led_visualiser.setChecked(false);
-            enable_second_led_visualiser.setTextColor(getResources().getColor(R.color.colorOFF));
-        }
-
-        enable_second_led_visualiser.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                boolean second_led_enabled = prefs.getBoolean(visualiser_use_second_led_shared_preference_key,false);
-
-                CheckBox s = (CheckBox) view;
-                if(second_led_enabled){
-                    s.setChecked(false);
-                    s.setTextColor(getResources().getColor(R.color.colorOFF));
-                    prefs.edit().putBoolean(visualiser_use_second_led_shared_preference_key, false).apply();
-                }else{
-                    s.setChecked(true);
-                    s.setTextColor(getResources().getColor(R.color.colorON));
-                    prefs.edit().putBoolean(visualiser_use_second_led_shared_preference_key, true).apply();
-                }
-            }
-        });
-
-        visualiser_settings_ll.addView(enable_second_led_visualiser);
-
-
-        // use second led for battery only
-        CheckBox use_second_led_for_visualiser_only = new CheckBox(getActivity().getApplicationContext());
-        use_second_led_for_visualiser_only.setText("Use Only the second led for the visualiser");
-        use_second_led_for_visualiser_only.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
-        use_second_led_for_visualiser_only.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        use_second_led_for_visualiser_only.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
-        use_second_led_for_visualiser_only.setPadding(0,0,0,25);
-
-        boolean second_led_enabled_only = prefs.getBoolean(visualiser_use_second_led_only_shared_preference_key,false);
-
-        if(second_led_enabled_only){
-            use_second_led_for_visualiser_only.setTextColor(getResources().getColor(R.color.colorON));
-            use_second_led_for_visualiser_only.setChecked(true);
-        }else{
-            use_second_led_for_visualiser_only.setChecked(false);
-            use_second_led_for_visualiser_only.setTextColor(getResources().getColor(R.color.colorOFF));
-        }
-
-        use_second_led_for_visualiser_only.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                boolean second_led_enabled_only = prefs.getBoolean(visualiser_use_second_led_only_shared_preference_key,false);
-                CheckBox s = (CheckBox) view;
-                if(second_led_enabled_only){
-                    s.setChecked(false);
-                    s.setTextColor(getResources().getColor(R.color.colorOFF));
-                    prefs.edit().putBoolean(visualiser_use_second_led_only_shared_preference_key, false).apply();
-                }else{
-                    s.setChecked(true);
-                    s.setTextColor(getResources().getColor(R.color.colorON));
-                    prefs.edit().putBoolean(visualiser_use_second_led_only_shared_preference_key, true).apply();
-                }
-
-            }
-        });
-
-        visualiser_settings_ll.addView(use_second_led_for_visualiser_only);
-
-
-        // which animation to use for notifications
-        Spinner VisualiserModeSelector = new Spinner(getActivity().getApplicationContext());
-        String[] animation_items = {"wave to hue","wave to lightness (pick colour from colour wheel tab)"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, animation_items);
-
-
-        adapter.setDropDownViewResource(R.layout.spinner_text);
-
-        VisualiserModeSelector.setAdapter(adapter);
-
-        VisualiserModeSelector.setPrompt("Select Animation to use for Audio");
-
-        int notifications_animation = prefs.getInt(visualiser_animation_mode_shared_preference_key,1);
-        VisualiserModeSelector.setSelection(notifications_animation-1,true);
-
-
-        VisualiserModeSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int animation_mode = i+1;
-
-                TextView selected = ((TextView) adapterView.getChildAt(0));
-                selected.setTextColor(getResources().getColor(R.color.colorText));
-                selected.setText("selected animation: "+selected.getText());
-
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                prefs.edit().putInt(visualiser_animation_mode_shared_preference_key, animation_mode).apply();
-
-
-                //((TextView) adapterView.getChildAt(0)).setTextSize(5);
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        visualiser_settings_ll.addView(VisualiserModeSelector);
-
-
-        animations_linear_layout.addView(visualiser_settings_ll);
-    }
-
+//
+//    public void create_visualiser_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
+//        visualiser_settings_ll = new LinearLayout(getActivity().getApplicationContext());
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+//        params.setMargins(0,20,0,20);
+//        visualiser_settings_ll.setLayoutParams(params);
+//        visualiser_settings_ll.setOrientation(LinearLayout.VERTICAL);
+//        visualiser_settings_ll.setGravity(Gravity.FILL_VERTICAL);
+//        visualiser_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+//        visualiser_settings_ll.setPadding(0,20,0,20);
+//
+//
+//        TextView custom_text_view = new TextView(getActivity().getApplicationContext());
+//        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+//        custom_text_view_params.setMargins(0,0,0,20);
+//        custom_text_view.setLayoutParams(custom_text_view_params);
+//        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
+//        custom_text_view.setText("Audio Visualiser Settings");
+//        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+//        custom_text_view.setTypeface(null, Typeface.BOLD);
+//        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+//        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//        visualiser_settings_ll.addView(custom_text_view);
+//
+//
+//        CheckBox enable_visualiser = new CheckBox(getActivity().getApplicationContext());
+//        enable_visualiser.setText("Enable Visualiser");
+//        enable_visualiser.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+//        enable_visualiser.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        enable_visualiser.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+//        enable_visualiser.setPadding(0,0,0,25);
+//
+//
+//        boolean enable_visualiser_test = prefs.getBoolean(visualiser_on_shared_preference_key,false);
+//
+//        if(enable_visualiser_test){
+//            enable_visualiser.setTextColor(getResources().getColor(R.color.colorON));
+//            enable_visualiser.setChecked(true);
+//            Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
+//            getActivity().getApplicationContext().startService(notification_intent);
+//
+//        }else{
+//            enable_visualiser.setChecked(false);
+//            enable_visualiser.setTextColor(getResources().getColor(R.color.colorOFF));
+//            Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
+//            getActivity().getApplicationContext().stopService(notification_intent);
+//        }
+//
+//        enable_visualiser.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+//                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+//                boolean animate_battery = prefs.getBoolean(visualiser_on_shared_preference_key,false);
+//                CheckBox s = (CheckBox) view;
+//
+//                if(animate_battery){
+//                    s.setChecked(false);
+//                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+//                    prefs.edit().putBoolean(visualiser_on_shared_preference_key, false).apply();
+//                    Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
+//                    getActivity().getApplicationContext().stopService(notification_intent);
+//
+//                }else{
+//                    s.setChecked(true);
+//                    s.setTextColor(getResources().getColor(R.color.colorON));
+//                    prefs.edit().putBoolean(visualiser_on_shared_preference_key, true).apply();
+//
+//                    Intent notification_intent = new Intent(getActivity().getApplicationContext(), VisualiserService.class);
+//                    getActivity().getApplicationContext().startService(notification_intent);
+//                }
+//
+//            }
+//        });
+//
+//        visualiser_settings_ll.addView(enable_visualiser);
+//
+//
+//        // use second led also for battery
+//        CheckBox enable_second_led_visualiser = new CheckBox(getActivity().getApplicationContext());
+//        enable_second_led_visualiser.setText("Use second led for visualiser also");
+//        enable_second_led_visualiser.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+//        enable_second_led_visualiser.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        enable_second_led_visualiser.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+//        enable_second_led_visualiser.setPadding(0,0,0,25);
+//
+//        boolean second_led_enabled = prefs.getBoolean(visualiser_use_second_led_shared_preference_key,false);
+//
+//        if(second_led_enabled){
+//            enable_second_led_visualiser.setTextColor(getResources().getColor(R.color.colorON));
+//            enable_second_led_visualiser.setChecked(true);
+//        }else{
+//            enable_second_led_visualiser.setChecked(false);
+//            enable_second_led_visualiser.setTextColor(getResources().getColor(R.color.colorOFF));
+//        }
+//
+//        enable_second_led_visualiser.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+//                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+//                boolean second_led_enabled = prefs.getBoolean(visualiser_use_second_led_shared_preference_key,false);
+//
+//                CheckBox s = (CheckBox) view;
+//                if(second_led_enabled){
+//                    s.setChecked(false);
+//                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+//                    prefs.edit().putBoolean(visualiser_use_second_led_shared_preference_key, false).apply();
+//                }else{
+//                    s.setChecked(true);
+//                    s.setTextColor(getResources().getColor(R.color.colorON));
+//                    prefs.edit().putBoolean(visualiser_use_second_led_shared_preference_key, true).apply();
+//                }
+//            }
+//        });
+//
+//        visualiser_settings_ll.addView(enable_second_led_visualiser);
+//
+//
+//        // use second led for battery only
+//        CheckBox use_second_led_for_visualiser_only = new CheckBox(getActivity().getApplicationContext());
+//        use_second_led_for_visualiser_only.setText("Use Only the second led for the visualiser");
+//        use_second_led_for_visualiser_only.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+//        use_second_led_for_visualiser_only.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        use_second_led_for_visualiser_only.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+//        use_second_led_for_visualiser_only.setPadding(0,0,0,25);
+//
+//        boolean second_led_enabled_only = prefs.getBoolean(visualiser_use_second_led_only_shared_preference_key,false);
+//
+//        if(second_led_enabled_only){
+//            use_second_led_for_visualiser_only.setTextColor(getResources().getColor(R.color.colorON));
+//            use_second_led_for_visualiser_only.setChecked(true);
+//        }else{
+//            use_second_led_for_visualiser_only.setChecked(false);
+//            use_second_led_for_visualiser_only.setTextColor(getResources().getColor(R.color.colorOFF));
+//        }
+//
+//        use_second_led_for_visualiser_only.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+//                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+//                boolean second_led_enabled_only = prefs.getBoolean(visualiser_use_second_led_only_shared_preference_key,false);
+//                CheckBox s = (CheckBox) view;
+//                if(second_led_enabled_only){
+//                    s.setChecked(false);
+//                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+//                    prefs.edit().putBoolean(visualiser_use_second_led_only_shared_preference_key, false).apply();
+//                }else{
+//                    s.setChecked(true);
+//                    s.setTextColor(getResources().getColor(R.color.colorON));
+//                    prefs.edit().putBoolean(visualiser_use_second_led_only_shared_preference_key, true).apply();
+//                }
+//
+//            }
+//        });
+//
+//        visualiser_settings_ll.addView(use_second_led_for_visualiser_only);
+//
+//
+//        // which animation to use for notifications
+//        Spinner VisualiserModeSelector = new Spinner(getActivity().getApplicationContext());
+//        String[] animation_items = {"wave to hue","wave to lightness (pick colour from colour wheel tab)"};
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, animation_items);
+//
+//
+//        adapter.setDropDownViewResource(R.layout.spinner_text);
+//
+//        VisualiserModeSelector.setAdapter(adapter);
+//
+//        VisualiserModeSelector.setPrompt("Select Animation to use for Audio");
+//
+//        int notifications_animation = prefs.getInt(visualiser_animation_mode_shared_preference_key,1);
+//        VisualiserModeSelector.setSelection(notifications_animation-1,true);
+//
+//
+//        VisualiserModeSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                int animation_mode = i+1;
+//
+//                TextView selected = ((TextView) adapterView.getChildAt(0));
+//                selected.setTextColor(getResources().getColor(R.color.colorText));
+//                selected.setText("selected animation: "+selected.getText());
+//
+//                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+//                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+//                prefs.edit().putInt(visualiser_animation_mode_shared_preference_key, animation_mode).apply();
+//
+//
+//                //((TextView) adapterView.getChildAt(0)).setTextSize(5);
+//
+//            }
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//
+//        visualiser_settings_ll.addView(VisualiserModeSelector);
+//
+//
+//        animations_linear_layout.addView(visualiser_settings_ll);
+//    }
+//
 
 
 

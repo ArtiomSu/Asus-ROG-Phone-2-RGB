@@ -9,10 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -24,6 +28,8 @@ public class AboutActivity extends Fragment {
 
     //check if magisk mode
     private final String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
+    private boolean pageNotAvailable = false;
+    private String mainTextString;
 
     public AboutActivity() {
         // Required empty public constructor
@@ -94,11 +100,37 @@ public class AboutActivity extends Fragment {
             }
         });
 
+        ImageView donate_app_view = (ImageView) root.findViewById(R.id.imageViewDonateAppGoogle);
 
+        donate_app_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(
+                        "https://play.google.com/store/apps/details?id=terminal_heat_sink.donateterminalheatsink"));
+                intent.setPackage("com.android.vending");
+                startActivity(intent);
+            }
+        });
+
+        ImageView donate_google_view = (ImageView) root.findViewById(R.id.imageViewDonateGoogle);
+
+        donate_google_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(
+                        "https://play.google.com/store/apps/details?id=terminal_heat_sink.donateterminalheatsink"));
+                intent.setPackage("com.android.vending");
+                startActivity(intent);
+            }
+        });
+
+        mainTextString = getString(R.string.about_text);
 
         TextView text = (TextView) root.findViewById(R.id.textViewAbout);
         text.setTextColor(getResources().getColor(R.color.colorText));
-        text.setText(R.string.about_text);
+        text.setText(mainTextString + " ( 0% )");
 
 
         scrollView = (ScrollView) root.findViewById(R.id.scrollViewabout);
@@ -164,6 +196,45 @@ public class AboutActivity extends Fragment {
         if(running_in_magisk_mode){
             convert_to_magisk.setVisibility(View.GONE);
         }
+
+        WebView webView = root.findViewById(R.id.webview);
+
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.clearCache(true);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        webView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int progress) {
+                Log.d("progress",""+progress);
+                text.setText(mainTextString + " ( "+progress+"% )");
+                if (progress == 100 && !pageNotAvailable) { //...page is fully loaded.
+                    webView.setVisibility(View.VISIBLE);
+                    scrollView.smoothScrollTo(0, 1100);
+                    text.setVisibility(View.GONE);
+                }else if(!pageNotAvailable){
+
+                }
+
+                if(pageNotAvailable){
+                    text.setText(mainTextString + " ( Oops failed to load page. Check your internet )");
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                Log.d("Title Change", title);
+                if(title.equals("Web page not available")){
+                    pageNotAvailable = true;
+                    text.setText(mainTextString + " ( Oops failed to load page. Check your internet )");
+                }
+            }
+        });
+        webView.loadUrl("https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB");
+
 
         scrollView.smoothScrollTo(0,0);
 

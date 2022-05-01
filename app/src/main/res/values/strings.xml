@@ -4,47 +4,7 @@
     <string name="tab_text_2">Colour Wheel</string>
     <string name="tab_text_3">About</string>
     <string name="title_activity_animations">AnimationsActivity</string>
-    <string name="about_text">Hello There Ladies and Gentlemen.\n
-        This app allows you to control the logo and second rgb on custom roms.\n\n
-
-        You need to be rooted to use this since it writes to system files.\n\n
-
-        To use it press the power button on the bottom right of the screen.\n
-        When it turns green we are good to go and you can head over the animations tab.\n\n
-
-        The Colour wheel allows you to change the colour provided the animations aren\'t rainbow.\n
-        Colour wheel will work for the following animations.\n
-        solid one colour\n
-        breathing one colour\n
-        blink\n
-        some kind of thunder\n
-        quick two flashes\n
-        and sort of the last one too\n\n
-
-        Notification support added and you can mess around with the settings after clicking on \"notification settings\"\n
-        To use the notifications\n
-        1. Press on the notification settings to see the options.\n
-        2. Press on React to Notifications to start the service.\n
-        3. Press on the \"Click to enable app to read notifications in settings\" button and allow Asus Rog Phone 2 RGB to read notifications\n
-        4. Select which animation you want to run when there is a notification\n
-        5. Press on \"Select which apps trigger notifications\" and tick on all the apps you want the app to use leds when a notification come in.\n\n
-
-        You can also enable the use of the second led that\'s normally meant to be used with a custom case.\n
-        The \"enable second led\" switch above \"Notification settings\" switch enables the second led for any animations selected above. This doesn\'t have any impact on using the second led for notifications.\n\n
-
-        For notifications you now have the following options relating to the second led.\n
-        \"use second led for notifications also\" This lights up the second led and the logo led when a notification comes in.\n
-        \"Use Only the second led for notifications\" This lights up only the second led.\n
-        If you have both 1 and 2 disabled then only the logo led with light up.\n\n
-
-        Notifications now can be snoozed. You can set up a time period where the notification service does not run. This is especially useful for rog 3 users as rog 3 needs a wakelock for notifications to work\n\n
-
-        If you like what I do you can check out my github, youtube and telegram channel by clicking the icons at the top.\n\n
-
-        If you would like to donate :) click on the paypal or patreon icons up above\n\n
-
-        Thanks and Bye Bye
-    </string>
+    <string name="about_text">Hello There Ladies and Gentlemen.\n\nPlease wait while the github app info page loads </string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

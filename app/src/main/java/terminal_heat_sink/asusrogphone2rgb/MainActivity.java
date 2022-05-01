@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
         FloatingActionButton fab_second_led = findViewById(R.id.fab_second_led);
+        viewPager.setCurrentItem(2, true); // go to about page
 
         final Context context = getApplicationContext();
 

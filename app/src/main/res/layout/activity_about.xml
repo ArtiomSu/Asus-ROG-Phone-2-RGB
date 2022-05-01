@@ -65,6 +65,64 @@
                 android:src="@drawable/icons8_youtube_squared" />
         </LinearLayout>
 
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="If you like you can use Google Pay to donate through my donation app :)"
+                android:textColor="@color/colorText"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:id="@+id/imageViewDonateAppGoogle"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/donate_app_icon_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_weight="100"
+                android:text="Donate Terminal Heat Sink"
+                android:textStyle="bold"
+                android:textColor="@color/colorText"
+                />
+
+            <ImageView
+                android:id="@+id/imageViewDonateGoogle"
+                android:layout_weight="2"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_google_play_store_badge_en" />
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -137,6 +195,13 @@
                         android:layout_height="match_parent"
                         android:text="TextView" />
 
+
+                    <WebView
+                        android:visibility="gone"
+                        android:id="@+id/webview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="WebViewLayout" />
 
 
 

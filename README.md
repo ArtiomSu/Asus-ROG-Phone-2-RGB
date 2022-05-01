@@ -1,13 +1,19 @@
 # Asus-ROG-Phone-2-RGB
-This app allows you to control the logo rgb on custom roms. 
-Works on stock rom too after release 2.0-hotfix
+This app allows you to control the logo rgb led and the scond led rgb on custom rom and stock roms.
 
-Only works on android 10 roms as the android 9 rgb driver doesn't react to changes, therefore it is probably not possible to make it work on android 9 using current methods. 
+This app also has some extra features not found on the asus stock app ( See links bellow for each feature ). 
 
-#### Only use this if you are using Asus Rog Phone 2 or *3
-Rog 3 works with latest release, however at the moment the second led cannot be lit on its own, the logo led must also be on to use second led
-#### You need to be rooted to use this since it writes to system files
-#### This modifies system files so use it at your own risk
+If you are using stock rom please disable any led effects in the built-in app as both apps will try to write different data at the same time causing unexpected results.
+
+Works on Android 10,11,12 stock and custom roms. Stock android 9 rom doesn't work and will never work as the rgb driver doesn't react to changes on android 9.
+
+###### Only use this if you are using Asus Rog Phone 2 or 3
+
+###### You need to be rooted to use this since it writes to the led driver which is not possible to do without root access.
+
+###### Use at your own risk although it should be pretty safe as it writes to the built in asus led driver.
+
+
 
 # Sections
 [Setup](#setup)
@@ -33,6 +39,8 @@ Rog 3 works with latest release, however at the moment the second led cannot be 
 [Music Visualiser](#music-visualiser)
 
 [Triple Shake](#triple-shake)
+
+[Smart Home Device Controls](#smart-home-device-controls)
 
 [Issues](#issues)
 
@@ -195,6 +203,8 @@ Introduced in release 16. When enabled the leds dance to the music currently pla
 
 Notifications take priority over the visualiser. Once notifications are cleared visualiser will continue.
 
+Removed in release 27. There are issues with it in android 11 and 12. Not alot of people are using it including myself to justify further development.
+
 ###### Modes
 1. rgb, the hue is changed according to the waveform
 2. glow, the lightness of the colour is changed according to the waveform, It will use the colour you selected in the colorwheel tab.
@@ -208,10 +218,18 @@ It will also use the colour you selected in the colour wheel for the appropriate
 
 I made this because I use the second led as a flashlight sometimes so this is a quick shortcut lol
 
+removed in release 27 as not alot of people are using it. I no longer use it also since I use the case which illuminates with the second led.
+
+### Smart Home Device Controls
+Added in release 27. Allows you to use the smart home device controls to control various settings within the app ( see screenshots bellow ).
+
+This is basicaly the android 11 power menu shortcuts. On Android 12 you can access these from the quick settings as it is no longer part of the the power menu.
+
+This only works with android 11+ as the API was introduced in android 11.
+
 # Issues
 1. colour wheel performance. This is improved as of version 3 but could still be smoother.
 2. app list can take a while to load because it gets the app icon for each application on the phone.
-3. notification service keeps on restarting when killed.
 
 # Features
 1. animation speed should be possible (might not be possible)
@@ -224,12 +242,22 @@ I made this because I use the second led as a flashlight sometimes so this is a 
 8. allow filtering when selecting apps (done)
 9. set custom animations and colours for each app (done)
 10. save restore app settings (done)
-11. battery charging animations (done-beta) 
-12. music visualiser (done)(can be improved)
-13. Notification Snooze (done-beta)
-14. Triple shake (done)
+11. battery charging animations (done) 
+12. music visualiser (done)(can be improved)(removed in v27)
+13. Notification Snooze (done)
+14. Triple shake (done)(removed in v27)
+15. Smart Home Device Controls (done)
 
 # Version
+27. [6.0-home-device-controls-new-style](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/30) 
+```
+    Added Smart Home Device Controls. ( Android 11 power button shortcuts. Can still be used with Android 12 from the quick settings )
+    Updated App Style. The different settings sections are now easily more distinguishable.
+    Updated About Page to use a webview to show the github readme page and added link to my donation app.
+    Removed Music Visualiser as it causes issues with Android 11+ and no one really uses it.
+    Removed Triple Shake, again because no one really uses it.
+    
+```
 26. [5.6-rog2-fallback](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/29) 
 ```
     Fallback to rog 2 mode if failed to determine which phone. ( can happen with android 12 gsi )
@@ -393,21 +421,20 @@ I made this because I use the second led as a flashlight sometimes so this is a 
     Working on HavocOS only.
 ```
 # Screenshots
-![screenshot 1](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/1.jpg)
-![screenshot 2](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/2.jpg)
-![screenshot 3](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/3.jpg)
-![screenshot 4](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/4.jpg)
-![screenshot 5](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/5.jpg)
-![screenshot 6](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/6.jpg)
-![screenshot 7](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.jpg)
-![screenshot 8](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/8.jpg)
-![screenshot 9](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/9.jpg)
-![screenshot 10](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/10.jpg)
+![screenshot 1](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/1.png)
+![screenshot 2](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/2.png)
+![screenshot 4](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/4.png)
+![screenshot 5](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/5.png)
+![screenshot 6](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/6.png)
+![screenshot 7](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/7.png)
+![screenshot 8](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/8.png)
+![screenshot 10](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/10.png)
 ![screenshot 11](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/11.jpg)
 ![screenshot 12](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/12.jpg)
 ![screenshot 13](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/13.jpg)
 ![screenshot 14](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/14.jpg)
 ![screenshot 15](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/15.jpg)
 ![screenshot 16](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/16.jpg)
-![screenshot 17](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/17.jpg)
-![screenshot 18](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/18.jpg)
+![screenshot 17](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/17.png)
+![screenshot 18](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/18.png)
+![screenshot 19](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/19.png)
