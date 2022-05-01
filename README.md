@@ -7,13 +7,13 @@ If you are using stock rom please disable any led effects in the built-in app as
 
 Works on Android 10,11,12 stock and custom roms. Stock android 9 rom doesn't work and will never work as the rgb driver doesn't react to changes on android 9.
 
-###### Only use this if you are using Asus Rog Phone 2 or 3
+#### Only use this if you are using Asus Rog Phone 2 or 3
 
-###### You need to be rooted to use this since it writes to the led driver which is not possible to do without root access.
+#### You need to be rooted to use this since it writes to the led driver which is not possible to do without root access.
 
-###### Use at your own risk although it should be pretty safe as it writes to the built in asus led driver.
+#### Use at your own risk although it should be pretty safe as it writes to the built in asus led driver.
 
-
+[![](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=terminal_heat_sink.asusrogphone2rgb)
 
 # Sections
 [Setup](#setup)
@@ -256,7 +256,6 @@ This only works with android 11+ as the API was introduced in android 11.
     Updated About Page to use a webview to show the github readme page and added link to my donation app.
     Removed Music Visualiser as it causes issues with Android 11+ and no one really uses it.
     Removed Triple Shake, again because no one really uses it.
-    
 ```
 26. [5.6-rog2-fallback](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/29) 
 ```
