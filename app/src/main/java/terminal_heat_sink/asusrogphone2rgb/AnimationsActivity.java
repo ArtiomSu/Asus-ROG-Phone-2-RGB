@@ -22,6 +22,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -66,23 +69,28 @@ public class AnimationsActivity extends Fragment {
     private PendingIntent notification_snooze_stop_intent;
 
     //battery charging preferences
-    private String battery_animate_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_animate";
-    private String battery_use_second_led_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_use_second_led";
-    private String battery_use_second_led_only_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_use_second_led_only";
-    private String battery_animation_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_animation_mode";
+    private final String battery_animate_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_animate";
+    private final String battery_use_second_led_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_use_second_led";
+    private final String battery_use_second_led_only_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_use_second_led_only";
+    private final String battery_animation_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.battery_animation_mode";
 
     //visualiser charging preferences
-    private String visualiser_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_on";
-    private String visualiser_use_second_led_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_use_second_led";
-    private String visualiser_use_second_led_only_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_use_second_led_only";
-    private String visualiser_animation_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_animation_mode";
+//    private final String visualiser_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_on";
+//    private final String visualiser_use_second_led_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_use_second_led";
+//    private final String visualiser_use_second_led_only_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_use_second_led_only";
+//    private final String visualiser_animation_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.visualiser_animation_mode";
 
     //miscellaneous preferences
-    private String shake_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.shake_on";
-    private String shake_on_first_launch_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.shake_on_first_launch";
+    private final String shake_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.shake_on";
+    private final String shake_on_first_launch_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.shake_on_first_launch";
 
     //check if phone is rog 3
-    private String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+    private final String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+
+    //help guide
+    private final String hide_help_animations_preference_key = "terminal_hear_sink.asusrogphone2rgb.hide_help_on_animations";
+    private boolean helpWebViewPageNotAvailable = false;
+    private final String help_video_id = "WONmNu35GFM";
 
     private LinearLayout notification_settings_ll;
     private CheckBox switch_enable_notifications;
@@ -105,9 +113,12 @@ public class AnimationsActivity extends Fragment {
 
     private LinearLayout battery_settings_ll;
 
-    private LinearLayout visualiser_settings_ll;
+    //private LinearLayout visualiser_settings_ll;
 
     private LinearLayout animations_mode_ll;
+
+    private LinearLayout help_ll;
+    private Button show_help_button;
 
     private boolean easter_egg_clicked = false;
 
@@ -158,6 +169,21 @@ public class AnimationsActivity extends Fragment {
                 "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
 
 
+        show_help_button = (Button) root.findViewById(R.id.show_help_button);
+        final boolean hide_help = prefs.getBoolean(hide_help_animations_preference_key, false);
+        if(!hide_help){
+            show_help_button.setVisibility(View.GONE);
+        }
+
+        show_help_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefs.edit().putBoolean(hide_help_animations_preference_key, false).apply();
+                help_ll.setVisibility(View.VISIBLE);
+                show_help_button.setVisibility(View.GONE);
+                scrollView.smoothScrollTo(0,0);
+            }
+        });
 
 
 
@@ -185,6 +211,7 @@ public class AnimationsActivity extends Fragment {
             animations_linear_layout.addView(test_text_view);
         }
 
+        create_help_view(animations_linear_layout, prefs);
 
         create_animation_switches(animations_linear_layout,root);
 
@@ -1326,6 +1353,136 @@ public class AnimationsActivity extends Fragment {
 
 
         animations_linear_layout.addView(battery_settings_ll);
+    }
+
+    public void create_help_view(LinearLayout animations_linear_layout, SharedPreferences prefs){
+
+        help_ll = new LinearLayout(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,10,0,10);
+        help_ll.setLayoutParams(params);
+        help_ll.setOrientation(LinearLayout.VERTICAL);
+        help_ll.setGravity(Gravity.FILL_VERTICAL);
+        help_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+        help_ll.setPadding(0,0,0,0);
+        help_ll.setBackground(getResources().getDrawable(R.drawable.linearlayoutborder));
+
+        final TextView custom_text_view = new TextView(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        custom_text_view_params.setMargins(0,0,0,20);
+        custom_text_view.setLayoutParams(custom_text_view_params);
+        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
+        custom_text_view.setText("Tutorial");
+        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+        custom_text_view.setTypeface(null, Typeface.BOLD);
+        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        help_ll.addView(custom_text_view);
+
+        final TextView line1 = new TextView(getActivity().getApplicationContext());
+        line1.setLayoutParams(custom_text_view_params);
+        line1.setTextColor(getResources().getColor(R.color.colorText));
+        line1.setText("For a full guide on how to use this app please watch the video bellow");
+        line1.setBackgroundColor(getResources().getColor(R.color.seperator));
+        line1.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        help_ll.addView(line1);
+
+        final TextView line2 = new TextView(getActivity().getApplicationContext());
+        line2.setLayoutParams(custom_text_view_params);
+        line2.setTextColor(getResources().getColor(R.color.colorText));
+        line2.setText("And yes the LEDs can light up during a phone call you just need to select your phone app in the \"select which apps trigger notifications\" setting, its as simple as that.");
+        line2.setBackgroundColor(getResources().getColor(R.color.seperator));
+        line2.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        help_ll.addView(line2);
+
+        Button hide_help_button = new Button(getActivity().getApplicationContext());
+        hide_help_button.setText("I know what I am doing. Hide this section");
+        hide_help_button.setTextColor(getResources().getColor(R.color.colorText));
+        hide_help_button.setBackgroundColor(getResources().getColor(R.color.colorButton));
+
+        hide_help_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                prefs.edit().putBoolean(hide_help_animations_preference_key, true).apply();
+                help_ll.setVisibility(View.GONE);
+                show_help_button.setVisibility(View.VISIBLE);
+                new AlertDialog.Builder(requireActivity())
+                        .setTitle("Help Section is Hidden Now")
+                        .setMessage("To show the help section again scroll down to the very end and click on show help button")
+                        .setCancelable(false)
+                        .setPositiveButton("Sounds good thanks", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
+            }});
+
+        help_ll.addView(hide_help_button);
+
+        TextView webviewText = new TextView(getActivity().getApplicationContext());
+        webviewText.setLayoutParams(custom_text_view_params);
+        webviewText.setTextColor(getResources().getColor(R.color.colorText));
+        webviewText.setText("Loading Video 0%");
+        webviewText.setBackgroundColor(getResources().getColor(R.color.seperator));
+        webviewText.setGravity(Gravity.LEFT);
+
+        help_ll.addView(webviewText);
+
+        WebView webView = new WebView(getActivity().getApplicationContext());
+
+        LinearLayout.LayoutParams webview_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        webview_params.setMargins(0,20,0,20);
+        webView.setLayoutParams(webview_params);
+
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.clearCache(true);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        webView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+        webView.setVisibility(View.GONE);
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int progress) {
+                Log.d("progress",""+progress);
+                webviewText.setText("Loading Video "+progress+"%");
+                if (progress == 100 && !helpWebViewPageNotAvailable) { //...page is fully loaded.
+                    webView.setVisibility(View.VISIBLE);
+                    webviewText.setVisibility(View.GONE);
+                }else if(!helpWebViewPageNotAvailable){
+
+                }
+
+                if(helpWebViewPageNotAvailable){
+                    webviewText.setText("Failed to load video. Check your internet");
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                Log.d("Title Change", title);
+                if(title.equals("Web page not available")){
+                    helpWebViewPageNotAvailable = true;
+                    webviewText.setText("Failed to load video. Check your internet");
+                }
+            }
+        });
+        String videoStr = "<html style=\"padding:0px;margin:0px;\"><body style=\"padding:0px;margin:0px;\"><iframe width=\"100%\" height=\"240\" src=\"https://www.youtube.com/embed/"+help_video_id+"\" style=\"padding:0px;margin:0px;border:0\" allowfullscreen></iframe></body></html>";
+        webView.loadData(videoStr, "text/html", "utf-8");
+
+        help_ll.addView(webView);
+
+        final boolean hide_this = prefs.getBoolean(hide_help_animations_preference_key, false);
+        if(hide_this){
+            help_ll.setVisibility(View.GONE);
+        }
+
+        animations_linear_layout.addView(help_ll);
     }
 //
 //    public void create_visualiser_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){

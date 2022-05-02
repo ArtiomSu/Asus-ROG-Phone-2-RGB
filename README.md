@@ -3,6 +3,8 @@ This app allows you to control the logo rgb led and the scond led rgb on custom 
 
 This app also has some extra features not found on the asus stock app ( See links bellow for each feature ). 
 
+#### And yes the LEDs can light up during a phone call you just need to select your phone app in the "select which apps trigger notifications" setting, its as simple as that.
+
 If you are using stock rom please disable any led effects in the built-in app as both apps will try to write different data at the same time causing unexpected results.
 
 Works on Android 10,11,12 stock and custom roms. Stock android 9 rom doesn't work and will never work as the rgb driver doesn't react to changes on android 9.
@@ -56,7 +58,13 @@ Works on Android 10,11,12 stock and custom roms. Stock android 9 rom doesn't wor
 3. Grant the root request
 4. Take a look at [Save Restore App Data](#save-restore-app-data) to restore old data.
 
-If you want a video guide here is a youtube video showing all the features and how to use them for release 9 [click to view](https://www.youtube.com/watch?v=8rNJtEDuV1I)
+### Video Guides
+##### release 30 
+[![release 30 video](https://img.youtube.com/vi/WONmNu35GFM/0.jpg)](https://www.youtube.com/watch?v=WONmNu35GFM)
+
+##### release 9 
+[![release 9 video](https://img.youtube.com/vi/8rNJtEDuV1I/0.jpg)](https://www.youtube.com/watch?v=8rNJtEDuV1I)
+
 
 # Animations currently available 
 0. off
@@ -249,6 +257,11 @@ This only works with android 11+ as the API was introduced in android 11.
 15. Smart Home Device Controls (done)
 
 # Version
+28. [6.1-tutorial-update](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/31) 
+```
+    Added a help section to the settings tab with the latest video guide. Can be hidden by pressing the button and shown again by pressing the button at the very bottom of the screen under the easter egg.
+    Updated libraries and compile target
+```
 27. [6.0-home-device-controls-new-style](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/releases/tag/30) 
 ```
     Added Smart Home Device Controls. ( Android 11 power button shortcuts. Can still be used with Android 12 from the quick settings )
@@ -420,6 +433,7 @@ This only works with android 11+ as the API was introduced in android 11.
     Working on HavocOS only.
 ```
 # Screenshots
+![screenshot 0](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/0.png)
 ![screenshot 1](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/1.png)
 ![screenshot 2](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/2.png)
 ![screenshot 4](https://github.com/ArtiomSu/Asus-ROG-Phone-2-RGB/blob/master/.screenshots/4.png)

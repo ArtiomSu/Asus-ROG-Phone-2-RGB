@@ -51,6 +51,14 @@
                 android:paddingBottom="20dp"
                 android:src="@drawable/easter_egg_2"/>
 
+            <Button
+                android:id="@+id/show_help_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorButton"
+                android:text="Show Help"
+                android:textColor="@color/colorText" />
+
         </LinearLayout>
 
         </LinearLayout>
