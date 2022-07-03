@@ -48,6 +48,8 @@ public class NotificationService extends NotificationListenerService {
     private String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
     private boolean magisk_mode;
 
+    private static String is_root_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrootmode";
+
 
     private String latest_notification = "";
 
@@ -101,18 +103,21 @@ public class NotificationService extends NotificationListenerService {
 
             Log.i( "AsusRogPhone2RGBNotificationService" , "Creating Service Notification");
 
-            String isrog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
-            if(!isrog3.equals(" ")){
-                if(isrog3.charAt(0) == '3'){
-                    Log.i("AsusRogPhone2RGBNotificationService","Starting Rog 3 wakelock");
-                    SystemWriter.rog_3_wakelock(context);
+            boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+            if(isRootMode) {
+                String isrog3 = prefs.getString(isphone_rog3_shared_preference_key, " ");
+                if (!isrog3.equals(" ")) {
+                    if (isrog3.charAt(0) == '3') {
+                        Log.i("AsusRogPhone2RGBNotificationService", "Starting Rog 3 wakelock");
+                        SystemWriter.rog_3_wakelock(context);
+                    }
                 }
             }
 
             if(!magisk_mode) {
                 Intent notificationIntent = new Intent(context, MainActivity.class);
                 PendingIntent pendingIntent =
-                        PendingIntent.getActivity(context, 0, notificationIntent, 0);
+                        PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
 
 //                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
 //                Notification notification = notificationBuilder
@@ -270,11 +275,16 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onDestroy() {
         Log.i("AsusRogPhone2RGBNotificationService", "onDestroy() , service stopped...");
-        String isRog3 = context.getSharedPreferences("terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE).getString(isphone_rog3_shared_preference_key," ");
-        if(!isRog3.equals(" ")) {
-            if (isRog3.charAt(0) == '3') {
-                Log.i("AsusRogPhone2RGBNotificationService", "Rog3 Releasing wakelock");
-                SystemWriter.rog_3_wakeunlock(context);
+        SharedPreferences prefs = context.getSharedPreferences("terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+
+        boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+        if(isRootMode){
+            String isRog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
+            if(!isRog3.equals(" ")) {
+                if (isRog3.charAt(0) == '3') {
+                    Log.i("AsusRogPhone2RGBNotificationService", "Rog3 Releasing wakelock");
+                    SystemWriter.rog_3_wakeunlock(context);
+                }
             }
         }
 

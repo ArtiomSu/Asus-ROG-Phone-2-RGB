@@ -12,9 +12,10 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -33,7 +34,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -86,6 +86,8 @@ public class AnimationsActivity extends Fragment {
 
     //check if phone is rog 3
     private final String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+
+    private final String is_root_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrootmode";
 
     //help guide
     private final String hide_help_animations_preference_key = "terminal_hear_sink.asusrogphone2rgb.hide_help_on_animations";
@@ -371,13 +373,27 @@ public class AnimationsActivity extends Fragment {
 
 
         boolean notifications_enabled = prefs.getBoolean(notifications_on_shared_preference_key,false);
+        boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+
+        if(!isRootMode){
+            notifications_enabled = NotificationManagerCompat.getEnabledListenerPackages(getActivity().getApplicationContext()).contains("terminal_heat_sink.asusrogphone2rgb");
+            prefs.edit().putBoolean(notifications_on_shared_preference_key, notifications_enabled).apply();
+        }
+
 
         if(notifications_enabled){
             //switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorON)));
             //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorON));
             switch_enable_notifications.setChecked(true);
-            SystemWriter.notification_access(true,getActivity().getApplicationContext());
+            if(isRootMode){
+                SystemWriter.notification_access(true,getActivity().getApplicationContext());
+            }else{
+                if (!NotificationManagerCompat.getEnabledListenerPackages(getActivity().getApplicationContext()).contains("terminal_heat_sink.asusrogphone2rgb")) {        //ask for permission
+                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    startActivity(intent);
+                }
+            }
 
             String isRog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
             if(!isRog3.equals(" ")){
@@ -392,7 +408,14 @@ public class AnimationsActivity extends Fragment {
             //switch_enable_notifications.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             //switch_enable_notifications.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
             switch_enable_notifications.setTextColor(getResources().getColor(R.color.colorOFF));
-            SystemWriter.notification_access(false,getActivity().getApplicationContext());
+            if(isRootMode){
+                SystemWriter.notification_access(false,getActivity().getApplicationContext());
+            }else{
+                if (NotificationManagerCompat.getEnabledListenerPackages(getActivity().getApplicationContext()).contains("terminal_heat_sink.asusrogphone2rgb")) {        //ask for permission
+                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    startActivity(intent);
+                }
+            }
 
             String isRog3 = prefs.getString(isphone_rog3_shared_preference_key," ");
             if(!isRog3.equals(" ")) {
@@ -408,6 +431,7 @@ public class AnimationsActivity extends Fragment {
                 SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
                         "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
                 boolean notifications_enabled = prefs.getBoolean(notifications_on_shared_preference_key,false);
+                boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
                 CheckBox s = (CheckBox) view;
 
                 if(notifications_enabled){
@@ -416,7 +440,14 @@ public class AnimationsActivity extends Fragment {
                     //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorOFF)));
                     s.setTextColor(getResources().getColor(R.color.colorOFF));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, false).apply();
-                    SystemWriter.notification_access(false,getActivity().getApplicationContext());
+                    if(isRootMode) {
+                        SystemWriter.notification_access(false, getActivity().getApplicationContext());
+                    } else{
+                        if (NotificationManagerCompat.getEnabledListenerPackages(getActivity().getApplicationContext()).contains("terminal_heat_sink.asusrogphone2rgb")) {        //ask for permission
+                            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                            startActivity(intent);
+                        }
+                    }
 
                     Intent notification_intent = new Intent(getActivity().getApplicationContext(), NotificationService.class);
                     getActivity().getApplicationContext().stopService(notification_intent);
@@ -427,7 +458,14 @@ public class AnimationsActivity extends Fragment {
                     //s.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorThumbOn)));
                     s.setTextColor(getResources().getColor(R.color.colorON));
                     prefs.edit().putBoolean(notifications_on_shared_preference_key, true).apply();
-                    SystemWriter.notification_access(true,getActivity().getApplicationContext());
+                    if(isRootMode) {
+                        SystemWriter.notification_access(true, getActivity().getApplicationContext());
+                    } else{
+                        if (!NotificationManagerCompat.getEnabledListenerPackages(getActivity().getApplicationContext()).contains("terminal_heat_sink.asusrogphone2rgb")) {        //ask for permission
+                            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                            startActivity(intent);
+                        }
+                    }
 
                     Intent notification_intent = new Intent(getActivity().getApplicationContext(), NotificationService.class);
                     getActivity().getApplicationContext().startService(notification_intent);
@@ -810,7 +848,7 @@ public class AnimationsActivity extends Fragment {
                         alarmMgr = (AlarmManager)getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                         Intent intent = new Intent(getActivity().getApplicationContext(), NotificationSnoozeReceiver.class);
                         intent.putExtra("start",true);
-                        notification_snooze_start_intent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification_snooze_start_intent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 192837, intent, PendingIntent.FLAG_MUTABLE);
 
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -827,7 +865,7 @@ public class AnimationsActivity extends Fragment {
                         alarmMgr_stop = (AlarmManager)getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                         Intent intent_stop = new Intent(getActivity().getApplicationContext(), NotificationSnoozeReceiver.class);
                         intent.putExtra("start",false);
-                        notification_snooze_stop_intent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 192838, intent_stop, PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification_snooze_stop_intent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 192838, intent_stop, PendingIntent.FLAG_MUTABLE);
 
 
                         Calendar calendar_stop = Calendar.getInstance();
@@ -1692,101 +1730,101 @@ public class AnimationsActivity extends Fragment {
 
 
 
-    public void create_miscellaneous_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
-        LinearLayout miscellaneous_settings_ll = new LinearLayout(getActivity().getApplicationContext());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(0,20,0,20);
-        miscellaneous_settings_ll.setLayoutParams(params);
-        miscellaneous_settings_ll.setOrientation(LinearLayout.VERTICAL);
-        miscellaneous_settings_ll.setGravity(Gravity.FILL_VERTICAL);
-        miscellaneous_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
-        miscellaneous_settings_ll.setPadding(0,20,0,20);
-
-
-        TextView custom_text_view = new TextView(getActivity().getApplicationContext());
-        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        custom_text_view_params.setMargins(0,0,0,20);
-        custom_text_view.setLayoutParams(custom_text_view_params);
-        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
-        custom_text_view.setText("Miscellaneous Settings");
-        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
-        custom_text_view.setTypeface(null, Typeface.BOLD);
-        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
-        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
-
-
-        miscellaneous_settings_ll.addView(custom_text_view);
-
-
-        CheckBox enable_shake = new CheckBox(getActivity().getApplicationContext());
-        enable_shake.setText("Enable Triple Shake");
-        enable_shake.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
-        enable_shake.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        enable_shake.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
-        enable_shake.setPadding(0,0,0,25);
-
-
-        boolean enable_shake_on = prefs.getBoolean(shake_on_shared_preference_key,false);
-
-        if(enable_shake_on){
-            enable_shake.setTextColor(getResources().getColor(R.color.colorON));
-            enable_shake.setChecked(true);
-
-            Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
-            getActivity().getApplicationContext().startService(shake_intent);
-
-        }else{
-            enable_shake.setChecked(false);
-            enable_shake.setTextColor(getResources().getColor(R.color.colorOFF));
-            Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
-            getActivity().getApplicationContext().stopService(shake_intent);
-        }
-
-        enable_shake.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
-                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-                boolean animate_battery = prefs.getBoolean(shake_on_shared_preference_key,false);
-                CheckBox s = (CheckBox) view;
-
-                if(animate_battery){
-                    s.setChecked(false);
-                    s.setTextColor(getResources().getColor(R.color.colorOFF));
-                    prefs.edit().putBoolean(shake_on_shared_preference_key, false).apply();
-                    Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
-                    getActivity().getApplicationContext().stopService(shake_intent);
-
-                }else{
-                    s.setChecked(true);
-                    s.setTextColor(getResources().getColor(R.color.colorON));
-                    prefs.edit().putBoolean(shake_on_shared_preference_key, true).apply();
-
-                    Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
-                    getActivity().getApplicationContext().startService(shake_intent);
-
-                    boolean launched_first_time = prefs.getBoolean(shake_on_first_launch_shared_preference_key,false);
-                    if(!launched_first_time){
-                        prefs.edit().putBoolean(shake_on_first_launch_shared_preference_key, true).apply();
-                        new AlertDialog.Builder(requireActivity())
-                                .setTitle("What is Triple Shake Feature?")
-                                .setMessage("Triple Shake allows you to quickly shake your phone 3 times to toggle the second led.\n\nThe second led will use whatever mode you selected above at the very top of this page.\n\nIt will also use the colour you selected in the colour wheel for the appropriate modes.\n\nI made this because I use the second led as a flashlight sometimes so this is a quick shortcut lol")
-                                .setCancelable(false)
-                                .setPositiveButton("I understand now", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .show();
-                    }
-
-                }
-
-            }
-        });
-
-        miscellaneous_settings_ll.addView(enable_shake);
-
-        animations_linear_layout.addView(miscellaneous_settings_ll);
-    }
+//    public void create_miscellaneous_settings(LinearLayout animations_linear_layout, SharedPreferences prefs){
+//        LinearLayout miscellaneous_settings_ll = new LinearLayout(getActivity().getApplicationContext());
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+//        params.setMargins(0,20,0,20);
+//        miscellaneous_settings_ll.setLayoutParams(params);
+//        miscellaneous_settings_ll.setOrientation(LinearLayout.VERTICAL);
+//        miscellaneous_settings_ll.setGravity(Gravity.FILL_VERTICAL);
+//        miscellaneous_settings_ll.setBackgroundColor(getResources().getColor(R.color.seperator));
+//        miscellaneous_settings_ll.setPadding(0,20,0,20);
+//
+//
+//        TextView custom_text_view = new TextView(getActivity().getApplicationContext());
+//        LinearLayout.LayoutParams custom_text_view_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+//        custom_text_view_params.setMargins(0,0,0,20);
+//        custom_text_view.setLayoutParams(custom_text_view_params);
+//        custom_text_view.setTextColor(getResources().getColor(R.color.colorText));
+//        custom_text_view.setText("Miscellaneous Settings");
+//        //custom_text_view.setTextSize(custom_text_view.getTextSize()+1);
+//        custom_text_view.setTypeface(null, Typeface.BOLD);
+//        custom_text_view.setBackgroundColor(getResources().getColor(R.color.seperator));
+//        custom_text_view.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//        miscellaneous_settings_ll.addView(custom_text_view);
+//
+//
+//        CheckBox enable_shake = new CheckBox(getActivity().getApplicationContext());
+//        enable_shake.setText("Enable Triple Shake");
+//        enable_shake.setButtonTintList(new ColorStateList(check_box_states,check_box_colors));
+//        enable_shake.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        enable_shake.setButtonDrawable(R.drawable.asus_rog_logo_scaled);
+//        enable_shake.setPadding(0,0,0,25);
+//
+//
+//        boolean enable_shake_on = prefs.getBoolean(shake_on_shared_preference_key,false);
+//
+//        if(enable_shake_on){
+//            enable_shake.setTextColor(getResources().getColor(R.color.colorON));
+//            enable_shake.setChecked(true);
+//
+//            Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+//            getActivity().getApplicationContext().startService(shake_intent);
+//
+//        }else{
+//            enable_shake.setChecked(false);
+//            enable_shake.setTextColor(getResources().getColor(R.color.colorOFF));
+//            Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+//            getActivity().getApplicationContext().stopService(shake_intent);
+//        }
+//
+//        enable_shake.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                SharedPreferences prefs = getActivity().getApplicationContext().getSharedPreferences(
+//                        "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+//                boolean animate_battery = prefs.getBoolean(shake_on_shared_preference_key,false);
+//                CheckBox s = (CheckBox) view;
+//
+//                if(animate_battery){
+//                    s.setChecked(false);
+//                    s.setTextColor(getResources().getColor(R.color.colorOFF));
+//                    prefs.edit().putBoolean(shake_on_shared_preference_key, false).apply();
+//                    Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+//                    getActivity().getApplicationContext().stopService(shake_intent);
+//
+//                }else{
+//                    s.setChecked(true);
+//                    s.setTextColor(getResources().getColor(R.color.colorON));
+//                    prefs.edit().putBoolean(shake_on_shared_preference_key, true).apply();
+//
+//                    Intent shake_intent = new Intent(getActivity().getApplicationContext(), ShakeService.class);
+//                    getActivity().getApplicationContext().startService(shake_intent);
+//
+//                    boolean launched_first_time = prefs.getBoolean(shake_on_first_launch_shared_preference_key,false);
+//                    if(!launched_first_time){
+//                        prefs.edit().putBoolean(shake_on_first_launch_shared_preference_key, true).apply();
+//                        new AlertDialog.Builder(requireActivity())
+//                                .setTitle("What is Triple Shake Feature?")
+//                                .setMessage("Triple Shake allows you to quickly shake your phone 3 times to toggle the second led.\n\nThe second led will use whatever mode you selected above at the very top of this page.\n\nIt will also use the colour you selected in the colour wheel for the appropriate modes.\n\nI made this because I use the second led as a flashlight sometimes so this is a quick shortcut lol")
+//                                .setCancelable(false)
+//                                .setPositiveButton("I understand now", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                    }
+//                                })
+//                                .show();
+//                    }
+//
+//                }
+//
+//            }
+//        });
+//
+//        miscellaneous_settings_ll.addView(enable_shake);
+//
+//        animations_linear_layout.addView(miscellaneous_settings_ll);
+//    }
 
 
     @Override

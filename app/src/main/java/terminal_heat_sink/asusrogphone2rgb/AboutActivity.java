@@ -1,14 +1,21 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,14 +30,26 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public class AboutActivity extends Fragment {
     private ScrollView scrollView;
 
     //check if magisk mode
     private final String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
+    private static String is_root_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrootmode";
     private boolean pageNotAvailable = false;
     private String mainTextString;
-
+    private static final int PERM_REQUEST = 112;
+    private static final int PERM_REQUEST_READ = 113;
     public AboutActivity() {
         // Required empty public constructor
     }
@@ -39,6 +58,10 @@ public class AboutActivity extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.activity_about, container, false);
+
+        Context context = getContext();
+        SharedPreferences prefs = context.getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
 
         ImageView telegram_image_view = (ImageView) root.findViewById(R.id.imageViewTelegram);
 
@@ -153,8 +176,24 @@ public class AboutActivity extends Fragment {
         export_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SystemWriter.save_shared_preferences(getActivity().getApplicationContext());
-                Toast.makeText(getActivity().getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(context)
+                        .setTitle("Export Settings")
+                        .setMessage("Root Mode is the original way for exporting (recommended)\nIf you are using this app without root then it will save it to downloads.")
+                        .setCancelable(true)
+                        .setPositiveButton("Export to Downloads", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(request_perms(context,PERM_REQUEST)){
+                                    savePrefs(prefs);
+                                }
+                            }
+                        })
+                        .setNegativeButton("Root Mode", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                SystemWriter.save_shared_preferences(getActivity().getApplicationContext());
+                                Toast.makeText(getActivity().getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -162,19 +201,31 @@ public class AboutActivity extends Fragment {
         import_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SystemWriter.restore_shared_preferences(getActivity().getApplicationContext());
-                Intent i = getActivity().getApplicationContext().getPackageManager().
-                        getLaunchIntentForPackage(getActivity().getApplicationContext().getPackageName());
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-                System.exit(0);
+                new AlertDialog.Builder(context)
+                        .setTitle("Import Settings")
+                        .setMessage("If you have used export settings in the past before this dialog existed or you exported with \"Root Mode\" use \"Root Mode\"")
+                        .setCancelable(true)
+                        .setPositiveButton("Import From Downloads", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(request_perms(context,PERM_REQUEST_READ)){
+                                    importPrefs(prefs);
+                                }
+                            }
+                        })
+                        .setNegativeButton("Root Mode", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                SystemWriter.restore_shared_preferences(getActivity().getApplicationContext());
+                                Intent i = getActivity().getApplicationContext().getPackageManager().
+                                getLaunchIntentForPackage(getActivity().getApplicationContext().getPackageName());
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                                System.exit(0);
+                            }
+                        })
+                        .show();
             }
         });
-
-        Context context = getContext();
-        SharedPreferences prefs = context.getSharedPreferences(
-                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
 
         boolean running_in_magisk_mode = prefs.getBoolean(magisk_mode_shared_preference_key, false);
 
@@ -196,6 +247,37 @@ public class AboutActivity extends Fragment {
         if(running_in_magisk_mode){
             convert_to_magisk.setVisibility(View.GONE);
         }
+
+        Button change_root_mode = (Button) root.findViewById(R.id.change_root_mode);
+        boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+        if(isRootMode){
+            change_root_mode.setText("Toggle Mode (Current Mode: Root)");
+        }else{
+            change_root_mode.setText("Toggle Mode (Current Mode: Non Root)");
+        }
+
+        change_root_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+                Log.d("isroot mode", String.valueOf(isRootMode));
+                isRootMode = !isRootMode;
+                Log.d("isroot mode", String.valueOf(isRootMode));
+                prefs.edit().putBoolean(is_root_mode_shared_preference_key, isRootMode).apply();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent i = getActivity().getApplicationContext().getPackageManager().
+                        getLaunchIntentForPackage(getActivity().getApplicationContext().getPackageName());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                System.exit(0);
+            }
+        });
+
 
         WebView webView = root.findViewById(R.id.webview);
 
@@ -239,6 +321,145 @@ public class AboutActivity extends Fragment {
         scrollView.smoothScrollTo(0,0);
 
         return root;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERM_REQUEST:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Context context = getContext();
+                    SharedPreferences prefs = context.getSharedPreferences(
+                            "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                    savePrefs(prefs);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "The app was not allowed to write in your storage", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case PERM_REQUEST_READ:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Context context = getContext();
+                    SharedPreferences prefs = context.getSharedPreferences(
+                            "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+                    importPrefs(prefs);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "The app was not allowed to write in your storage", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private boolean request_perms(Context context, int requestId){
+        String[] PERMISSIONS = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) context, PERMISSIONS, requestId );
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void savePrefs(SharedPreferences prefs){
+        File myPath = new File(Environment.getExternalStorageDirectory().toString());
+        File myFile = new File(myPath,"/Download/.terminal_heat_sink.asusrogphone2rgb.xml.txt");
+
+        try
+        {
+            FileWriter fw = new FileWriter(myFile);
+            PrintWriter pw = new PrintWriter(fw);
+
+            Map<String,?> prefsMap = prefs.getAll();
+
+            for(Map.Entry<String,?> entry : prefsMap.entrySet())
+            {
+                pw.println(entry.getKey() + ":mysplit:" + entry.getValue().getClass().getSimpleName() + ":mysplit:" + entry.getValue().toString());
+            }
+
+            pw.close();
+            fw.close();
+            Toast.makeText(getActivity().getApplicationContext(), "Saved to Download/.terminal_heat_sink.asusrogphone2rgb.xml.txt", Toast.LENGTH_LONG).show();
+        }
+        catch (Exception e)
+        {
+            Log.e("Saving Shared Prefs Failed", e.toString());
+            Toast.makeText(getActivity().getApplicationContext(), "Failed to save", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void importPrefs(SharedPreferences prefs){
+        File myPath = new File(Environment.getExternalStorageDirectory().toString());
+        File myFile = new File(myPath,"/Download/.terminal_heat_sink.asusrogphone2rgb.xml.txt");
+        try
+        {
+            FileReader fr = new FileReader(myFile);
+
+            ArrayList<String> input = new ArrayList<String>();
+            StringBuilder temp = new StringBuilder();
+
+            int i;
+            while ((i = fr.read()) != -1) {
+                if((char)i == '\n'){
+                    input.add(temp.toString());
+                    temp = new StringBuilder();
+                }
+                temp.append((char) i);
+                //Log.e("SystemWriter", String.valueOf((char)i));
+            }
+
+            for( String item : input){
+                String parts[] = item.split(":mysplit:");
+                String key = parts[0];
+                String type = parts[1];
+                String value = parts[2];
+
+                switch (type){
+                    case "String":
+                        prefs.edit().putString(key, value).apply();
+                        Log.d("SystemWriter", "adding string");
+                        break;
+                    case "Boolean":
+                        prefs.edit().putBoolean(key, value.equals("true")).apply();
+                        Log.d("SystemWriter", "adding boolean");
+                        break;
+                    case "Integer":
+                        prefs.edit().putInt(key, Integer.parseInt(value)).apply();
+                        Log.d("SystemWriter", "adding integer");
+                        break;
+                    case "HashSet":
+                        String joinedMinusBrackets = value.substring( 1, value.length() - 1);
+                        String[] resplit = joinedMinusBrackets.split( ", ");
+                        HashSet<String> myset = new HashSet<String>();
+
+                        myset.addAll(Arrays.asList(resplit));
+
+                        prefs.edit().putStringSet(key, myset).apply();
+                        Log.d("SystemWriter", "adding hashset");
+                        Log.d("SystemWriter", myset.toString());
+                        break;
+                }
+
+                Log.d("SystemWriter", key + " " + type + " " + value);
+            }
+
+            fr.close();
+            Toast.makeText(getActivity().getApplicationContext(), "imported successfully", Toast.LENGTH_LONG).show();
+
+            Intent intent = getActivity().getApplicationContext().getPackageManager().
+                        getLaunchIntentForPackage(getActivity().getApplicationContext().getPackageName());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            System.exit(0);
+        }
+        catch (Exception e)
+        {
+            Log.e("Saving Shared Prefs Failed", e.toString());
+            Toast.makeText(getActivity().getApplicationContext(), "Failed to import", Toast.LENGTH_LONG).show();
+        }
     }
 }
 

@@ -1,10 +1,13 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ public class ColourWheelActivity extends Fragment {
 
     private static final String SAVED_STATE_KEY_COLOR = "saved_state_key_color";
     private String SAVED_PREFS_KEY_COLOR = "terminal_heat_sink.asusrogphone2rgb.saved_prefs_key_color";
+    private final String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
 
     private ColorPickerView colorPickerView;
     private LinearLayout colour_preview;
@@ -52,9 +56,11 @@ public class ColourWheelActivity extends Fragment {
                     prefs.edit().putInt(SAVED_PREFS_KEY_COLOR, color).apply();
                     colour_preview.setBackgroundColor(color);
                     //Color c = Color.valueOf(color);
-                    //Log.e("color"," color picked "+color + " RGB is "+ Color.red(color)+ " " + Color.green(color)+ " "+ Color.blue(color));
-
-                    SystemWriter.write_colour(Color.red(color),Color.green(color),Color.blue(color),getActivity().getApplicationContext());
+                    String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
+                    if(!phone.equals(" ")){
+                        Log.e("color"," color picked "+color + " RGB is "+ Color.red(color)+ " " + Color.green(color)+ " "+ Color.blue(color));
+                        SystemWriter.write_colour(Color.red(color),Color.green(color),Color.blue(color),getActivity().getApplicationContext());
+                    }
                 }
 
             }

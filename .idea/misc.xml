@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/asus_rog_logo_scaled.xml" value="0.281" />
         <entry key="app/src/main/res/drawable/asus_rog_logo.xml" value="0.24537037037037038" />
+        <entry key="app/src/main/res/drawable/button_green.xml" value="0.2855" />
         <entry key="app/src/main/res/drawable/button_red.xml" value="0.24537037037037038" />
         <entry key="app/src/main/res/drawable/easter_egg.xml" value="0.24537037037037038" />
         <entry key="app/src/main/res/drawable/empty.xml" value="0.291" />
@@ -23,6 +24,7 @@
         <entry key="app/src/main/res/layout/activity_animations.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_colour_wheel.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_startup.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/per_app_customisation_activity.xml" value="0.1" />
       </map>

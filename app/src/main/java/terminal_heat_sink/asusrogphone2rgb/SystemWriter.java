@@ -1,6 +1,7 @@
 package terminal_heat_sink.asusrogphone2rgb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,13 +13,17 @@ public class SystemWriter {
 
     private static boolean isRog3 = false;
     private static String isphone_rog3_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrog3";
+    private static String is_root_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrootmode";
 
     private static String read_from_sys(String command, Context context){
         Process p;
         String result = "";
+        boolean isRootMode = context.getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE).getBoolean(is_root_mode_shared_preference_key, false);
+
         try {
             // Preform su to get root privledges
-            p = Runtime.getRuntime().exec("su");
+            p = Runtime.getRuntime().exec(isRootMode ? "su" : "sh");
 
             DataOutputStream os = new DataOutputStream(p.getOutputStream());
             DataInputStream in = new DataInputStream(p.getInputStream());
@@ -66,10 +71,13 @@ public class SystemWriter {
     }
 
     private static void write_to_sys(String command, Context context){
+        Log.d("SystemWriter", "about to write:" +command);
         Process p;
+        boolean isRootMode = context.getSharedPreferences(
+                "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE).getBoolean(is_root_mode_shared_preference_key, false);
         try {
             // Preform su to get root privledges
-            p = Runtime.getRuntime().exec("su");
+            p = Runtime.getRuntime().exec(isRootMode ? "su" : "sh");
 
             DataOutputStream os = new DataOutputStream(p.getOutputStream());
             os.writeBytes(command);
@@ -85,7 +93,7 @@ public class SystemWriter {
 
                     }else{
                         Log.i("SystemWriter","failed to write");
-                        Toast toast = Toast.makeText(context, "Could not write please allow AsusRogPhone2RGB root access in magisk", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(context, isRootMode ? "Could not write please allow AsusRogPhone2RGB root access in magisk" : "Non Root Mode failed. Toggle Root Mode in about page", Toast.LENGTH_LONG);
                         toast.show();
                     }
 
@@ -237,16 +245,16 @@ public class SystemWriter {
         write_to_sys(command,context);
     }
 
-    public static void rog_3_crap(Context context){
-        String command = "";
-        command += "echo 1 > /sys/class/leds/aura_sync/led_on && "+
-                "echo 1 > /sys/class/leds/aura_sync/mode" + " && " +
-                "echo 0 > /sys/class/leds/aura_sync/red_pwm" + " && " +
-                "echo 0 > /sys/class/leds/aura_sync/green_pwm" + " && " +
-                "echo 0 > /sys/class/leds/aura_sync/blue_pwm" + " && " +
-        "echo 1 > "+ "/sys/class/leds/aura_sync/apply" + " \n ";
-        write_to_sys(command,context);
-    }
+//    public static void rog_3_crap(Context context){
+//        String command = "";
+//        command += "echo 1 > /sys/class/leds/aura_sync/led_on && "+
+//                "echo 1 > /sys/class/leds/aura_sync/mode" + " && " +
+//                "echo 0 > /sys/class/leds/aura_sync/red_pwm" + " && " +
+//                "echo 0 > /sys/class/leds/aura_sync/green_pwm" + " && " +
+//                "echo 0 > /sys/class/leds/aura_sync/blue_pwm" + " && " +
+//        "echo 1 > "+ "/sys/class/leds/aura_sync/apply" + " \n ";
+//        write_to_sys(command,context);
+//    }
 
     public static void rog_3_wakelock(Context context){
         write_to_sys("echo asusrogphonergb > /sys/power/wake_lock\n",context);
@@ -272,9 +280,9 @@ public class SystemWriter {
         }
     }
 
-    public static void permissions(Context context){
-        write_to_sys("pm grant terminal_heat_sink.asusrogphone2rgb android.permission.RECORD_AUDIO \n",context);
-    }
+//    public static void permissions(Context context){
+//        write_to_sys("pm grant terminal_heat_sink.asusrogphone2rgb android.permission.RECORD_AUDIO \n",context);
+//    }
 
     private static void update_phone_type(Context context){
         SharedPreferences prefs = context.getSharedPreferences(
@@ -313,7 +321,8 @@ public class SystemWriter {
     magisk --sqlite "SELECT * FROM policies"
     */
     public static void turn_off_magisk_notifications(Context context){
-        write_to_sys("magisk --sqlite \"UPDATE policies SET notification = 0 WHERE package_name LIKE 'terminal_heat_sink.asusrogphone2rgb'\" \n",context);
+        //write_to_sys("magisk --sqlite \"UPDATE policies SET notification = 0 WHERE package_name LIKE 'terminal_heat_sink.asusrogphone2rgb'\" \n",context);
+        write_to_sys("magisk --sqlite \"UPDATE policies SET notification = 0 WHERE uid LIKE '$(dumpsys package terminal_heat_sink.asusrogphone2rgb | grep userId= | cut -d \"=\" -f2)'\" \n",context);
     }
 
     public static void uninstall_self(Context context){

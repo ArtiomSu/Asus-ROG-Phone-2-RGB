@@ -9,6 +9,58 @@
     android:background="@color/colorPrimary">
 
     <TextView
+        android:id="@+id/useroottext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Mode"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAlignment="center"
+        android:background="@drawable/button_red"
+        android:textColor="@color/colorOFF"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="30dp"
+        android:padding="10dp"
+        >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/useroottext"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_select_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Root Mode (Default)"
+            android:layout_weight="1"
+            android:background="@drawable/button_green"
+            android:textColor="@color/colorON"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textSize="20dp"></Button>
+
+        <Button
+            android:id="@+id/button_select_noroot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Root Mode\n(For Use With Supported Custom Roms or with magisk module)"
+            android:layout_weight="1"
+            android:background="@drawable/button_red"
+            android:textColor="@color/colorOFF"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="20dp"></Button>
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/startuptext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

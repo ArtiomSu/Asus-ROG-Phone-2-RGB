@@ -10,6 +10,8 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     private String notifications_on_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notifications_on";
     private String use_notifications_snooze_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.use_notifications_snooze_shared_preference_key";
+    private static String is_root_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrootmode";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -21,13 +23,17 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
             boolean snooze_on = prefs.getBoolean(use_notifications_snooze_shared_preference_key,false);
 
+            boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+
             boolean start = extras.getBoolean("start");
             Log.i("reciever","start: "+start+" notif on?: "+notification_service_on+" snooze_on?: "+snooze_on);
             if(start && notification_service_on && snooze_on){
                 //stop the notification service
                 Log.i("reciever","stopping notification service");
                 prefs.edit().putBoolean(notifications_on_shared_preference_key, false).apply();
-                SystemWriter.notification_access(false,context);
+                if(isRootMode){
+                    SystemWriter.notification_access(false,context);
+                }
 
                 Intent notification_intent = new Intent(context, NotificationService.class);
                 context.stopService(notification_intent);
@@ -37,10 +43,14 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
             }else if(snooze_on && !notification_service_on) {
                 Log.i("reciever","starting notification service");
-                SystemWriter.notification_access(true,context);
+                if(isRootMode) {
+                    SystemWriter.notification_access(true, context);
+                }
 
                 prefs.edit().putBoolean(notifications_on_shared_preference_key, true).apply();
-                SystemWriter.notification_access(true,context);
+                if(isRootMode) {
+                    SystemWriter.notification_access(true, context);
+                }
 
                 Intent notification_intent = new Intent(context, NotificationService.class);
                 context.getApplicationContext().startService(notification_intent);

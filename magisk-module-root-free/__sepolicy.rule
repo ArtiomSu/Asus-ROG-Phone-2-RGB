@@ -1,0 +1,18 @@
+allow app=terminal_heat_sink.asusrogphone2rgb system_file  { read }
+magiskpolicy --live 'allow u:r:untrusted_app:s0:c214,c257,c512,c768 u:object_r:sysfs:s0 file { read }'
+
+ps -AZ | grep terminal
+
+LABEL: u:r:untrusted_app:s0:c214,c257,c512,c768 
+USER: u0_a470 
+PID:8360 
+PPID:798
+VSZ:31770864 
+RSS:230324 
+WCHAN:SyS_epoll_wait   
+ADDR:0 
+S:S 
+NAME:terminal_heat_sink.asusrogphone2rgb
+
+ls -Z /sys/class/leds/aura_sync/led_on
+u:object_r:sysfs:s0 /sys/class/leds/aura_sync/led_on

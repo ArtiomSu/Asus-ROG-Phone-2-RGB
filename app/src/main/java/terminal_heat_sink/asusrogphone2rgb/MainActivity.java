@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     //notification animation running?.
     private final String notification_animation_running_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.notification_animation_running_shared_preference_key";
+    private static String is_root_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.isrootmode";
 
     //check if magisk mode
     private final String magisk_mode_shared_preference_key = "terminal_heat_sink.asusrogphone2rgb.magiskmode";
@@ -121,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 prefs.edit().putBoolean(use_second_led_on_shared_preference_key, second_led_on).apply();
             }
         });
-
     }
 
     boolean checkSdk(Context context, SharedPreferences prefs){
@@ -139,7 +139,14 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Exit App", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             //finishAndRemoveTask();
-                            SystemWriter.uninstall_self(context);
+                            boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+                            if(isRootMode){
+                                SystemWriter.uninstall_self(context);
+                            }else{
+                                moveTaskToBack(true);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(1);
+                            }
                         }
                     })
                     .show();
@@ -153,13 +160,19 @@ public class MainActivity extends AppCompatActivity {
         String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
         if(phone.equals(" ")){
             Intent app_selector = new Intent(context, Startup.class);
-            startActivityForResult(app_selector, 404);
+            startActivity(app_selector);
+            //startActivityForResult(app_selector, 404);
         }
 
-        //check if magisk mode is present
-        if(SystemWriter.check_if_system_app(context).equals("terminal_heat_sink.asusrogphone2rgb\n")){
-            Log.i("MainActivity", " running in magisk mode");
-            prefs.edit().putBoolean(magisk_mode_shared_preference_key, true).apply();
+        boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+        if(isRootMode && !phone.equals(" ")){
+            //check if magisk mode is present
+            if(SystemWriter.check_if_system_app(context).equals("terminal_heat_sink.asusrogphone2rgb\n")){
+                Log.i("MainActivity", " running in magisk mode");
+                prefs.edit().putBoolean(magisk_mode_shared_preference_key, true).apply();
+            }else{
+                prefs.edit().putBoolean(magisk_mode_shared_preference_key, false).apply();
+            }
         }else{
             prefs.edit().putBoolean(magisk_mode_shared_preference_key, false).apply();
         }
@@ -193,7 +206,14 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Exit App", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             //finishAndRemoveTask();
-                            SystemWriter.uninstall_self(context);
+                            boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+                            if(isRootMode){
+                                SystemWriter.uninstall_self(context);
+                            }else{
+                                moveTaskToBack(true);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(1);
+                            }
                         }
                     })
                     .show();
@@ -203,6 +223,11 @@ public class MainActivity extends AppCompatActivity {
         }else{
             launchPhonePicker(context, prefs);
         }
+        boolean isRootMode = prefs.getBoolean(is_root_mode_shared_preference_key, false);
+        String phone = prefs.getString(isphone_rog3_shared_preference_key," ");
+        if(!phone.equals(" ") && isRootMode){
+            SystemWriter.turn_off_magisk_notifications(getApplicationContext());
+        }
     }
 
     @Override
@@ -211,24 +236,25 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean("fab_on", fab_on);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if(requestCode==404)
-        {
-            SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                    "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
-            String message=data.getStringExtra("PHONE");
-            Log.i("startup","selected rog "+message+"");
-            prefs.edit().putString(isphone_rog3_shared_preference_key,message).apply();
-            if(message.charAt(0) == '3'){
-                Log.i("startup","preparing driver for rog 3");
-                SystemWriter.rog_3_crap(getApplicationContext());
-            }
-            SystemWriter.permissions(getApplicationContext());
-            SystemWriter.turn_off_magisk_notifications(getApplicationContext());
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+//    {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        // check if the request code is same as what is passed  here it is 2
+//        if(requestCode==404)
+//        {
+////            SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+////                    "terminal_heat_sink.asusrogphone2rgb", Context.MODE_PRIVATE);
+////            String message=data.getStringExtra("PHONE");
+////            Log.i("startup","selected rog "+message+"");
+////            prefs.edit().putString(isphone_rog3_shared_preference_key,message).apply();
+////            if(message.charAt(0) == '3'){
+////                Log.i("startup","preparing driver for rog 3");
+////                //SystemWriter.rog_3_crap(getApplicationContext());
+////            }
+//            //SystemWriter.permissions(getApplicationContext());
+//            //SystemWriter.turn_off_magisk_notifications(getApplicationContext());
+//
+//        }
+//    }
 }
