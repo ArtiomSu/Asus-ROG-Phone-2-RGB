@@ -114,6 +114,20 @@ public class NotificationService extends NotificationListenerService {
                 PendingIntent pendingIntent =
                         PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+//                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+//                Notification notification = notificationBuilder
+//                        .setOngoing(true)
+//                        .setSmallIcon(R.drawable.empty)
+//                        .setSilent(true)
+//                        .setColor(Color.argb(255,1,1,1))
+//                        .setContentTitle("Notification service running")
+//                        .setContentIntent(pendingIntent)
+//                        .setPriority(NotificationManager.IMPORTANCE_UNSPECIFIED)
+//                        .setCategory(Notification.CATEGORY_SERVICE)
+//                        .setColorized(false)
+//                        .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+//                        .build();
+
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
                 Notification notification = notificationBuilder.setOngoing(true)
                         .setSmallIcon(R.drawable.ic_launcher_foreground)

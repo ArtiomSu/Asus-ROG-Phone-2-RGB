@@ -91,7 +91,7 @@ public class PowerMenuButtonsService extends ControlsProviderService {
 
     private Control makeControl(int id, boolean on){
         Intent i = new Intent(PowerMenuButtonsService.this, MainActivity.class);
-        PendingIntent pi = PendingIntent.getActivity(this, 1, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(this, 1, i, PendingIntent.FLAG_MUTABLE);
         String subtitle = !on ? "turn on" : "turn off";
         return new Control.StatefulBuilder(controlIds[id], pi)
                 .setTitle(controlIdsTitle[id])
@@ -107,7 +107,7 @@ public class PowerMenuButtonsService extends ControlsProviderService {
 
     private Control makeControlInitial(int id){
         Intent i = new Intent(PowerMenuButtonsService.this, MainActivity.class);
-        PendingIntent pi = PendingIntent.getActivity(this, 1, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(this, 1, i, PendingIntent.FLAG_IMMUTABLE);
 
         return new Control.StatelessBuilder(controlIds[id], pi)
                 .setTitle(controlIdsTitle[id])

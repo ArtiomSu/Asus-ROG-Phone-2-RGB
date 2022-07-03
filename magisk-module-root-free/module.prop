@@ -1,0 +1,6 @@
+id=asusrogphonergbnotroot
+name=Asus Rog Phone RGB No Root
+version=v1
+versionCode=1
+author=Terminal_Heat_Sink
+description=Allows you to run the Asus Rog Phone RGB App without giving the app root access directly by Adding Selinux policy
