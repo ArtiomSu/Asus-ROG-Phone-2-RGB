@@ -1478,7 +1478,6 @@ public class AnimationsActivity extends Fragment {
 
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setAppCacheEnabled(true);
         webView.clearCache(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);

@@ -52,34 +52,34 @@ public class Startup extends AppCompatActivity {
             }
         });
 
-        Button rootMode = findViewById(R.id.button_select_root);
-        Button noRootMode = findViewById(R.id.button_select_noroot);
+        //Button rootMode = findViewById(R.id.button_select_root);
+        //Button noRootMode = findViewById(R.id.button_select_noroot);
 
-        rootMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean(is_root_mode_shared_preference_key,true).apply();
+//        rootMode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                prefs.edit().putBoolean(is_root_mode_shared_preference_key,true).apply();
+//
+//                rootMode.setBackground(getResources().getDrawable(R.drawable.button_green));
+//                rootMode.setTextColor(getResources().getColor(R.color.colorON));
+//
+//                noRootMode.setBackground(getResources().getDrawable(R.drawable.button_red));
+//                noRootMode.setTextColor(getResources().getColor(R.color.colorOFF));
+//            }
+//        });
 
-                rootMode.setBackground(getResources().getDrawable(R.drawable.button_green));
-                rootMode.setTextColor(getResources().getColor(R.color.colorON));
 
-                noRootMode.setBackground(getResources().getDrawable(R.drawable.button_red));
-                noRootMode.setTextColor(getResources().getColor(R.color.colorOFF));
-            }
-        });
-
-
-        noRootMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean(is_root_mode_shared_preference_key,false).apply();
-                noRootMode.setBackground(getResources().getDrawable(R.drawable.button_green));
-                noRootMode.setTextColor(getResources().getColor(R.color.colorON));
-
-                rootMode.setBackground(getResources().getDrawable(R.drawable.button_red));
-                rootMode.setTextColor(getResources().getColor(R.color.colorOFF));
-            }
-        });
+//        noRootMode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                prefs.edit().putBoolean(is_root_mode_shared_preference_key,false).apply();
+//                noRootMode.setBackground(getResources().getDrawable(R.drawable.button_green));
+//                noRootMode.setTextColor(getResources().getColor(R.color.colorON));
+//
+//                rootMode.setBackground(getResources().getDrawable(R.drawable.button_red));
+//                rootMode.setTextColor(getResources().getColor(R.color.colorOFF));
+//            }
+//        });
 
     }
 
